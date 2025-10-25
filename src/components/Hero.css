@@ -4,14 +4,32 @@
   align-items: center;
   justify-content: center;
   padding: var(--space-120) var(--space-24);
-  background-color: var(--color-bg);
+  background-color: #000000;
   position: relative;
+  overflow: hidden;
+}
+
+.hero__starfield {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero__layout {
+  width: 100%;
+  max-width: 1200px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-80);
+  align-items: center;
+  position: relative;
+  z-index: 1;
 }
 
 .hero__content {
-  max-width: var(--max-width-content);
+  max-width: 520px;
   width: 100%;
-  text-align: center;
+  text-align: left;
 }
 
 .hero__title {
@@ -28,8 +46,6 @@
   color: var(--color-text-primary);
   margin-bottom: var(--space-12);
   max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .hero__tagline {
@@ -42,7 +58,7 @@
 .hero__cta {
   display: flex;
   gap: var(--space-16);
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   flex-wrap: wrap;
 }
@@ -89,6 +105,20 @@
   background-color: var(--color-card-bg-hover);
 }
 
+.hero__visual {
+  position: relative;
+  width: 100%;
+  min-height: 420px;
+  max-height: 520px;
+  border-radius: 24px;
+  background: transparent;
+  overflow: hidden;
+}
+
+.hero__canvas {
+  position: absolute;
+  inset: 0;
+}
 .hero__scroll-cue {
   position: absolute;
   bottom: var(--space-40);
@@ -96,6 +126,7 @@
   transform: translateX(-50%);
   color: var(--color-text-muted);
   animation: fadeInBounce 0.6s var(--transition-easing) forwards;
+  z-index: 2;
 }
 
 @keyframes fadeInBounce {
@@ -125,6 +156,27 @@
 }
 
 /* Mobile styles */
+@media (max-width: 1024px) {
+  .hero__layout {
+    grid-template-columns: 1fr;
+    gap: var(--space-40);
+  }
+
+  .hero__content {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .hero__cta {
+    justify-content: center;
+  }
+
+  .hero__visual {
+    min-height: 360px;
+  }
+}
+
 @media (max-width: 640px) {
   .hero {
     padding: var(--space-80) var(--space-16);
