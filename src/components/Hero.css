@@ -57,23 +57,27 @@
 
 .hero__cta {
   display: flex;
-  gap: var(--space-16);
+  gap: var(--space-24);
   justify-content: flex-start;
   align-items: center;
   flex-wrap: wrap;
+  isolation: isolate;
 }
 
 .button {
+  position: relative;
   font-family: var(--font-family);
   font-size: var(--font-size-base);
   font-weight: 500;
   padding: var(--space-12) var(--space-24);
   border-radius: var(--space-8);
   cursor: pointer;
-  transition: all var(--transition-duration) var(--transition-easing);
+  transition: background-color var(--transition-duration) var(--transition-easing),
+              border-color var(--transition-duration) var(--transition-easing);
   min-width: 140px;
   min-height: 44px;
   border: none;
+  flex-shrink: 0;
 }
 
 .button--primary {
@@ -83,11 +87,10 @@
 
 .button--primary:hover {
   background-color: var(--color-text-muted);
-  transform: translateY(-1px);
 }
 
 .button--primary:active {
-  transform: translateY(0);
+  background-color: var(--color-text-primary);
 }
 
 .button--secondary {
@@ -112,12 +115,14 @@
   max-height: 520px;
   border-radius: 24px;
   background: transparent;
-  overflow: hidden;
+  overflow: visible; /* Changed from hidden to allow note to overflow */
 }
 
 .hero__canvas {
   position: absolute;
   inset: 0;
+  border-radius: 24px;
+  overflow: hidden;
 }
 .hero__scroll-cue {
   position: absolute;

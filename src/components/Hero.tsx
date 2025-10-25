@@ -1,7 +1,10 @@
-import { useEffect, useState } from 'react';
-import './Hero.css';
-import { EarthCanvas } from './earth/EarthCanvas';
-import { HeroStarfield } from './HeroStarfield';
+import { useEffect, useState } from "react";
+import { useMagneticHover } from "../hooks/useMagneticHover";
+import "./Hero.css";
+import { EarthCanvas } from "./earth/EarthCanvas";
+import { HandwrittenNote } from "./HandwrittenNote";
+import { HeroStarfield } from "./HeroStarfield";
+import { RevealText } from "./RevealText";
 
 interface HeroProps {
   onWorkClick: () => void;
@@ -10,7 +13,14 @@ interface HeroProps {
 
 export function Hero({ onWorkClick, onContactClick }: HeroProps) {
   const [showScrollCue, setShowScrollCue] = useState(false);
-
+  const primaryButtonRef = useMagneticHover<HTMLButtonElement>({
+    strength: 0.2,
+    maxDistance: 60,
+  });
+  const secondaryButtonRef = useMagneticHover<HTMLButtonElement>({
+    strength: 0.2,
+    maxDistance: 60,
+  });
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowScrollCue(true);
@@ -24,7 +34,9 @@ export function Hero({ onWorkClick, onContactClick }: HeroProps) {
       <HeroStarfield />
       <div className="hero__layout">
         <div className="hero__content">
-          <h1 className="hero__title">Gabriel Andrade</h1>
+          <RevealText as="h1" className="hero__title" stagger={true} delay={0}>
+            Gabriel Andrade
+          </RevealText>
           <p className="hero__subtitle">
             Frontend / Full-stack Engineer crafting fast, aesthetic, reliable
             interfaces.
@@ -35,6 +47,7 @@ export function Hero({ onWorkClick, onContactClick }: HeroProps) {
 
           <div className="hero__cta">
             <button
+              ref={primaryButtonRef}
               type="button"
               className="button button--primary"
               onClick={onWorkClick}
@@ -43,6 +56,7 @@ export function Hero({ onWorkClick, onContactClick }: HeroProps) {
               See my work
             </button>
             <button
+              ref={secondaryButtonRef}
               type="button"
               className="button button--secondary"
               onClick={onContactClick}
@@ -55,6 +69,7 @@ export function Hero({ onWorkClick, onContactClick }: HeroProps) {
 
         <div className="hero__visual" aria-hidden="true">
           <EarthCanvas />
+          <HandwrittenNote text="You can spin it!" delay={1500} />
         </div>
       </div>
 
