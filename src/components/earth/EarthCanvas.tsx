@@ -49,7 +49,7 @@ export function EarthCanvas() {
     earthGroup.rotation.z = THREE.MathUtils.degToRad(-23.4);
     scene.add(earthGroup);
 
-    const geometry = new THREE.IcosahedronGeometry(2.16, 12);
+    const geometry = new THREE.IcosahedronGeometry(2.592, 12);
     const material = new THREE.MeshPhongMaterial({
       map: loadTexture('00_earthmap1k.jpg'),
       specularMap: loadTexture('02_earthspec1k.jpg'),
@@ -84,7 +84,6 @@ export function EarthCanvas() {
     earthGroup.add(glowMesh);
 
     const sunLight = new THREE.DirectionalLight(0xffffff, 2.0);
-    sunLight.position.set(-5, 0, 0);
     scene.add(sunLight);
 
     const controls = new OrbitControls(camera, renderer.domElement);
@@ -98,6 +97,12 @@ export function EarthCanvas() {
     const animate = () => {
       animationFrame = requestAnimationFrame(animate);
       controls.update();
+
+      // Update light position to always be to the left of the camera view
+      const offset = new THREE.Vector3(-5, 0, 0);
+      offset.applyQuaternion(camera.quaternion);
+      sunLight.position.copy(offset);
+
       earthMesh.rotation.y += 0.002;
       lightsMesh.rotation.y += 0.002;
       cloudsMesh.rotation.y += 0.0023;
