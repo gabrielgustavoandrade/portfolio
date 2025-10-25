@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 import type { Project } from '../data/projects';
-import { getTitleSegments } from '../utils/titleSegments';
 import { TransitionLink } from './TransitionLink';
 import './WorkList.css';
 
@@ -119,31 +118,26 @@ export function WorkList({ projects }: WorkListProps) {
         </div>
 
         <div className="work-list__grid" ref={cardsRef}>
-          {projects.map((project) => {
-            const titleSegments = getTitleSegments(project.slug, project.title);
-
-            return (
-              <TransitionLink
-                key={project.slug}
-                to={`/work/${project.slug}`}
-                className="work-card"
+          {projects.map((project) => (
+            <TransitionLink
+              key={project.slug}
+              to={`/work/${project.slug}`}
+              className="work-card"
+            >
+              <h3
+                className="work-card__title"
+                aria-label={project.title}
+                style={{ viewTransitionName: `work-title-${project.slug}` }}
               >
-                <h3 className="work-card__title" aria-label={project.title}>
-                  {titleSegments.map((segment, index) => (
-                    <span key={segment.id}>
-                      {segment.text}
-                      {index < titleSegments.length - 1 ? ' ' : ''}
-                    </span>
-                  ))}
-                </h3>
-                <p className="work-card__subtitle">{project.subtitle}</p>
-                <div className="work-card__meta">
-                  {project.meta.role} · {project.meta.location}
-                </div>
-                <p className="work-card__summary">{project.summary}</p>
-              </TransitionLink>
-            );
-          })}
+                {project.title}
+              </h3>
+              <p className="work-card__subtitle">{project.subtitle}</p>
+              <div className="work-card__meta">
+                {project.meta.role} · {project.meta.location}
+              </div>
+              <p className="work-card__summary">{project.summary}</p>
+            </TransitionLink>
+          ))}
         </div>
       </div>
     </section>

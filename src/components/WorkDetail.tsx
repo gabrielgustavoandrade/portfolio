@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 import type { Project } from '../data/projects';
-import { getTitleSegments } from '../utils/titleSegments';
 import './WorkDetail.css';
 
 interface WorkDetailProps {
@@ -68,8 +67,6 @@ export function WorkDetail({ project, onClose }: WorkDetailProps) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const titleSegments = getTitleSegments(project.slug, project.title);
-
   return (
     <section className="work-detail" ref={detailRef}>
       <div className="work-detail__container">
@@ -88,13 +85,9 @@ export function WorkDetail({ project, onClose }: WorkDetailProps) {
             className="work-detail__title"
             tabIndex={-1}
             aria-label={project.title}
+            style={{ viewTransitionName: `work-title-${project.slug}` }}
           >
-            {titleSegments.map((segment, index) => (
-              <span key={segment.id}>
-                {segment.text}
-                {index < titleSegments.length - 1 ? ' ' : ''}
-              </span>
-            ))}
+            {project.title}
           </h2>
 
           <p className="work-detail__subtitle">{project.subtitle}</p>

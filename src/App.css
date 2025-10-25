@@ -14,6 +14,21 @@
   animation: fade-in 0.3s ease-in;
 }
 
+/* Title morphing - smooth transition for work titles */
+::view-transition-old(work-title-mms-customize),
+::view-transition-new(work-title-mms-customize),
+::view-transition-old(work-title-valtech-design-system),
+::view-transition-new(work-title-valtech-design-system),
+::view-transition-old(work-title-rv-energy),
+::view-transition-new(work-title-rv-energy),
+::view-transition-old(work-title-good-eggs),
+::view-transition-new(work-title-good-eggs),
+::view-transition-old(work-title-plasma-pos),
+::view-transition-new(work-title-plasma-pos) {
+  animation-duration: 0.5s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 @keyframes fade-out {
   to {
     opacity: 0;
