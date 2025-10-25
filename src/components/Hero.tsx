@@ -22,12 +22,14 @@ export function Hero({ onWorkClick, onContactClick }: HeroProps) {
       <div className="hero__content">
         <h1 className="hero__title">Gabriel Andrade</h1>
         <p className="hero__subtitle">
-          Frontend / Full-stack Engineer crafting fast, aesthetic, reliable interfaces.
+          Frontend / Full-stack Engineer crafting fast, aesthetic, reliable
+          interfaces.
         </p>
         <p className="hero__tagline">I build software that feels invisible.</p>
 
         <div className="hero__cta">
           <button
+            type="button"
             className="button button--primary"
             onClick={onWorkClick}
             aria-label="Navigate to selected work section"
@@ -35,6 +37,7 @@ export function Hero({ onWorkClick, onContactClick }: HeroProps) {
             See my work
           </button>
           <button
+            type="button"
             className="button button--secondary"
             onClick={onContactClick}
             aria-label="Navigate to contact section"
@@ -52,6 +55,7 @@ export function Hero({ onWorkClick, onContactClick }: HeroProps) {
               fill="none"
               stroke="currentColor"
               strokeWidth="2"
+              aria-hidden="true"
             >
               <polyline points="6 9 12 15 18 9" />
             </svg>

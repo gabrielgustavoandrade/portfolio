@@ -11,6 +11,7 @@ export function Footer() {
       <footer className="footer">
         <div className="footer__container">
           <button
+            type="button"
             className="footer__tech-button"
             onClick={() => setIsModalOpen(true)}
           >
@@ -20,6 +21,7 @@ export function Footer() {
               viewBox="0 0 20 20"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
             >
               <path
                 d="M10 2L2 6V10C2 14.5 5 18 10 18C15 18 18 14.5 18 10V6L10 2Z"
@@ -45,7 +47,10 @@ export function Footer() {
         </div>
       </footer>
 
-      <TechStackModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <TechStackModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </>
   );
 }
