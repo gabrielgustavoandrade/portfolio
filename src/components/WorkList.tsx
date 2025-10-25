@@ -1,10 +1,35 @@
 import { useEffect, useRef } from 'react';
+import { useCardMagneticTitle } from '../hooks/useCardMagneticTitle';
 import type { Project } from '../data/projects';
 import { TransitionLink } from './TransitionLink';
 import './WorkList.css';
 
 interface WorkListProps {
   projects: Project[];
+}
+
+function WorkCard({ project }: { project: Project }) {
+  const [cardRef, titleRef] = useCardMagneticTitle<
+    HTMLAnchorElement,
+    HTMLHeadingElement
+  >({ strength: 0.1 });
+
+  return (
+    <TransitionLink
+      ref={cardRef}
+      to={`/work/${project.slug}`}
+      className="work-card"
+    >
+      <h3 ref={titleRef} className="work-card__title" aria-label={project.title}>
+        {project.title}
+      </h3>
+      <p className="work-card__subtitle">{project.subtitle}</p>
+      <div className="work-card__meta">
+        {project.meta.role} · {project.meta.location}
+      </div>
+      <p className="work-card__summary">{project.summary}</p>
+    </TransitionLink>
+  );
 }
 
 export function WorkList({ projects }: WorkListProps) {
@@ -33,79 +58,7 @@ export function WorkList({ projects }: WorkListProps) {
     });
 
     return () => observer.disconnect();
-  }, []);
-
-  // Magnetic cursor effect on title words
-  useEffect(() => {
-    // Skip magnetic effect if user prefers reduced motion
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)',
-    ).matches;
-    if (prefersReducedMotion) return;
-
-    const cards = cardsRef.current?.querySelectorAll('.work-card');
-    if (!cards) return;
-
-    const handleMouseMove = (e: MouseEvent, card: Element) => {
-      const titleWords = card.querySelectorAll('.work-card__title span');
-
-      titleWords.forEach((word) => {
-        const rect = word.getBoundingClientRect();
-        const wordCenterX = rect.left + rect.width / 2;
-        const wordCenterY = rect.top + rect.height / 2;
-
-        const deltaX = e.clientX - wordCenterX;
-        const deltaY = e.clientY - wordCenterY;
-
-        const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-        const maxDistance = 100;
-
-        if (distance < maxDistance) {
-          const strength = (1 - distance / maxDistance) * 0.15;
-          const moveX = deltaX * strength;
-          const moveY = deltaY * strength;
-
-          (word as HTMLElement).style.transform =
-            `translate(${moveX}px, ${moveY}px)`;
-        } else {
-          (word as HTMLElement).style.transform = 'translate(0, 0)';
-        }
-      });
-    };
-
-    const handleMouseLeave = (card: Element) => {
-      const titleWords = card.querySelectorAll('.work-card__title span');
-      titleWords.forEach((word) => {
-        (word as HTMLElement).style.transform = 'translate(0, 0)';
-      });
-    };
-
-    const handlers = new Map<
-      Element,
-      { move: EventListener; leave: EventListener }
-    >();
-
-    cards.forEach((card) => {
-      const mouseMoveHandler: EventListener = (e) =>
-        handleMouseMove(e as MouseEvent, card);
-      const mouseLeaveHandler: EventListener = () => handleMouseLeave(card);
-
-      handlers.set(card, {
-        move: mouseMoveHandler,
-        leave: mouseLeaveHandler,
-      });
-
-      card.addEventListener('mousemove', mouseMoveHandler);
-      card.addEventListener('mouseleave', mouseLeaveHandler);
-    });
-
-    return () => {
-      handlers.forEach((h, card) => {
-        card.removeEventListener('mousemove', h.move);
-        card.removeEventListener('mouseleave', h.leave);
-      });
-    };
-  }, []);
+  }, [projects]);
 
   return (
     <section className="work-list" id="work">
@@ -119,20 +72,7 @@ export function WorkList({ projects }: WorkListProps) {
 
         <div className="work-list__grid" ref={cardsRef}>
           {projects.map((project) => (
-            <TransitionLink
-              key={project.slug}
-              to={`/work/${project.slug}`}
-              className="work-card"
-            >
-              <h3 className="work-card__title" aria-label={project.title}>
-                {project.title}
-              </h3>
-              <p className="work-card__subtitle">{project.subtitle}</p>
-              <div className="work-card__meta">
-                {project.meta.role} · {project.meta.location}
-              </div>
-              <p className="work-card__summary">{project.summary}</p>
-            </TransitionLink>
+            <WorkCard key={project.slug} project={project} />
           ))}
         </div>
       </div>
