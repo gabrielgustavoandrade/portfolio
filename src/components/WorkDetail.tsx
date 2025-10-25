@@ -1,4 +1,6 @@
 import { useEffect, useRef } from 'react';
+import { useMagneticHover } from '../hooks/useMagneticHover';
+import { useGlobalMagneticHover } from '../hooks/useGlobalMagneticHover';
 import type { Project } from '../data/projects';
 import './WorkDetail.css';
 
@@ -9,11 +11,17 @@ interface WorkDetailProps {
 
 export function WorkDetail({ project, onClose }: WorkDetailProps) {
   const detailRef = useRef<HTMLElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
   const sectionsRef = useRef<HTMLDivElement>(null);
+  const backButtonRef = useMagneticHover<HTMLButtonElement>({
+    strength: 0.2,
+    maxDistance: 60,
+  });
+  const titleMagneticRef = useGlobalMagneticHover<HTMLHeadingElement>({
+    strength: 0.025,
+  });
 
   useEffect(() => {
-    titleRef.current?.focus();
+    titleMagneticRef.current?.focus();
 
     const announcement = document.createElement('div');
     announcement.setAttribute('role', 'status');
@@ -71,6 +79,7 @@ export function WorkDetail({ project, onClose }: WorkDetailProps) {
     <section className="work-detail" ref={detailRef}>
       <div className="work-detail__container">
         <button
+          ref={backButtonRef}
           type="button"
           className="work-detail__back"
           onClick={onClose}
@@ -81,7 +90,7 @@ export function WorkDetail({ project, onClose }: WorkDetailProps) {
 
         <article className="work-detail__content" ref={sectionsRef}>
           <h2
-            ref={titleRef}
+            ref={titleMagneticRef}
             className="work-detail__title"
             tabIndex={-1}
             aria-label={project.title}

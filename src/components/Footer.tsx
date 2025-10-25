@@ -1,16 +1,22 @@
 import { useState } from 'react';
+import { useMagneticHover } from '../hooks/useMagneticHover';
 import { PerformanceToggle } from './PerformanceToggle';
 import { TechStackModal } from './TechStackModal';
 import './Footer.css';
 
 export function Footer() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const techButtonRef = useMagneticHover<HTMLButtonElement>({
+    strength: 0.15,
+    maxDistance: 50,
+  });
 
   return (
     <>
       <footer className="footer">
         <div className="footer__container">
           <button
+            ref={techButtonRef}
             type="button"
             className="footer__tech-button"
             onClick={() => setIsModalOpen(true)}

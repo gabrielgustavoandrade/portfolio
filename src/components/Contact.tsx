@@ -1,6 +1,12 @@
+import { useMagneticHover } from '../hooks/useMagneticHover';
 import './Contact.css';
 
 export function Contact() {
+  const emailButtonRef = useMagneticHover<HTMLAnchorElement>({
+    strength: 0.2,
+    maxDistance: 60,
+  });
+
   return (
     <section className="contact" id="contact">
       <div className="contact__container">
@@ -11,6 +17,7 @@ export function Contact() {
 
         <div className="contact__actions">
           <a
+            ref={emailButtonRef}
             href="mailto:gabrielgustavoandrade@gmail.com"
             className="button button--primary"
             aria-label="Send me an email"
