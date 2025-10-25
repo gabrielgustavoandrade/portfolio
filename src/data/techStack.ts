@@ -171,7 +171,7 @@ export const buildPipeline = {
   development: [
     'Vite dev server with HMR',
     'TypeScript type checking',
-    'ESLint for code quality',
+    'Biome for linting and formatting',
     'Hot module replacement for instant feedback',
   ],
   production: [
@@ -197,8 +197,8 @@ export const metrics = {
     seo: '100',
   },
   bundle: {
-    totalSize: '< 200KB',
-    gzipped: 'Yes',
+    totalSize: '212KB',
+    gzipped: '68KB',
     chunks: 'Optimized',
   },
   vitals: {

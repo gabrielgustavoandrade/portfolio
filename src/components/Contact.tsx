@@ -11,14 +11,14 @@ export function Contact() {
 
         <div className="contact__actions">
           <a
-            href="mailto:your.email@example.com"
+            href="mailto:gabrielgustavoandrade@gmail.com"
             className="button button--primary"
             aria-label="Send me an email"
           >
             Email me
           </a>
           <a
-            href="https://linkedin.com/in/yourprofile"
+            href="https://www.linkedin.com/in/gabrielgustavoandrade"
             className="contact__link"
             target="_blank"
             rel="noopener noreferrer"
