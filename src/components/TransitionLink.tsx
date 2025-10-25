@@ -1,5 +1,5 @@
-import { useNavigate, useLocation } from 'react-router-dom';
-import { MouseEvent, ReactNode } from 'react';
+import type { MouseEvent, ReactNode } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface TransitionLinkProps {
   to: string;
@@ -10,7 +10,12 @@ interface TransitionLinkProps {
 
 const SCROLL_KEY = 'portfolio:scroll-position';
 
-export function TransitionLink({ to, children, className, onClick }: TransitionLinkProps) {
+export function TransitionLink({
+  to,
+  children,
+  className,
+  onClick,
+}: TransitionLinkProps) {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -27,8 +32,8 @@ export function TransitionLink({ to, children, className, onClick }: TransitionL
     }
 
     // Use View Transitions API for SPA navigation
-    if ('startViewTransition' in document) {
-      (document as any).startViewTransition(() => {
+    if ('startViewTransition' in document && document.startViewTransition) {
+      document.startViewTransition(() => {
         navigate(to);
       });
     } else {

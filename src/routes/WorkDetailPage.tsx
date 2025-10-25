@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { WorkDetail } from '../components/WorkDetail';
+import { useNavigate, useParams } from 'react-router-dom';
 import { About } from '../components/About';
 import { Contact } from '../components/Contact';
 import { Footer } from '../components/Footer';
+import { WorkDetail } from '../components/WorkDetail';
 import { projects } from '../data/projects';
 
 const LAST_FOCUSED_CARD_KEY = 'work:last-focused-slug';
@@ -32,8 +32,8 @@ export function WorkDetailPage() {
     sessionStorage.setItem(LAST_FOCUSED_CARD_KEY, project.slug);
 
     // Use View Transitions API for SPA navigation
-    if ('startViewTransition' in document) {
-      (document as any).startViewTransition(() => {
+    if ('startViewTransition' in document && document.startViewTransition) {
+      document.startViewTransition(() => {
         navigate('/');
 
         // Restore scroll immediately after navigation
