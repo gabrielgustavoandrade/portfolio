@@ -130,10 +130,7 @@ export function WorkList({ projects }: WorkListProps) {
               >
                 <h3 className="work-card__title" aria-label={project.title}>
                   {titleSegments.map((segment, index) => (
-                    <span
-                      key={segment.id}
-                      style={{ viewTransitionName: segment.viewTransitionName }}
-                    >
+                    <span key={segment.id}>
                       {segment.text}
                       {index < titleSegments.length - 1 ? ' ' : ''}
                     </span>

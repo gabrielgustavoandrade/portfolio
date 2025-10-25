@@ -90,10 +90,7 @@ export function WorkDetail({ project, onClose }: WorkDetailProps) {
             aria-label={project.title}
           >
             {titleSegments.map((segment, index) => (
-              <span
-                key={segment.id}
-                style={{ viewTransitionName: segment.viewTransitionName }}
-              >
+              <span key={segment.id}>
                 {segment.text}
                 {index < titleSegments.length - 1 ? ' ' : ''}
               </span>

@@ -1,6 +1,6 @@
 import type { MouseEvent, ReactNode } from 'react';
+import { flushSync } from 'react-dom';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useViewTransition } from '../hooks/useViewTransition';
 
 interface TransitionLinkProps {
   to: string;
@@ -19,7 +19,6 @@ export function TransitionLink({
 }: TransitionLinkProps) {
   const navigate = useNavigate();
   const location = useLocation();
-  const startViewTransition = useViewTransition();
 
   const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
@@ -33,9 +32,20 @@ export function TransitionLink({
       onClick();
     }
 
-    startViewTransition(() => {
+    // Simple page crossfade with View Transitions API
+    if (
+      'startViewTransition' in document &&
+      typeof (document as any).startViewTransition === 'function'
+    ) {
+      (document as any).startViewTransition(() => {
+        flushSync(() => {
+          navigate(to);
+        });
+      });
+    } else {
+      // Fallback for browsers without View Transitions support
       navigate(to);
-    });
+    }
   };
 
   return (
