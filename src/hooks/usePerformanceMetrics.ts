@@ -4,7 +4,7 @@ export interface PerformanceMetrics {
   fcp: number | null; // First Contentful Paint
   lcp: number | null; // Largest Contentful Paint
   cls: number | null; // Cumulative Layout Shift
-  fid: number | null; // First Input Delay
+  inp: number | null; // Interaction to Next Paint (replaced FID in March 2024)
   ttfb: number | null; // Time to First Byte
   memory: {
     used: number;
@@ -18,7 +18,7 @@ export function usePerformanceMetrics() {
     fcp: null,
     lcp: null,
     cls: null,
-    fid: null,
+    inp: null,
     ttfb: null,
     memory: null,
   });
@@ -67,7 +67,7 @@ export function usePerformanceMetrics() {
       }
     };
 
-    // Use PerformanceObserver for LCP, CLS, FID
+    // Use PerformanceObserver for LCP, CLS, INP
     if ('PerformanceObserver' in window) {
       try {
         // LCP Observer
@@ -97,21 +97,29 @@ export function usePerformanceMetrics() {
         });
         clsObserver.observe({ entryTypes: ['layout-shift'] });
 
-        // FID Observer
-        const fidObserver = new PerformanceObserver((entryList) => {
-          const entries = entryList.getEntries();
-          const firstEntry = entries[0] as PerformanceEventTiming;
-          setMetrics((prev) => ({
-            ...prev,
-            fid: firstEntry.processingStart - firstEntry.startTime,
-          }));
+        // INP Observer (Interaction to Next Paint)
+        // Tracks the worst interaction latency across all user interactions
+        let maxInteractionLatency = 0;
+        const inpObserver = new PerformanceObserver((entryList) => {
+          for (const entry of entryList.getEntries()) {
+            const eventEntry = entry as PerformanceEventTiming;
+            // INP is the duration of the interaction (processing + presentation delay)
+            const interactionLatency = eventEntry.duration;
+            if (interactionLatency > maxInteractionLatency) {
+              maxInteractionLatency = interactionLatency;
+              setMetrics((prev) => ({
+                ...prev,
+                inp: maxInteractionLatency,
+              }));
+            }
+          }
         });
-        fidObserver.observe({ entryTypes: ['first-input'] });
+        inpObserver.observe({ type: 'event', buffered: true });
 
         return () => {
           lcpObserver.disconnect();
           clsObserver.disconnect();
-          fidObserver.disconnect();
+          inpObserver.disconnect();
         };
       } catch (e) {
         console.warn('PerformanceObserver not fully supported', e);

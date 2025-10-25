@@ -3,7 +3,38 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { getFresnelMaterial } from './getFresnelMaterial';
 
+// Scene configuration
 const EARTH_TEXTURE_PATH = '/textures/earth/';
+const EARTH_RADIUS = 2.592;
+const EARTH_TILT_DEGREES = -23.4;
+const EARTH_GEOMETRY_DETAIL = 12;
+
+// Camera configuration
+const CAMERA_FOV = 75;
+const CAMERA_NEAR = 0.1;
+const CAMERA_FAR = 1000;
+const CAMERA_POSITION_Z = 5;
+
+// Material configuration
+const BUMP_SCALE = 0.04;
+const CLOUDS_OPACITY = 0.8;
+const CLOUDS_SCALE = 1.003;
+const GLOW_SCALE = 1.01;
+
+// Lighting configuration
+const LIGHT_INTENSITY = 2.0;
+const LIGHT_OFFSET_X = -5;
+
+// Controls configuration
+const DAMPING_FACTOR = 0.05;
+const ROTATE_SPEED = 0.5;
+const MAX_PIXEL_RATIO = 1.75;
+
+// Animation configuration
+const ROTATION_SPEED = {
+  earth: 0.002,
+  clouds: 0.0023,
+} as const;
 
 export function EarthCanvas() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -18,15 +49,15 @@ export function EarthCanvas() {
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
-      75,
+      CAMERA_FOV,
       sizes.width / sizes.height,
-      0.1,
-      1000,
+      CAMERA_NEAR,
+      CAMERA_FAR,
     );
-    camera.position.z = 5;
+    camera.position.z = CAMERA_POSITION_Z;
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, MAX_PIXEL_RATIO));
     renderer.setSize(sizes.width, sizes.height);
     renderer.domElement.style.width = '100%';
     renderer.domElement.style.height = '100%';
@@ -46,15 +77,18 @@ export function EarthCanvas() {
     };
 
     const earthGroup = new THREE.Group();
-    earthGroup.rotation.z = THREE.MathUtils.degToRad(-23.4);
+    earthGroup.rotation.z = THREE.MathUtils.degToRad(EARTH_TILT_DEGREES);
     scene.add(earthGroup);
 
-    const geometry = new THREE.IcosahedronGeometry(2.592, 12);
+    const geometry = new THREE.IcosahedronGeometry(
+      EARTH_RADIUS,
+      EARTH_GEOMETRY_DETAIL,
+    );
     const material = new THREE.MeshPhongMaterial({
       map: loadTexture('00_earthmap1k.jpg'),
       specularMap: loadTexture('02_earthspec1k.jpg'),
       bumpMap: loadTexture('01_earthbump1k.jpg', false),
-      bumpScale: 0.04,
+      bumpScale: BUMP_SCALE,
     });
     const earthMesh = new THREE.Mesh(geometry, material);
     earthGroup.add(earthMesh);
@@ -70,28 +104,28 @@ export function EarthCanvas() {
     const cloudsMat = new THREE.MeshStandardMaterial({
       map: loadTexture('04_earthcloudmap.jpg'),
       transparent: true,
-      opacity: 0.8,
+      opacity: CLOUDS_OPACITY,
       blending: THREE.AdditiveBlending,
       alphaMap: loadTexture('05_earthcloudmaptrans.jpg', false),
     });
     const cloudsMesh = new THREE.Mesh(geometry, cloudsMat);
-    cloudsMesh.scale.setScalar(1.003);
+    cloudsMesh.scale.setScalar(CLOUDS_SCALE);
     earthGroup.add(cloudsMesh);
 
     const fresnelMat = getFresnelMaterial();
     const glowMesh = new THREE.Mesh(geometry, fresnelMat);
-    glowMesh.scale.setScalar(1.01);
+    glowMesh.scale.setScalar(GLOW_SCALE);
     earthGroup.add(glowMesh);
 
-    const sunLight = new THREE.DirectionalLight(0xffffff, 2.0);
+    const sunLight = new THREE.DirectionalLight(0xffffff, LIGHT_INTENSITY);
     scene.add(sunLight);
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
-    controls.dampingFactor = 0.05;
+    controls.dampingFactor = DAMPING_FACTOR;
     controls.enableZoom = false;
     controls.enablePan = false;
-    controls.rotateSpeed = 0.5;
+    controls.rotateSpeed = ROTATE_SPEED;
 
     let animationFrame: number;
     const animate = () => {
@@ -99,14 +133,15 @@ export function EarthCanvas() {
       controls.update();
 
       // Update light position to always be to the left of the camera view
-      const offset = new THREE.Vector3(-5, 0, 0);
-      offset.applyQuaternion(camera.quaternion);
-      sunLight.position.copy(offset);
+      const lightOffset = new THREE.Vector3(LIGHT_OFFSET_X, 0, 0);
+      lightOffset.applyQuaternion(camera.quaternion);
+      sunLight.position.copy(lightOffset);
 
-      earthMesh.rotation.y += 0.002;
-      lightsMesh.rotation.y += 0.002;
-      cloudsMesh.rotation.y += 0.0023;
-      glowMesh.rotation.y += 0.002;
+      // Rotate Earth layers
+      earthMesh.rotation.y += ROTATION_SPEED.earth;
+      lightsMesh.rotation.y += ROTATION_SPEED.earth;
+      cloudsMesh.rotation.y += ROTATION_SPEED.clouds;
+      glowMesh.rotation.y += ROTATION_SPEED.earth;
       renderer.render(scene, camera);
     };
     animate();

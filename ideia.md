@@ -1,105 +1,30 @@
-Below are a few structured directions — from subtle performance-engineering proof points to lightweight WebGL/Three.js showcases — that fit your profile (React/TypeScript engineer focused on speed, reliability, composability).
+# Portfolio North Star
 
-⚙️ 1. Interactive “Tech Showcase” Section
+This site sells Gabriel Andrade as a senior React/TypeScript engineer who obsesses over speed, clarity, and reliable execution. Every artifact should feel like product documentation: intentional typography, restrained visuals, and measurable engineering receipts.
 
-Goal: Demonstrate your frontend depth (WebGL, performance, micro-interactions) without turning your site into a gimmick.
+## Experience Pillars
 
-Ideas:
+1. **Performance-first storytelling** — show Lighthouse scores, FPS monitors, and measurable deltas right in the UI (Performance Toggle, metrics callouts inside Work Detail, Build Log posts with charts).
+2. **Route-based work exploration** — keep `/work/:slug` detail pages, but wrap every navigation in View Transitions for a polished list → detail experience without inline rendering.
+3. **Technical transparency** — “How I Built This” modal, Build Log posts, and console/Easter-egg notes communicate architecture choices and trade-offs like an engineer’s write-up.
+4. **Developer trust cues** — fast bundle, stable interactions, no gimmicks. Cursor effects, parallax, or transitions must never compromise 60 fps.
 
-3D “Experience Map” – a minimal 3D scene (using three.js + React Three Fiber) showing your career timeline as floating cards (Valtech, BairesDev, Plasma). Hovering a card animates a small particle burst or reveals metrics (“32% faster load times”).
-→ Shows: WebGL integration, animation control, composable architecture.
+## Interaction Focus
 
-Component-Performance Visualizer – simulate component re-renders (a graph or real-time counter) to illustrate your obsession with optimization.
-→ Shows: React profiler mindset, animation & data visualization.
+- **View Transitions everywhere**: smooth route changes via `useViewTransition`, subtle fade/scale fallbacks when unsupported.
+- **Motion with intent**: staggered work cards, scroll-activated detail sections, minimal parallax in hero/work detail.
+- **Accessible micro-interactions**: buttons with explicit types, aria-labels, reduced-motion guards, keyboard-first navigation.
 
-“System View” Canvas – a subtle background canvas of connected nodes (like network packets or data flow) that subtly react to mouse movement.
-→ Shows: React + canvas + event handling; looks like “fast, invisible systems”.
+## Content System
 
-💡 Use react-three-fiber + drei for simplicity. Keep frame rate high, memory low — this will itself prove performance expertise.
+- **Hero** → clarity-first statement + primary/secondary CTAs.
+- **Selected Work** → curated list with consistent metadata, project detail lives on `/work/:slug`.
+- **Build Log** → deep-dives (performance, view transitions, interaction engineering).
+- **Tech Stack Modal** → architectural notes, metrics, tooling rationale.
+- **Performance Toggle** → real-time metrics to reinforce credibility.
+- **About + Contact** → concise narrative + actionable links.
 
-🧠 2. Engineering Case-Study Demos
+## Future Direction
 
-Goal: Let visitors use something you’ve built — short, scoped demos hosted on your portfolio domain.
-
-Ideas:
-
-Design System Sandbox:
-Embed a live Storybook or a small component playground where people can interact with a few components (buttons, modals, animations).
-→ Shows: UI library architecture, accessibility, documentation discipline.
-
-Performance Playground:
-A side-by-side demo: “Before optimization / After optimization”. Use something like bundle analyzer results, frame render times, or lazy loading metrics.
-→ Shows: tangible engineering impact, measurable outcomes.
-
-Convex/TanStack Demo:
-A small demo using your Plasma stack (React + Convex + TanStack Router) — e.g., a mini todo list with real-time updates.
-→ Shows: full-stack fluency, reactive data flows, serverless understanding.
-
-🧩 3. “Behind the Scenes” Engineering Notes
-
-Goal: Add technical depth without code dumps — similar to blog posts, but visually engaging.
-
-Ideas:
-
-A “Build Log” section: short cards like “How I achieved 98 Lighthouse score on this site” / “Migrating design systems to React 18 concurrent features” / “Offline sync in Plasma”.
-→ Each card links to a medium-length post (with diagrams, metrics).
-
-A “Stack Overview” visualization: small diagram showing layers — Frontend (React/Next.js/Vite) → APIs (tRPC/GraphQL) → Infra (AWS/Lambda/Vercel). Use animated SVG lines or canvas.
-
-This keeps your site useful for recruiters and engineers reading deeper.
-
-🎨 4. Subtle Interaction Enhancements
-
-Goal: Communicate polish through micro-interactions that feel effortless.
-
-Ideas:
-
-Smooth page transitions using the View Transitions API (the animation you mentioned earlier, like nmn.sh/blog).
-→ Shows: adoption of emerging browser tech.
-
-Hover-reveals on project cards: reveal stack icons or metrics when hovered.
-
-Parallax scroll in hero section (slight motion tied to scroll position).
-
-Cursor-based magnetic effects (light reflection, 3D tilt).
-→ All subtle, not flashy. Emphasise frame rate and performance.
-
-🚀 5. AI / Data-Driven Demo
-
-Since you’re also comfortable with AI/GenAI and have Convex experience:
-
-AI-powered UI generator: A small demo where users can type “generate a login screen” and it produces a styled component using your design system tokens (just conceptually).
-
-Real-time data dashboard: Use mock API to show charts updating smoothly.
-→ Shows: backend integration + UI reactivity + “product feel”.
-
-🧭 6. Interactive Timeline / Map
-
-Goal: Replace the boring text résumé section with a dynamic one.
-
-Ideas:
-
-Vertical or horizontal timeline where each milestone expands into a small modal with achievements, metrics, screenshots.
-
-Or, if you want to hint 3D: make a “journey path” (camera scrolls through Valtech → BairesDev → Plasma nodes).
-→ This ties together your career story and your mastery of 3D or animation frameworks.
-
-🧱 7. Tech-Driven Footer / Easter Egg
-
-Keep it light but memorable:
-
-“Inspect this site”: a console log Easter egg that prints your stack + build time.
-
-Or a “Performance mode toggle” in the footer that benchmarks current FPS / load time when clicked.
-→ Shows confidence and craft.
-
-🧭 Priority Recommendations for you
-
-Given your profile (senior, React/TypeScript, focus on performance, composable systems, European market):
-
-Tier	Feature	Why
-Must-Add	View Transition animation between pages (Title/Project)	Light, modern, subtle tech mastery
-Should-Add	3D / WebGL micro-scene (career timeline or system map)	Visually memorable proof of technical depth
-Should-Add	“Performance Playground” case study	Reinforces your engineering maturity
-Nice-to-Have	“Stack Visualization” or “Build Log” posts	Shows transparency & leadership
-Optional Flair	Console Easter egg or performance toggle	Personality + confidence
+- **3D/Career Timeline**: paused. Keep exploratory notes off the current spec until we define a clearer visual concept.
+- **Optional demos**: Convex/TanStack “live data” proof and a Design-System sandbox remain on the backlog for a post-MVP polish phase.

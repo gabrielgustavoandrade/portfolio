@@ -8,12 +8,20 @@ type FresnelOptions = {
   power?: number;
 };
 
+// Fresnel effect configuration
+const DEFAULT_RIM_COLOR = 0x0088ff; // Blue atmospheric glow
+const DEFAULT_FACING_COLOR = 0x000000; // Black (transparent)
+const DEFAULT_BIAS = 0.1;
+const DEFAULT_SCALE = 1.0;
+const DEFAULT_POWER = 4.0;
+const GLOW_OPACITY_MULTIPLIER = 0.3; // Controls overall glow transparency
+
 export function getFresnelMaterial({
-  rimColor = 0x0088ff,
-  facingColor = 0x000000,
-  bias = 0.1,
-  scale = 1.0,
-  power = 4.0,
+  rimColor = DEFAULT_RIM_COLOR,
+  facingColor = DEFAULT_FACING_COLOR,
+  bias = DEFAULT_BIAS,
+  scale = DEFAULT_SCALE,
+  power = DEFAULT_POWER,
 }: FresnelOptions = {}) {
   const uniforms = {
     color1: { value: new THREE.Color(rimColor) },
@@ -50,8 +58,11 @@ export function getFresnelMaterial({
     varying float vReflectionFactor;
 
     void main() {
+      // Clamp the reflection factor between 0 and 1
       float f = clamp(vReflectionFactor, 0.0, 1.0);
-      gl_FragColor = vec4(mix(color2, color1, vec3(f)), f * 0.3);
+
+      // Mix colors and apply opacity multiplier for subtle glow effect
+      gl_FragColor = vec4(mix(color2, color1, vec3(f)), f * ${GLOW_OPACITY_MULTIPLIER.toFixed(1)});
     }
   `;
 

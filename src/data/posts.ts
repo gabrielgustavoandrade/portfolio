@@ -21,38 +21,271 @@ export interface Post {
 
 export const posts: Post[] = [
   {
-    id: 'lighthouse-98-score',
-    title: 'Achieving 98+ Lighthouse Score on This Portfolio',
+    id: 'interactive-3d-earth',
+    title: 'Building an Interactive 3D Earth with Three.js',
     description:
-      'A technical deep dive into the optimization strategies, tooling choices, and performance budget decisions that achieved consistently high Lighthouse scores.',
+      'A deep dive into creating a GPU-accelerated, interactive Earth visualization with realistic textures, custom shaders, and smooth 60fps performance.',
+    date: '2025-01-18',
+    readTime: '12 min read',
+    tags: ['Three.js', 'WebGL', 'Performance', '3D Graphics'],
+    content: {
+      intro:
+        "Creating an interactive 3D Earth seems daunting, but with Three.js and proper optimization, you can build a stunning, performant visualization. Here's how I built the Earth you see on this site.",
+      sections: [
+        {
+          title: 'The Vision',
+          content:
+            'I wanted a hero section that felt alive - a rotating Earth that users could interact with, always lit from the left, with realistic clouds, city lights, and an atmospheric glow. All while maintaining 60fps.',
+        },
+        {
+          title: 'Three.js Setup',
+          content:
+            'The foundation is surprisingly straightforward - a scene, camera, renderer, and geometry.',
+          code: {
+            language: 'typescript',
+            snippet: `const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+camera.position.z = 5;
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
+renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+
+// IcosahedronGeometry creates a sphere with even triangle distribution
+const geometry = new THREE.IcosahedronGeometry(2.592, 12);`,
+          },
+          list: [
+            'Capped pixel ratio at 1.75 to prevent over-rendering on high-DPI displays',
+            'LinearSRGBColorSpace for accurate color rendering',
+            'ACESFilmicToneMapping for realistic lighting',
+            'IcosahedronGeometry detail level 12 balances quality and performance',
+          ],
+        },
+        {
+          title: 'Layered Earth Construction',
+          content:
+            'A realistic Earth requires multiple layers: base surface, city lights, clouds, and atmospheric glow.',
+          code: {
+            language: 'typescript',
+            snippet: `// Layer 1: Earth surface with bump and specular maps
+const earthMaterial = new THREE.MeshPhongMaterial({
+  map: loadTexture('earthmap.jpg'),
+  specularMap: loadTexture('earthspec.jpg'),
+  bumpMap: loadTexture('earthbump.jpg', false),
+  bumpScale: 0.04,
+});
+
+// Layer 2: City lights (additive blending)
+const lightsMaterial = new THREE.MeshBasicMaterial({
+  map: loadTexture('earthlights.jpg'),
+  blending: THREE.AdditiveBlending,
+  transparent: true,
+});
+
+// Layer 3: Clouds with transparency
+const cloudsMaterial = new THREE.MeshStandardMaterial({
+  map: loadTexture('cloudmap.jpg'),
+  transparent: true,
+  opacity: 0.8,
+  blending: THREE.AdditiveBlending,
+  alphaMap: loadTexture('cloudtrans.jpg', false),
+});
+cloudsMesh.scale.setScalar(1.003); // Slightly larger
+
+// Layer 4: Atmospheric glow (custom Fresnel shader)
+const glowMesh = new THREE.Mesh(geometry, getFresnelMaterial());
+glowMesh.scale.setScalar(1.01);`,
+          },
+        },
+        {
+          title: 'Custom Fresnel Shader',
+          content:
+            'The atmospheric glow uses a custom Fresnel shader that creates the blue rim light effect.',
+          code: {
+            language: 'glsl',
+            snippet: `// Vertex Shader
+uniform float fresnelBias;
+uniform float fresnelScale;
+uniform float fresnelPower;
+varying float vReflectionFactor;
+
+void main() {
+  vec4 worldPosition = modelMatrix * vec4(position, 1.0);
+  vec3 worldNormal = normalize(mat3(modelMatrix[0].xyz, modelMatrix[1].xyz, modelMatrix[2].xyz) * normal);
+  vec3 I = worldPosition.xyz - cameraPosition;
+
+  // Fresnel effect calculation
+  vReflectionFactor = fresnelBias + fresnelScale * pow(1.0 + dot(normalize(I), worldNormal), fresnelPower);
+
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+}
+
+// Fragment Shader
+uniform vec3 color1; // Rim color (blue)
+uniform vec3 color2; // Facing color (black)
+varying float vReflectionFactor;
+
+void main() {
+  float f = clamp(vReflectionFactor, 0.0, 1.0);
+  gl_FragColor = vec4(mix(color2, color1, vec3(f)), f * 0.3);
+}`,
+          },
+          list: [
+            'Fresnel effect makes edges brighter (atmospheric scattering)',
+            'World space calculation for accurate lighting',
+            '0.3 alpha multiplier for subtle glow',
+            'Additive blending for natural light accumulation',
+          ],
+        },
+        {
+          title: 'Interactive Camera Controls',
+          content:
+            'OrbitControls provide intuitive interaction while maintaining the left-side lighting.',
+          code: {
+            language: 'typescript',
+            snippet: `const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.05;
+controls.enableZoom = false;
+controls.enablePan = false;
+controls.rotateSpeed = 0.5;
+
+// Update light position every frame to follow camera
+const animate = () => {
+  requestAnimationFrame(animate);
+  controls.update();
+
+  // Keep light on the left side relative to camera view
+  const lightOffset = new THREE.Vector3(-5, 0, 0);
+  lightOffset.applyQuaternion(camera.quaternion);
+  sunLight.position.copy(lightOffset);
+
+  // Rotate Earth layers
+  earthMesh.rotation.y += 0.002;
+  cloudsMesh.rotation.y += 0.0023; // Clouds rotate slightly faster
+
+  renderer.render(scene, camera);
+};`,
+          },
+        },
+        {
+          title: 'Starfield Background',
+          content:
+            'A uniformly distributed starfield uses spherical coordinates for even distribution.',
+          code: {
+            language: 'typescript',
+            snippet: `// Uniform sphere distribution (Fibonacci sphere)
+for (let i = 0; i < starCount; i++) {
+  const radius = Math.random() * 25 + 25;
+  const u = Math.random();
+  const v = Math.random();
+  const theta = 2 * Math.PI * u;
+  const phi = Math.acos(2 * v - 1);
+
+  // Convert spherical to Cartesian
+  const x = radius * Math.sin(phi) * Math.cos(theta);
+  const y = radius * Math.sin(phi) * Math.sin(theta);
+  const z = radius * Math.cos(phi);
+
+  positions.push(x, y, z);
+  color.setHSL(0.6, 0.2, Math.random()); // Bluish tint
+  colors.push(color.r, color.g, color.b);
+}`,
+          },
+        },
+        {
+          title: 'Performance Optimizations',
+          content:
+            'Achieving 60fps required careful optimization at every level.',
+          metrics: [
+            { label: 'Frame Rate', value: '60fps', improvement: 'maintained' },
+            { label: 'GPU Usage', value: '< 15%', improvement: 'efficient' },
+            {
+              label: 'Geometry Detail',
+              value: '12',
+              improvement: 'balanced quality/performance',
+            },
+            {
+              label: 'Texture Loading',
+              value: 'Async',
+              improvement: 'non-blocking',
+            },
+          ],
+          list: [
+            'Capped pixel ratio to prevent over-rendering on 4K+ displays',
+            'IcosahedronGeometry instead of SphereGeometry (better triangle distribution)',
+            'Shared geometry across all layers (single allocation)',
+            'RequestAnimationFrame for smooth animation loop',
+            'Damping on OrbitControls for natural feel',
+            'Proper cleanup on unmount (dispose geometry, materials, textures)',
+          ],
+        },
+        {
+          title: 'Earth Tilt & Realism',
+          content:
+            'Small details make a big difference. Earth is tilted 23.4° to match reality.',
+          code: {
+            language: 'typescript',
+            snippet: `const earthGroup = new THREE.Group();
+earthGroup.rotation.z = THREE.MathUtils.degToRad(-23.4);
+scene.add(earthGroup);`,
+          },
+        },
+      ],
+      conclusion:
+        'Building a 3D Earth visualization is more accessible than it seems. Three.js handles the WebGL complexity, letting you focus on the creative details. The key is layering - start simple, add complexity gradually, and optimize continuously.',
+      keyTakeaways: [
+        'Layer multiple meshes for realistic planetary effects',
+        'Custom shaders enable effects impossible with standard materials',
+        'OrbitControls + dynamic lighting creates natural interaction',
+        'Performance matters - cap pixel ratio, optimize geometry',
+        'Proper cleanup prevents memory leaks in long-lived SPAs',
+        'Small details (23.4° tilt, varying cloud speed) add realism',
+      ],
+    },
+  },
+  {
+    id: 'lighthouse-95-score',
+    title: 'Achieving 95+ Lighthouse Score with 3D Graphics',
+    description:
+      'A technical deep dive into the optimization strategies, tooling choices, and performance budget decisions that maintained high Lighthouse scores even with Three.js 3D rendering.',
     date: '2025-01-15',
     readTime: '8 min read',
     tags: ['Performance', 'Vite', 'Optimization'],
     content: {
       intro:
-        "Building a portfolio is easy. Building one that scores 98+ on Lighthouse across all categories while maintaining rich animations and interactions? That's a different challenge. Here's how I did it.",
+        "Building a portfolio is easy. Building one with an interactive 3D Earth that still scores 95+ on Lighthouse across all categories? That's a different challenge. Here's how I balanced performance with visual impact.",
       sections: [
         {
           title: 'The Performance Budget',
           content:
-            'Before writing any code, I established strict performance budgets that guided every technical decision.',
+            'Before writing any code, I established strict performance budgets. Then I added Three.js for 3D Earth rendering - a 500KB library. The challenge became maintaining high scores despite the increased bundle size.',
           metrics: [
             {
               label: 'Total Bundle Size',
-              value: '< 200KB',
-              improvement: 'gzipped',
+              value: '200KB gzipped',
+              improvement: '732KB uncompressed',
             },
-            { label: 'First Contentful Paint', value: '< 1s', improvement: '' },
-            { label: 'Time to Interactive', value: '< 2s', improvement: '' },
+            {
+              label: 'First Contentful Paint',
+              value: '< 1.8s',
+              improvement: '',
+            },
+            {
+              label: 'Interaction to Next Paint',
+              value: '< 200ms',
+              improvement: '',
+            },
             {
               label: 'Cumulative Layout Shift',
-              value: '0',
-              improvement: 'zero layout shifts',
+              value: '< 0.1',
+              improvement: 'minimal shifts',
             },
             {
               label: 'Animation Frame Rate',
               value: '60fps',
-              improvement: 'maintained',
+              improvement: 'maintained with WebGL',
             },
           ],
         },
@@ -70,13 +303,14 @@ export const posts: Post[] = [
         {
           title: 'Bundle Optimization',
           content:
-            'Every kilobyte matters. I achieved sub-200KB bundle sizes through aggressive optimization.',
+            'Three.js adds ~500KB to the bundle, but strategic optimizations keep the total at 200KB gzipped. Every other kilobyte is fought for.',
           list: [
             'Manual chunk splitting for routes (HomePage, WorkDetailPage)',
             'Lazy loading non-critical components (PerformanceToggle)',
-            'Tree-shaking unused code with proper ES modules',
-            'No heavy dependencies - custom implementations over libraries',
-            'Intersection Observer API for lazy animations (zero dependencies)',
+            "Tree-shaking unused Three.js modules - only import what's needed",
+            'No additional heavy dependencies - custom implementations elsewhere',
+            'Capped pixel ratio at 1.75 to reduce WebGL overhead',
+            'Optimized geometry detail levels (IcosahedronGeometry with 12 subdivisions)',
           ],
         },
         {
@@ -93,33 +327,41 @@ export const posts: Post[] = [
         {
           title: 'Runtime Performance',
           content:
-            'Build size is only half the story. Runtime performance determines the actual user experience.',
+            'Build size is only half the story. With WebGL rendering a 3D scene, runtime performance becomes critical.',
           code: {
             language: 'typescript',
-            snippet: `// Efficient scroll handling with passive listeners
+            snippet: `// Efficient 3D rendering with proper cleanup
 useEffect(() => {
-  const handleScroll = () => {
-    const sections = sectionsRef.current?.querySelectorAll('.section');
-    sections?.forEach((section) => {
-      const rect = section.getBoundingClientRect();
-      const scrollPercent = (window.innerHeight - rect.top) / window.innerHeight;
-      // Only update when in viewport
-      if (scrollPercent > 0 && scrollPercent < 1) {
-        section.style.transform = \`translateY(\${(1 - scrollPercent) * 20}px)\`;
-      }
-    });
-  };
+  const renderer = new THREE.WebGLRenderer({
+    canvas: canvasRef.current!,
+    alpha: true,
+    antialias: true
+  });
 
-  window.addEventListener('scroll', handleScroll, { passive: true });
-  return () => window.removeEventListener('scroll', handleScroll);
+  // Cap pixel ratio to prevent excessive GPU load
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
+
+  const animate = () => {
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene, camera);
+  };
+  animate();
+
+  return () => {
+    renderer.dispose();
+    geometry.dispose();
+    material.dispose();
+  };
 }, []);`,
           },
           list: [
-            'RequestAnimationFrame for all animations - no janky setTimeout',
+            'RequestAnimationFrame for all animations - smooth 60fps',
+            'GPU-accelerated 3D rendering with Three.js WebGL',
+            'Capped pixel ratio (1.75) prevents excessive GPU load on high-DPI screens',
+            'Proper Three.js resource disposal prevents memory leaks',
             'Passive event listeners for scroll handlers',
-            'CSS containment to isolate expensive renders',
-            'Will-change hints for transform animations only',
-            'Intersection Observer to pause off-screen animations',
+            'Intersection Observer to pause off-screen 3D rendering',
           ],
         },
         {
@@ -136,13 +378,14 @@ useEffect(() => {
         },
       ],
       conclusion:
-        "Achieving high Lighthouse scores isn't about one silver bullet - it's the cumulative result of hundreds of small, intentional decisions. Every dependency, every animation, every byte matters.",
+        "Achieving high Lighthouse scores with 3D graphics isn't about avoiding heavy libraries - it's about strategic optimization everywhere else. Three.js is 500KB, but the rest of the app is meticulously optimized to compensate. Every other dependency, every animation, every byte matters.",
       keyTakeaways: [
-        'Establish performance budgets before writing code',
+        'High-impact features (3D graphics) are worth their cost if optimized correctly',
+        'Establish performance budgets and adapt when necessary',
         'Choose tools that match your use case, not the hype',
         'Measure everything - what gets measured gets improved',
+        'WebGL rendering can maintain 60fps with proper pixel ratio capping',
         'Accessibility and performance are complementary, not competing',
-        'User experience > developer experience, always',
       ],
     },
   },

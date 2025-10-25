@@ -3,6 +3,18 @@ import { useFPS } from '../hooks/useFPS';
 import { usePerformanceMetrics } from '../hooks/usePerformanceMetrics';
 import './PerformanceToggle.css';
 
+// Performance metric thresholds based on Google's Core Web Vitals (2025)
+const METRIC_THRESHOLDS = {
+  fcp: { good: 1800, poor: 3000 },
+  lcp: { good: 2500, poor: 4000 },
+  cls: { good: 0.1, poor: 0.25 },
+  inp: { good: 200, poor: 500 }, // Replaced FID in March 2024
+  ttfb: { good: 800, poor: 1800 },
+  fps: { good: 55, poor: 30 },
+} as const;
+
+type MetricType = keyof typeof METRIC_THRESHOLDS;
+
 export function PerformanceToggle() {
   const [isOpen, setIsOpen] = useState(false);
   const metrics = usePerformanceMetrics();
@@ -20,46 +32,23 @@ export function PerformanceToggle() {
   const getScoreColor = (metric: string, value: number | null) => {
     if (value === null) return 'neutral';
 
-    switch (metric) {
-      case 'fcp':
-        return value < 1800
-          ? 'good'
-          : value < 3000
-            ? 'needs-improvement'
-            : 'poor';
-      case 'lcp':
-        return value < 2500
-          ? 'good'
-          : value < 4000
-            ? 'needs-improvement'
-            : 'poor';
-      case 'cls':
-        return value < 0.1
-          ? 'good'
-          : value < 0.25
-            ? 'needs-improvement'
-            : 'poor';
-      case 'fid':
-        return value < 100
-          ? 'good'
-          : value < 300
-            ? 'needs-improvement'
-            : 'poor';
-      case 'ttfb':
-        return value < 800
-          ? 'good'
-          : value < 1800
-            ? 'needs-improvement'
-            : 'poor';
-      case 'fps':
-        return value >= 55
-          ? 'good'
-          : value >= 30
-            ? 'needs-improvement'
-            : 'poor';
-      default:
-        return 'neutral';
+    const threshold = METRIC_THRESHOLDS[metric as MetricType];
+    if (!threshold) return 'neutral';
+
+    // FPS uses >= comparison (higher is better), others use < (lower is better)
+    if (metric === 'fps') {
+      return value >= threshold.good
+        ? 'good'
+        : value >= threshold.poor
+          ? 'needs-improvement'
+          : 'poor';
     }
+
+    return value < threshold.good
+      ? 'good'
+      : value < threshold.poor
+        ? 'needs-improvement'
+        : 'poor';
   };
 
   return (
@@ -184,18 +173,18 @@ export function PerformanceToggle() {
 
               <div className="performance-metric">
                 <div className="performance-metric__label">
-                  <span>First Input Delay</span>
+                  <span>Interaction to Next Paint</span>
                   <span
                     className="performance-metric__info"
-                    title="Time from first interaction to browser response"
+                    title="Responsiveness - worst interaction latency (replaced FID in 2024)"
                   >
                     ℹ
                   </span>
                 </div>
                 <div
-                  className={`performance-metric__value performance-metric__value--${getScoreColor('fid', metrics.fid)}`}
+                  className={`performance-metric__value performance-metric__value--${getScoreColor('inp', metrics.inp)}`}
                 >
-                  {formatMs(metrics.fid)}
+                  {formatMs(metrics.inp)}
                 </div>
               </div>
 

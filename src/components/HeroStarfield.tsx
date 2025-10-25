@@ -2,6 +2,11 @@ import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { getStarfield } from './earth/getStarfield';
 
+// Constants
+const CAMERA_FOV = 75;
+const CAMERA_POSITION_Z = 5;
+const STARFIELD_ROTATION_SPEED = -0.0002;
+
 export function HeroStarfield() {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -15,12 +20,12 @@ export function HeroStarfield() {
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
-      75,
+      CAMERA_FOV,
       sizes.width / sizes.height,
       0.1,
       1000,
     );
-    camera.position.z = 5;
+    camera.position.z = CAMERA_POSITION_Z;
 
     const renderer = new THREE.WebGLRenderer({
       antialias: true,
@@ -37,7 +42,7 @@ export function HeroStarfield() {
     let animationFrame: number;
     const animate = () => {
       animationFrame = requestAnimationFrame(animate);
-      stars.rotation.y -= 0.0002;
+      stars.rotation.y += STARFIELD_ROTATION_SPEED;
       renderer.render(scene, camera);
     };
     animate();
@@ -63,10 +68,6 @@ export function HeroStarfield() {
   }, []);
 
   return (
-    <div
-      ref={containerRef}
-      className="hero__starfield"
-      aria-hidden="true"
-    />
+    <div ref={containerRef} className="hero__starfield" aria-hidden="true" />
   );
 }

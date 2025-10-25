@@ -1,261 +1,54 @@
-# Portfolio Implementation Plan
+# Implementation Plan
 
-## ✅ Completed Features
+## Phase 1 – Foundations ✅
+- SPA scaffold (Vite + React + Router) with `/` + `/work/:slug`
+- Hero, Selected Work, Work Detail, About, Contact, Footer components
+- Static datasets for projects/posts/tech stack
+- View Transition future flags enabled in `BrowserRouter`
+- Performance Toggle, Tech Stack Modal, Build Log, console easter egg
+- Bundle, linting, formatting tooling (Bun, Biome)
 
-- [x] View Transition API with per-word title morphing
-- [x] Stagger fade-in animations for work cards
-- [x] Card hover effects (scale, glow, gradient backgrounds)
-- [x] Individual word hover animations with blue glow
-- [x] Page morph transitions with scale effects
-- [x] Stack badge animations with stagger
-- [x] Scroll-based animations with Intersection Observer
-- [x] Parallax effects on detail page
-- [x] Magnetic cursor effect on title words
-- [x] Scroll position restoration on navigation
-- [x] Accessibility support (prefers-reduced-motion)
+## Phase 2 – Transitions & UX Polish (Current)
+1. **`useViewTransition` hook**  
+   - Implement the proposed API and update `TransitionLink` + `WorkDetailPage` to consume it.  
+   - Document usage patterns (scroll restoration, fallbacks).
 
-## 🎯 Implementation Roadmap
+2. **Route-based detail refinements**  
+   - Keep `/work/:slug`, but add consistent fade/scale classes on card → detail navigation (fallback path).  
+   - Ensure sessionStorage scroll persistence stays in sync with the hook.
 
-### Phase 1: Quick Wins (Today - 2 hours)
+3. **Data consistency**  
+   - Enforce `meta: { role; location }` across TypeScript interfaces, datasets, and UI.  
+   - Update docs to reflect the simplified schema.
 
-#### 1. Console Easter Egg ⏱️ 15 min
-**Priority:** HIGH
-**Location:** `src/main.tsx`
+4. **Motion accessibility audit**  
+   - Recheck `prefers-reduced-motion` guards for magnetic titles, parallax, and hero scroll cue.  
+   - Confirm focus handling (detail back button, modal toggles).
 
-Add developer-friendly console messages:
-```typescript
-console.log('%c👋 Hey there!', 'font-size: 20px; color: #60a5fa;');
-console.log('%cStack: React 18 + TypeScript + Vite + React Router', 'color: #94a3b8;');
-console.log('%cBuild time: ' + new Date().toISOString(), 'color: #94a3b8;');
-console.log('%cLighthouse: 98+', 'color: #10b981; font-weight: bold;');
-console.log('%cView source on GitHub', 'color: #60a5fa;');
-console.log('%c\nInterested in performance? Type performance.measure() in the console!', 'color: #fbbf24;');
-```
+5. **Storytelling polish**  
+   - Refresh Build Log copy and metrics so each post references current tooling/perf numbers.  
+   - Keep Tech Stack Modal aligned with real build pipeline (Biome, Bun, Vercel).
 
-**Why:** Shows personality, confidence, and attention to detail. Takes minimal time.
+## Phase 3 – Narrative Depth
+1. **Additional Build Log entries** — e.g., “Performance Toggle internals”, “Session-aware scroll restoration”.  
+2. **Case-study assets** — optional diagrams or metric cards inside Work Detail to surface measurable outcomes.  
+3. **Recruiter-friendly snippets** — condensed summaries per project (role, location, impact) for quick scanning.
 
----
+## Phase 4 – Optional Enhancements
+1. **Convex/TanStack Live Demo**  
+   - Mini optimistic-update app demonstrating real-time collaboration, typed RPC, and DX story.  
+   - Load lazily and gate behind explicit CTA to avoid impacting core bundle.
 
-#### 2. Performance Metrics Display ⏱️ 1-2 hours
-**Priority:** HIGH
-**Location:** New component `src/components/PerformanceToggle.tsx`
+2. **Design-System Sandbox**  
+   - Component playground showing tokens, accessibility toggles, and code snippets.  
+   - Ideal when targeting design-system roles or as supplemental blog content.
 
-Features:
-- Toggle button in footer
-- Real-time FPS counter
-- Bundle size display
-- Web Vitals metrics (FCP, LCP, CLS, FID, TTFB)
-- Current memory usage
-- Smooth slide-in panel
+3. **Visual experiments (TBD)**  
+   - 3D timeline / WebGL scenes on hold until a clearer direction emerges.  
+   - Document new concept separately once performance budget and UX value are defined.
 
-**Files to create:**
-- `src/components/PerformanceToggle.tsx`
-- `src/components/PerformanceToggle.css`
-- `src/hooks/usePerformanceMetrics.ts`
-- `src/hooks/useFPS.ts`
-
-**Why:** Demonstrates engineering maturity, proves performance expertise, memorable for technical recruiters.
-
----
-
-### Phase 2: Content & Depth (This Week - 6 hours)
-
-#### 3. Build Log / Technical Posts ⏱️ 4-6 hours
-**Priority:** MEDIUM-HIGH
-**Location:** New section in homepage or separate route
-
-Create 2-3 technical blog posts:
-
-**Post Ideas:**
-1. "Achieving 98+ Lighthouse Score on This Portfolio"
-   - Bundle optimization strategies
-   - Image optimization
-   - Code splitting approach
-   - Performance budget
-
-2. "Per-Word View Transitions: Implementation Deep Dive"
-   - How the View Transitions API works
-   - Per-word splitting technique
-   - Challenges with React Router
-   - Scroll restoration solution
-
-3. "Magnetic Cursor Effects Without Performance Jank"
-   - Event handling optimization
-   - RequestAnimationFrame usage
-   - Reduced motion accessibility
-   - Performance profiling results
-
-**Files to create:**
-- `src/data/posts.ts`
-- `src/components/BlogPost.tsx`
-- `src/components/BlogPost.css`
-- `src/components/BlogList.tsx`
-- `src/routes/BlogPostPage.tsx` (optional)
-
-**Format:** Each post should have:
-- Title, date, tags
-- Estimated read time
-- Code snippets with syntax highlighting
-- Performance metrics/graphs
-- Key takeaways
-
-**Why:**
-- Shows technical leadership
-- Helps with SEO
-- Gives recruiters/engineers depth to read
-- Demonstrates communication skills
-
----
-
-#### 4. "How I Built This" Modal ⏱️ 2-3 hours
-**Priority:** MEDIUM
-**Location:** Footer button → Modal
-
-Modal content:
-- Tech stack with icons
-- Key architectural decisions
-  - "Why Vite over Next.js"
-  - "Why React Router over Next.js App Router"
-  - "Performance-first approach"
-- Performance optimizations list
-- Open source dependencies used
-- Build/deployment pipeline
-
-**Files to create:**
-- `src/components/TechStackModal.tsx`
-- `src/components/TechStackModal.css`
-- `src/data/techStack.ts`
-
-**Why:** Makes technical details accessible to non-technical recruiters, shows transparency.
-
----
-
-### Phase 3: Visual Impact (This Month - 12 hours)
-
-#### 5. 3D Career Timeline ⏱️ 8-12 hours
-**Priority:** MEDIUM
-**Tech:** react-three-fiber + drei
-
-**Features:**
-- Minimal 3D scene with floating cards for each role
-  - Valtech
-  - BairesDev
-  - Plasma
-  - M&Ms (if including contract work)
-- Hover interactions reveal:
-  - Key metrics ("32% faster load times", "Reduced bundle by 40%")
-  - Tech stack icons
-  - Project highlights
-- Smooth camera movement
-- Particle effects on hover (subtle)
-- **Must maintain 60fps**
-
-**Files to create:**
-- `src/components/CareerTimeline3D.tsx`
-- `src/components/CareerTimeline3D.css`
-- `src/components/TimelineCard3D.tsx`
-- Package: `@react-three/fiber`, `@react-three/drei`, `three`
-
-**Why:**
-- Visually memorable
-- Proves WebGL/3D fluency
-- Demonstrates performance optimization (60fps requirement)
-- Differentiates from typical portfolios
-
-**Alternative (if 3D is too heavy):**
-- Interactive 2D timeline with canvas animations
-- Smooth scroll-based reveal
-- Animated connections between nodes
-
----
-
-### Phase 4: Nice-to-Have (Later)
-
-#### 6. Convex/TanStack Demo ⏱️ 4-6 hours
-**Priority:** LOW (only if targeting full-stack roles)
-
-Mini demo app showing:
-- Real-time todo list with Convex
-- TanStack Router navigation
-- Optimistic updates
-- Offline sync demonstration
-
-**Why:** Shows full-stack capability, real-time systems understanding.
-
----
-
-#### 7. Design System Sandbox ⏱️ 6-8 hours
-**Priority:** LOW (only if targeting design system roles)
-
-Interactive component playground:
-- Button variants
-- Modal examples
-- Form components
-- Animation controls
-- Accessibility features
-
----
-
-## 📊 Implementation Order
-
-### Today (2 hours)
-1. ✅ Console Easter Egg - 15 min
-2. ✅ Performance Metrics Toggle - 1-2 hours
-
-### This Week (6-8 hours)
-3. ✅ Build Log posts (write 2-3 posts) - 4-6 hours
-4. ✅ "How I Built This" modal - 2-3 hours
-
-### This Month (8-12 hours)
-5. ✅ 3D Career Timeline - 8-12 hours
-
-### Future / As Needed
-6. ⏸️ Convex Demo (if targeting full-stack)
-7. ⏸️ Design System Sandbox (if targeting DS roles)
-
----
-
-## 🎨 Design Principles
-
-All features should follow these principles:
-
-1. **Performance First**
-   - 60fps animations
-   - Lazy load heavy features
-   - Code split appropriately
-   - Monitor bundle size
-
-2. **Accessibility**
-   - Keyboard navigation
-   - Screen reader support
-   - Respect prefers-reduced-motion
-   - Proper ARIA labels
-
-3. **Subtle, Not Flashy**
-   - Animations should enhance, not distract
-   - Professional polish over gimmicks
-   - Every feature proves technical skill
-
-4. **Mobile Responsive**
-   - All features work on mobile
-   - Touch-friendly interactions
-   - Performance on lower-end devices
-
----
-
-## 📈 Success Metrics
-
-After implementation, measure:
-- Lighthouse score remains 95+
-- Bundle size stays under 200KB (gzipped)
-- Time to Interactive < 2s
-- First Contentful Paint < 1s
-- No layout shifts (CLS = 0)
-- 60fps on all animations
-- Positive feedback from technical reviewers
-
----
-
-## 🚀 Let's Start!
-
-Beginning with Phase 1, Task 1: Console Easter Egg
+## Success Criteria
+- All navigations run through `useViewTransition` with graceful fallbacks.
+- Bundle remains ≤ 80 KB gzipped; Lighthouse ≥ 95 after new polish. 
+- Animations respect reduced-motion preferences without breaking narratives.
+- Optional demos stay quarantined behind lazy routes so they never penalize the core experience.

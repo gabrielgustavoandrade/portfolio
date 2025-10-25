@@ -1,5 +1,6 @@
 import type { MouseEvent, ReactNode } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useViewTransition } from '../hooks/useViewTransition';
 
 interface TransitionLinkProps {
   to: string;
@@ -18,6 +19,7 @@ export function TransitionLink({
 }: TransitionLinkProps) {
   const navigate = useNavigate();
   const location = useLocation();
+  const startViewTransition = useViewTransition();
 
   const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
@@ -31,14 +33,9 @@ export function TransitionLink({
       onClick();
     }
 
-    // Use View Transitions API for SPA navigation
-    if ('startViewTransition' in document && document.startViewTransition) {
-      document.startViewTransition(() => {
-        navigate(to);
-      });
-    } else {
+    startViewTransition(() => {
       navigate(to);
-    }
+    });
   };
 
   return (

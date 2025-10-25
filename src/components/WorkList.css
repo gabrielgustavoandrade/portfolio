@@ -29,7 +29,7 @@
 .work-list__grid {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: var(--space-32);
 }
 
 .work-card {
@@ -108,6 +108,7 @@
   transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
   position: relative;
   will-change: transform;
+  margin-right: 0.25em;
 }
 
 .work-card:hover .work-card__title span {

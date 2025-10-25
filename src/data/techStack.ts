@@ -70,6 +70,21 @@ export const techStack: TechCategory[] = [
     ],
   },
   {
+    name: '3D Graphics',
+    items: [
+      {
+        name: 'Three.js',
+        description: 'WebGL 3D rendering library',
+        icon: '🌍',
+      },
+      {
+        name: 'Custom Shaders',
+        description: 'GLSL shaders for atmospheric effects',
+        icon: '✨',
+      },
+    ],
+  },
+  {
     name: 'Performance APIs',
     items: [
       {
@@ -143,6 +158,11 @@ export const performanceOptimizations: PerformanceOptimization[] = [
       'Direct DOM manipulation for high-frequency updates',
       'Intersection Observer to pause off-screen animations',
       'CSS containment to isolate expensive renders',
+      'GPU-accelerated 3D rendering with Three.js and WebGL',
+      'OrbitControls with damping for smooth camera interactions',
+      'Optimized geometry detail levels (IcosahedronGeometry)',
+      'Efficient shader-based atmospheric glow effects',
+      'Dynamic light positioning following camera view',
     ],
   },
   {
@@ -191,20 +211,21 @@ export const buildPipeline = {
 
 export const metrics = {
   lighthouse: {
-    performance: '98+',
+    performance: '95+',
     accessibility: '100',
     bestPractices: '100',
     seo: '100',
   },
   bundle: {
-    totalSize: '212KB',
-    gzipped: '68KB',
-    chunks: 'Optimized',
+    totalSize: '732KB',
+    gzipped: '200KB',
+    chunks: 'Code-split',
+    note: 'Three.js accounts for ~500KB of bundle (WebGL rendering library)',
   },
   vitals: {
-    fcp: '< 1s',
+    fcp: '< 1.8s',
     lcp: '< 2.5s',
-    cls: '0',
-    tti: '< 2s',
+    cls: '< 0.1',
+    inp: '< 200ms',
   },
 };

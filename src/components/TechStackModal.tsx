@@ -78,7 +78,7 @@ export function TechStackModal({ isOpen, onClose }: TechStackModalProps) {
                   <span>FCP: {metrics.vitals.fcp}</span>
                   <span>LCP: {metrics.vitals.lcp}</span>
                   <span>CLS: {metrics.vitals.cls}</span>
-                  <span>TTI: {metrics.vitals.tti}</span>
+                  <span>INP: {metrics.vitals.inp}</span>
                 </div>
               </div>
               <div className="tech-modal__metric-card">

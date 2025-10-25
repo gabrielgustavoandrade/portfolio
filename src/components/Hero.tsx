@@ -29,7 +29,9 @@ export function Hero({ onWorkClick, onContactClick }: HeroProps) {
             Frontend / Full-stack Engineer crafting fast, aesthetic, reliable
             interfaces.
           </p>
-          <p className="hero__tagline">I build software that feels invisible.</p>
+          <p className="hero__tagline">
+            I build software that feels invisible.
+          </p>
 
           <div className="hero__cta">
             <button
