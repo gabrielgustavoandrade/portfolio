@@ -1,0 +1,15 @@
+{
+  "languages": {
+    "JSON": {
+      "formatter": {
+        "external": {
+          "command": "biome",
+          "arguments": ["format", "--stdin-file-path", "{buffer_path}"]
+        }
+      }
+    }
+  },
+  "file_types": {
+    "Plain Text": ["bun.lock", "bun.lockb"]
+  }
+}
