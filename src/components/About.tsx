@@ -1,4 +1,5 @@
-import './About.css';
+import { RevealText } from "./RevealText";
+import "./About.css";
 
 export function About() {
   return (
@@ -6,19 +7,39 @@ export function About() {
       <div className="about__container">
         <h2 className="about__title">About Me</h2>
         <div className="about__content">
-          <p className="about__paragraph">
+          <RevealText
+            as="p"
+            className="about__paragraph"
+            stagger={true}
+            delay={0}
+          >
             I'm a Brazilian software engineer based in Madrid.
-          </p>
-          <p className="about__paragraph">
+          </RevealText>
+          <RevealText
+            as="p"
+            className="about__paragraph"
+            stagger={true}
+            delay={100}
+          >
             Over six years I've worked on consumer and commerce products —
             blending UX thinking with strong engineering foundations.
-          </p>
-          <p className="about__paragraph">
+          </RevealText>
+          <RevealText
+            as="p"
+            className="about__paragraph"
+            stagger={true}
+            delay={200}
+          >
             I focus on speed, clarity, and design systems that scale.
-          </p>
-          <p className="about__paragraph about__paragraph--muted">
+          </RevealText>
+          <RevealText
+            as="p"
+            className="about__paragraph about__paragraph--muted"
+            stagger={true}
+            delay={300}
+          >
             Currently exploring new projects across Europe.
-          </p>
+          </RevealText>
         </div>
       </div>
     </section>
