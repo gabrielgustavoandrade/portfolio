@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export interface PerformanceMetrics {
   fcp: number | null; // First Contentful Paint
@@ -26,7 +26,9 @@ export function usePerformanceMetrics() {
   useEffect(() => {
     // Get Navigation Timing metrics
     const getNavigationMetrics = () => {
-      const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+      const navigation = performance.getEntriesByType(
+        'navigation',
+      )[0] as PerformanceNavigationTiming;
       if (navigation) {
         setMetrics((prev) => ({
           ...prev,
@@ -38,7 +40,9 @@ export function usePerformanceMetrics() {
     // Get Paint Timing metrics
     const getPaintMetrics = () => {
       const paintEntries = performance.getEntriesByType('paint');
-      const fcp = paintEntries.find((entry) => entry.name === 'first-contentful-paint');
+      const fcp = paintEntries.find(
+        (entry) => entry.name === 'first-contentful-paint',
+      );
 
       if (fcp) {
         setMetrics((prev) => ({
@@ -50,8 +54,8 @@ export function usePerformanceMetrics() {
 
     // Get Memory metrics (Chrome only)
     const getMemoryMetrics = () => {
-      if ('memory' in performance) {
-        const memory = (performance as any).memory;
+      if ('memory' in performance && performance.memory) {
+        const { memory } = performance;
         setMetrics((prev) => ({
           ...prev,
           memory: {
@@ -81,8 +85,9 @@ export function usePerformanceMetrics() {
         let clsValue = 0;
         const clsObserver = new PerformanceObserver((entryList) => {
           for (const entry of entryList.getEntries()) {
-            if (!(entry as any).hadRecentInput) {
-              clsValue += (entry as any).value;
+            const layoutShift = entry as LayoutShift;
+            if (!layoutShift.hadRecentInput) {
+              clsValue += layoutShift.value;
               setMetrics((prev) => ({
                 ...prev,
                 cls: clsValue,
@@ -95,10 +100,10 @@ export function usePerformanceMetrics() {
         // FID Observer
         const fidObserver = new PerformanceObserver((entryList) => {
           const entries = entryList.getEntries();
-          const firstEntry = entries[0];
+          const firstEntry = entries[0] as PerformanceEventTiming;
           setMetrics((prev) => ({
             ...prev,
-            fid: (firstEntry as any).processingStart - firstEntry.startTime,
+            fid: firstEntry.processingStart - firstEntry.startTime,
           }));
         });
         fidObserver.observe({ entryTypes: ['first-input'] });

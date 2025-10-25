@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { usePerformanceMetrics } from '../hooks/usePerformanceMetrics';
 import { useFPS } from '../hooks/useFPS';
+import { usePerformanceMetrics } from '../hooks/usePerformanceMetrics';
 import './PerformanceToggle.css';
 
 export function PerformanceToggle() {
@@ -22,17 +22,41 @@ export function PerformanceToggle() {
 
     switch (metric) {
       case 'fcp':
-        return value < 1800 ? 'good' : value < 3000 ? 'needs-improvement' : 'poor';
+        return value < 1800
+          ? 'good'
+          : value < 3000
+            ? 'needs-improvement'
+            : 'poor';
       case 'lcp':
-        return value < 2500 ? 'good' : value < 4000 ? 'needs-improvement' : 'poor';
+        return value < 2500
+          ? 'good'
+          : value < 4000
+            ? 'needs-improvement'
+            : 'poor';
       case 'cls':
-        return value < 0.1 ? 'good' : value < 0.25 ? 'needs-improvement' : 'poor';
+        return value < 0.1
+          ? 'good'
+          : value < 0.25
+            ? 'needs-improvement'
+            : 'poor';
       case 'fid':
-        return value < 100 ? 'good' : value < 300 ? 'needs-improvement' : 'poor';
+        return value < 100
+          ? 'good'
+          : value < 300
+            ? 'needs-improvement'
+            : 'poor';
       case 'ttfb':
-        return value < 800 ? 'good' : value < 1800 ? 'needs-improvement' : 'poor';
+        return value < 800
+          ? 'good'
+          : value < 1800
+            ? 'needs-improvement'
+            : 'poor';
       case 'fps':
-        return value >= 55 ? 'good' : value >= 30 ? 'needs-improvement' : 'poor';
+        return value >= 55
+          ? 'good'
+          : value >= 30
+            ? 'needs-improvement'
+            : 'poor';
       default:
         return 'neutral';
     }
@@ -41,6 +65,7 @@ export function PerformanceToggle() {
   return (
     <>
       <button
+        type="button"
         className="performance-toggle__button"
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Toggle performance metrics"
@@ -52,6 +77,7 @@ export function PerformanceToggle() {
           viewBox="0 0 20 20"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
         >
           <path
             d="M10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2Z"
@@ -73,6 +99,7 @@ export function PerformanceToggle() {
           <div className="performance-panel__header">
             <h3>Performance Metrics</h3>
             <button
+              type="button"
               className="performance-panel__close"
               onClick={() => setIsOpen(false)}
               aria-label="Close performance panel"
@@ -86,9 +113,16 @@ export function PerformanceToggle() {
             <div className="performance-metric">
               <div className="performance-metric__label">
                 <span>Frames Per Second</span>
-                <span className="performance-metric__info" title="Current rendering performance">ℹ</span>
+                <span
+                  className="performance-metric__info"
+                  title="Current rendering performance"
+                >
+                  ℹ
+                </span>
               </div>
-              <div className={`performance-metric__value performance-metric__value--${getScoreColor('fps', fps)}`}>
+              <div
+                className={`performance-metric__value performance-metric__value--${getScoreColor('fps', fps)}`}
+              >
                 {fps} fps
               </div>
             </div>
@@ -100,9 +134,16 @@ export function PerformanceToggle() {
               <div className="performance-metric">
                 <div className="performance-metric__label">
                   <span>First Contentful Paint</span>
-                  <span className="performance-metric__info" title="Time until first content is rendered">ℹ</span>
+                  <span
+                    className="performance-metric__info"
+                    title="Time until first content is rendered"
+                  >
+                    ℹ
+                  </span>
                 </div>
-                <div className={`performance-metric__value performance-metric__value--${getScoreColor('fcp', metrics.fcp)}`}>
+                <div
+                  className={`performance-metric__value performance-metric__value--${getScoreColor('fcp', metrics.fcp)}`}
+                >
                   {formatMs(metrics.fcp)}
                 </div>
               </div>
@@ -110,9 +151,16 @@ export function PerformanceToggle() {
               <div className="performance-metric">
                 <div className="performance-metric__label">
                   <span>Largest Contentful Paint</span>
-                  <span className="performance-metric__info" title="Time until largest content element is rendered">ℹ</span>
+                  <span
+                    className="performance-metric__info"
+                    title="Time until largest content element is rendered"
+                  >
+                    ℹ
+                  </span>
                 </div>
-                <div className={`performance-metric__value performance-metric__value--${getScoreColor('lcp', metrics.lcp)}`}>
+                <div
+                  className={`performance-metric__value performance-metric__value--${getScoreColor('lcp', metrics.lcp)}`}
+                >
                   {formatMs(metrics.lcp)}
                 </div>
               </div>
@@ -120,9 +168,16 @@ export function PerformanceToggle() {
               <div className="performance-metric">
                 <div className="performance-metric__label">
                   <span>Cumulative Layout Shift</span>
-                  <span className="performance-metric__info" title="Visual stability score">ℹ</span>
+                  <span
+                    className="performance-metric__info"
+                    title="Visual stability score"
+                  >
+                    ℹ
+                  </span>
                 </div>
-                <div className={`performance-metric__value performance-metric__value--${getScoreColor('cls', metrics.cls)}`}>
+                <div
+                  className={`performance-metric__value performance-metric__value--${getScoreColor('cls', metrics.cls)}`}
+                >
                   {metrics.cls?.toFixed(3) ?? '—'}
                 </div>
               </div>
@@ -130,9 +185,16 @@ export function PerformanceToggle() {
               <div className="performance-metric">
                 <div className="performance-metric__label">
                   <span>First Input Delay</span>
-                  <span className="performance-metric__info" title="Time from first interaction to browser response">ℹ</span>
+                  <span
+                    className="performance-metric__info"
+                    title="Time from first interaction to browser response"
+                  >
+                    ℹ
+                  </span>
                 </div>
-                <div className={`performance-metric__value performance-metric__value--${getScoreColor('fid', metrics.fid)}`}>
+                <div
+                  className={`performance-metric__value performance-metric__value--${getScoreColor('fid', metrics.fid)}`}
+                >
                   {formatMs(metrics.fid)}
                 </div>
               </div>
@@ -140,9 +202,16 @@ export function PerformanceToggle() {
               <div className="performance-metric">
                 <div className="performance-metric__label">
                   <span>Time to First Byte</span>
-                  <span className="performance-metric__info" title="Server response time">ℹ</span>
+                  <span
+                    className="performance-metric__info"
+                    title="Server response time"
+                  >
+                    ℹ
+                  </span>
                 </div>
-                <div className={`performance-metric__value performance-metric__value--${getScoreColor('ttfb', metrics.ttfb)}`}>
+                <div
+                  className={`performance-metric__value performance-metric__value--${getScoreColor('ttfb', metrics.ttfb)}`}
+                >
                   {formatMs(metrics.ttfb)}
                 </div>
               </div>
@@ -155,10 +224,16 @@ export function PerformanceToggle() {
                 <div className="performance-metric">
                   <div className="performance-metric__label">
                     <span>JS Heap Size</span>
-                    <span className="performance-metric__info" title="Current JavaScript memory usage">ℹ</span>
+                    <span
+                      className="performance-metric__info"
+                      title="Current JavaScript memory usage"
+                    >
+                      ℹ
+                    </span>
                   </div>
                   <div className="performance-metric__value performance-metric__value--neutral">
-                    {formatBytes(metrics.memory.used)} / {formatBytes(metrics.memory.limit)}
+                    {formatBytes(metrics.memory.used)} /{' '}
+                    {formatBytes(metrics.memory.limit)}
                   </div>
                 </div>
                 <div className="performance-memory-bar">

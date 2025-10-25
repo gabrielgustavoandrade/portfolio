@@ -152,7 +152,7 @@
 }
 
 .performance-metric__value {
-  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+  font-family: "SF Mono", "Monaco", "Inconsolata", "Fira Code", monospace;
   font-size: 14px;
   font-weight: 600;
   padding: 4px 12px;
