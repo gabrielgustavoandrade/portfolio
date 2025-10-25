@@ -1,4 +1,4 @@
-import { Post } from '../data/posts';
+import type { Post } from '../data/posts';
 import './BlogPost.css';
 
 interface BlogPostProps {
@@ -10,16 +10,18 @@ export function BlogPost({ post }: BlogPostProps) {
     <article className="blog-post">
       <p className="blog-post__intro">{post.content.intro}</p>
 
-      {post.content.sections.map((section, index) => (
-        <section key={index} className="blog-post__section">
+      {post.content.sections.map((section) => (
+        <section key={section.title} className="blog-post__section">
           <h4 className="blog-post__section-title">{section.title}</h4>
           <p className="blog-post__section-content">{section.content}</p>
 
           {section.metrics && (
             <div className="blog-post__metrics">
-              {section.metrics.map((metric, metricIndex) => (
-                <div key={metricIndex} className="blog-post__metric">
-                  <span className="blog-post__metric-label">{metric.label}</span>
+              {section.metrics.map((metric) => (
+                <div key={metric.label} className="blog-post__metric">
+                  <span className="blog-post__metric-label">
+                    {metric.label}
+                  </span>
                   <span className="blog-post__metric-value">
                     {metric.value}
                     {metric.improvement && (
@@ -45,8 +47,8 @@ export function BlogPost({ post }: BlogPostProps) {
 
           {section.list && (
             <ul className="blog-post__list">
-              {section.list.map((item, itemIndex) => (
-                <li key={itemIndex} className="blog-post__list-item">
+              {section.list.map((item) => (
+                <li key={item} className="blog-post__list-item">
                   {item}
                 </li>
               ))}
@@ -57,14 +59,16 @@ export function BlogPost({ post }: BlogPostProps) {
 
       <div className="blog-post__conclusion">
         <h4 className="blog-post__conclusion-title">Conclusion</h4>
-        <p className="blog-post__conclusion-content">{post.content.conclusion}</p>
+        <p className="blog-post__conclusion-content">
+          {post.content.conclusion}
+        </p>
       </div>
 
       <div className="blog-post__takeaways">
         <h4 className="blog-post__takeaways-title">Key Takeaways</h4>
         <ul className="blog-post__takeaways-list">
-          {post.content.keyTakeaways.map((takeaway, index) => (
-            <li key={index} className="blog-post__takeaways-item">
+          {post.content.keyTakeaways.map((takeaway) => (
+            <li key={takeaway} className="blog-post__takeaways-item">
               {takeaway}
             </li>
           ))}

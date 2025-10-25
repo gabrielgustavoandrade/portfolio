@@ -91,7 +91,7 @@
 }
 
 .blog-card__read-time::before {
-  content: '•';
+  content: "•";
   margin-right: var(--space-8);
 }
 

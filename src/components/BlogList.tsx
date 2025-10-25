@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Post } from '../data/posts';
+import type { Post } from '../data/posts';
 import { BlogPost } from './BlogPost';
 import './BlogList.css';
 
@@ -20,7 +20,8 @@ export function BlogList({ posts }: BlogListProps) {
         <div className="blog-list__header">
           <h2 className="blog-list__title">Build Log</h2>
           <p className="blog-list__subtitle">
-            Technical deep dives into engineering decisions, performance optimizations, and implementation details.
+            Technical deep dives into engineering decisions, performance
+            optimizations, and implementation details.
           </p>
         </div>
 
@@ -32,12 +33,19 @@ export function BlogList({ posts }: BlogListProps) {
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               <button
+                type="button"
                 className="blog-card__header"
                 onClick={() => handlePostClick(post.id)}
                 aria-expanded={expandedPostId === post.id}
               >
                 <div className="blog-card__meta">
-                  <time className="blog-card__date">{new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</time>
+                  <time className="blog-card__date">
+                    {new Date(post.date).toLocaleDateString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                      year: 'numeric',
+                    })}
+                  </time>
                   <span className="blog-card__read-time">{post.readTime}</span>
                 </div>
                 <h3 className="blog-card__title">{post.title}</h3>

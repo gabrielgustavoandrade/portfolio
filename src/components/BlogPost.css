@@ -56,7 +56,7 @@
   font-size: 18px;
   font-weight: 600;
   color: #10b981;
-  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+  font-family: "SF Mono", "Monaco", "Inconsolata", "Fira Code", monospace;
 }
 
 .blog-post__metric-improvement {
@@ -82,7 +82,7 @@
 }
 
 .blog-post__code code {
-  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+  font-family: "SF Mono", "Monaco", "Inconsolata", "Fira Code", monospace;
   font-size: 14px;
   line-height: 1.6;
   color: #e2e8f0;
@@ -104,7 +104,7 @@
 }
 
 .blog-post__list-item::before {
-  content: '→';
+  content: "→";
   position: absolute;
   left: 0;
   color: #60a5fa;
@@ -167,7 +167,7 @@
 }
 
 .blog-post__takeaways-item::before {
-  content: '✓';
+  content: "✓";
   position: absolute;
   left: 0;
   color: #10b981;
