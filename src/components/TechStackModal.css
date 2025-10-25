@@ -24,7 +24,11 @@
 }
 
 .tech-modal {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(30, 41, 59, 0.98));
+  background: linear-gradient(
+    135deg,
+    rgba(15, 23, 42, 0.98),
+    rgba(30, 41, 59, 0.98)
+  );
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   max-width: 900px;
@@ -134,7 +138,7 @@
 .tech-modal__metric-values span {
   font-size: 14px;
   color: var(--color-text-muted);
-  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+  font-family: "SF Mono", "Monaco", "Inconsolata", "Fira Code", monospace;
 }
 
 /* Tech Stack */
@@ -261,7 +265,7 @@
 }
 
 .tech-modal__optimization-list li::before {
-  content: '→';
+  content: "→";
   position: absolute;
   left: 0;
   color: #10b981;
@@ -309,7 +313,7 @@
 }
 
 .tech-modal__pipeline-stage li::before {
-  content: '•';
+  content: "•";
   position: absolute;
   left: 0;
   color: #60a5fa;

@@ -7,10 +7,7 @@ export interface TitleSegment {
 }
 
 const normalize = (value: string) =>
-  value
-    .toLowerCase()
-    .trim()
-    .replace(nonAlphaNumeric, '-');
+  value.toLowerCase().trim().replace(nonAlphaNumeric, '-');
 
 export function getTitleSegments(slug: string, title: string): TitleSegment[] {
   const tokens = title.match(/\S+/g) ?? [title];

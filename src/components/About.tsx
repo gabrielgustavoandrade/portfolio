@@ -10,8 +10,8 @@ export function About() {
             I'm a Brazilian software engineer based in Madrid.
           </p>
           <p className="about__paragraph">
-            Over six years I've worked on consumer and commerce products — blending UX thinking
-            with strong engineering foundations.
+            Over six years I've worked on consumer and commerce products —
+            blending UX thinking with strong engineering foundations.
           </p>
           <p className="about__paragraph">
             I focus on speed, clarity, and design systems that scale.

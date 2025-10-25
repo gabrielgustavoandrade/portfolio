@@ -126,7 +126,7 @@
 }
 
 .work-detail__list-item::before {
-  content: '•';
+  content: "•";
   position: absolute;
   left: var(--space-8);
   color: var(--color-text-muted);

@@ -27,7 +27,7 @@
   --transition-easing: cubic-bezier(0.25, 0.1, 0.25, 1);
 
   /* Typography */
-  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-family: "Inter", system-ui, -apple-system, sans-serif;
   --font-size-hero-desktop: 48px;
   --font-size-hero-mobile: 34px;
   --font-size-base: 16px;

@@ -23,27 +23,43 @@ export const posts: Post[] = [
   {
     id: 'lighthouse-98-score',
     title: 'Achieving 98+ Lighthouse Score on This Portfolio',
-    description: 'A technical deep dive into the optimization strategies, tooling choices, and performance budget decisions that achieved consistently high Lighthouse scores.',
+    description:
+      'A technical deep dive into the optimization strategies, tooling choices, and performance budget decisions that achieved consistently high Lighthouse scores.',
     date: '2025-01-15',
     readTime: '8 min read',
     tags: ['Performance', 'Vite', 'Optimization'],
     content: {
-      intro: 'Building a portfolio is easy. Building one that scores 98+ on Lighthouse across all categories while maintaining rich animations and interactions? That\'s a different challenge. Here\'s how I did it.',
+      intro:
+        "Building a portfolio is easy. Building one that scores 98+ on Lighthouse across all categories while maintaining rich animations and interactions? That's a different challenge. Here's how I did it.",
       sections: [
         {
           title: 'The Performance Budget',
-          content: 'Before writing any code, I established strict performance budgets that guided every technical decision.',
+          content:
+            'Before writing any code, I established strict performance budgets that guided every technical decision.',
           metrics: [
-            { label: 'Total Bundle Size', value: '< 200KB', improvement: 'gzipped' },
+            {
+              label: 'Total Bundle Size',
+              value: '< 200KB',
+              improvement: 'gzipped',
+            },
             { label: 'First Contentful Paint', value: '< 1s', improvement: '' },
             { label: 'Time to Interactive', value: '< 2s', improvement: '' },
-            { label: 'Cumulative Layout Shift', value: '0', improvement: 'zero layout shifts' },
-            { label: 'Animation Frame Rate', value: '60fps', improvement: 'maintained' },
+            {
+              label: 'Cumulative Layout Shift',
+              value: '0',
+              improvement: 'zero layout shifts',
+            },
+            {
+              label: 'Animation Frame Rate',
+              value: '60fps',
+              improvement: 'maintained',
+            },
           ],
         },
         {
           title: 'Tooling Decisions',
-          content: 'Choosing Vite over Next.js was intentional. For a static portfolio with client-side routing, Vite offers superior developer experience and build performance without the overhead of a full-stack framework.',
+          content:
+            'Choosing Vite over Next.js was intentional. For a static portfolio with client-side routing, Vite offers superior developer experience and build performance without the overhead of a full-stack framework.',
           list: [
             'Vite for build tooling - near-instant HMR, optimal code splitting',
             'React Router for client-side navigation - lighter than Next.js App Router',
@@ -53,7 +69,8 @@ export const posts: Post[] = [
         },
         {
           title: 'Bundle Optimization',
-          content: 'Every kilobyte matters. I achieved sub-200KB bundle sizes through aggressive optimization.',
+          content:
+            'Every kilobyte matters. I achieved sub-200KB bundle sizes through aggressive optimization.',
           list: [
             'Manual chunk splitting for routes (HomePage, WorkDetailPage)',
             'Lazy loading non-critical components (PerformanceToggle)',
@@ -64,7 +81,8 @@ export const posts: Post[] = [
         },
         {
           title: 'Image & Asset Strategy',
-          content: 'This portfolio is intentionally light on images. When assets are needed, they\'re optimized aggressively.',
+          content:
+            "This portfolio is intentionally light on images. When assets are needed, they're optimized aggressively.",
           list: [
             'SVG icons over icon fonts - smaller, cacheable, scalable',
             'CSS gradients and effects over images where possible',
@@ -74,7 +92,8 @@ export const posts: Post[] = [
         },
         {
           title: 'Runtime Performance',
-          content: 'Build size is only half the story. Runtime performance determines the actual user experience.',
+          content:
+            'Build size is only half the story. Runtime performance determines the actual user experience.',
           code: {
             language: 'typescript',
             snippet: `// Efficient scroll handling with passive listeners
@@ -105,7 +124,8 @@ useEffect(() => {
         },
         {
           title: 'Accessibility & Progressive Enhancement',
-          content: 'Performance isn\'t just speed metrics. It\'s also ensuring the site works for everyone.',
+          content:
+            "Performance isn't just speed metrics. It's also ensuring the site works for everyone.",
           list: [
             'Respects prefers-reduced-motion - disables animations when requested',
             'Full keyboard navigation with visible focus indicators',
@@ -115,7 +135,8 @@ useEffect(() => {
           ],
         },
       ],
-      conclusion: 'Achieving high Lighthouse scores isn\'t about one silver bullet - it\'s the cumulative result of hundreds of small, intentional decisions. Every dependency, every animation, every byte matters.',
+      conclusion:
+        "Achieving high Lighthouse scores isn't about one silver bullet - it's the cumulative result of hundreds of small, intentional decisions. Every dependency, every animation, every byte matters.",
       keyTakeaways: [
         'Establish performance budgets before writing code',
         'Choose tools that match your use case, not the hype',
@@ -128,20 +149,24 @@ useEffect(() => {
   {
     id: 'view-transitions-deep-dive',
     title: 'Per-Word View Transitions: Implementation Deep Dive',
-    description: 'How I implemented smooth per-word morphing animations using the View Transitions API, solving challenges with React Router and scroll position.',
+    description:
+      'How I implemented smooth per-word morphing animations using the View Transitions API, solving challenges with React Router and scroll position.',
     date: '2025-01-12',
     readTime: '10 min read',
     tags: ['View Transitions API', 'React', 'Animations'],
     content: {
-      intro: 'The View Transitions API is one of the most exciting browser features for creating smooth, app-like experiences. But getting it to work with React Router and maintaining scroll position? That took some work.',
+      intro:
+        'The View Transitions API is one of the most exciting browser features for creating smooth, app-like experiences. But getting it to work with React Router and maintaining scroll position? That took some work.',
       sections: [
         {
           title: 'The Goal',
-          content: 'I wanted to recreate the smooth morphing effect from nmn.sh/blog, where each word in a title transitions independently when navigating between list and detail views.',
+          content:
+            'I wanted to recreate the smooth morphing effect from nmn.sh/blog, where each word in a title transitions independently when navigating between list and detail views.',
         },
         {
           title: 'Understanding View Transitions',
-          content: 'The View Transitions API captures a snapshot of the DOM before a change, then animates between the old and new states. The magic happens with CSS view-transition-name properties.',
+          content:
+            'The View Transitions API captures a snapshot of the DOM before a change, then animates between the old and new states. The magic happens with CSS view-transition-name properties.',
           code: {
             language: 'css',
             snippet: `/* Each word gets a unique view-transition-name */
@@ -159,7 +184,8 @@ useEffect(() => {
         },
         {
           title: 'The Per-Word Split',
-          content: 'The first challenge was splitting titles into individual words while maintaining a unique view-transition-name for each.',
+          content:
+            'The first challenge was splitting titles into individual words while maintaining a unique view-transition-name for each.',
           code: {
             language: 'typescript',
             snippet: `export function getTitleSegments(slug: string, title: string) {
@@ -192,7 +218,8 @@ return (
         },
         {
           title: 'React Router Integration',
-          content: 'The View Transitions API works best with cross-document navigation. Making it work with SPA routing required wrapping React Router navigation.',
+          content:
+            'The View Transitions API works best with cross-document navigation. Making it work with SPA routing required wrapping React Router navigation.',
           code: {
             language: 'typescript',
             snippet: `const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
@@ -216,7 +243,8 @@ return (
         },
         {
           title: 'Scroll Restoration Challenge',
-          content: 'The hardest part was restoring scroll position after the transition. The solution required executing the scroll synchronously within the transition callback.',
+          content:
+            'The hardest part was restoring scroll position after the transition. The solution required executing the scroll synchronously within the transition callback.',
           code: {
             language: 'typescript',
             snippet: `const handleClose = () => {
@@ -241,7 +269,8 @@ return (
         },
         {
           title: 'Performance Considerations',
-          content: 'View transitions can be expensive. I optimized by limiting the number of transitioning elements and using efficient selectors.',
+          content:
+            'View transitions can be expensive. I optimized by limiting the number of transitioning elements and using efficient selectors.',
           list: [
             'Only title words transition - not entire cards',
             'Reduced motion check to disable for accessibility',
@@ -250,7 +279,8 @@ return (
           ],
         },
       ],
-      conclusion: 'The View Transitions API is powerful but requires careful integration with modern frameworks. The result is worth it - smooth, native-feeling animations without heavy JavaScript libraries.',
+      conclusion:
+        'The View Transitions API is powerful but requires careful integration with modern frameworks. The result is worth it - smooth, native-feeling animations without heavy JavaScript libraries.',
       keyTakeaways: [
         'View Transitions API works best when view-transition-names match exactly',
         'React Router requires manual wrapping of navigation',
@@ -263,20 +293,24 @@ return (
   {
     id: 'magnetic-cursor-performance',
     title: 'Magnetic Cursor Effects Without Performance Jank',
-    description: 'Building smooth, 60fps magnetic cursor interactions using requestAnimationFrame and proper event handling optimization.',
+    description:
+      'Building smooth, 60fps magnetic cursor interactions using requestAnimationFrame and proper event handling optimization.',
     date: '2025-01-08',
     readTime: '6 min read',
     tags: ['Performance', 'Animations', 'UX'],
     content: {
-      intro: 'Magnetic cursor effects are visually striking, but poorly implemented ones tank performance. Here\'s how to build them properly at 60fps.',
+      intro:
+        "Magnetic cursor effects are visually striking, but poorly implemented ones tank performance. Here's how to build them properly at 60fps.",
       sections: [
         {
           title: 'The Problem',
-          content: 'Naive implementations attach mousemove listeners that trigger re-renders on every pixel movement. At 60fps, that\'s 60 React renders per second.',
+          content:
+            "Naive implementations attach mousemove listeners that trigger re-renders on every pixel movement. At 60fps, that's 60 React renders per second.",
         },
         {
           title: 'The Solution: Direct DOM Manipulation',
-          content: 'For performance-critical animations, bypass React\'s render cycle entirely and manipulate the DOM directly.',
+          content:
+            "For performance-critical animations, bypass React's render cycle entirely and manipulate the DOM directly.",
           code: {
             language: 'typescript',
             snippet: `const handleMouseMove = (e: MouseEvent, card: Element) => {
@@ -306,7 +340,8 @@ return (
         },
         {
           title: 'Event Handler Optimization',
-          content: 'Reducing the frequency of expensive calculations with proper event management.',
+          content:
+            'Reducing the frequency of expensive calculations with proper event management.',
           list: [
             'Attach listeners only to parent cards, not individual words',
             'Use getBoundingClientRect once per word, not per frame',
@@ -333,7 +368,8 @@ return (
         },
         {
           title: 'Accessibility Consideration',
-          content: 'Always check for reduced motion preference to respect user settings.',
+          content:
+            'Always check for reduced motion preference to respect user settings.',
           code: {
             language: 'typescript',
             snippet: `useEffect(() => {
@@ -352,13 +388,22 @@ return (
           content: 'Measuring the impact of optimizations.',
           metrics: [
             { label: 'Frame Rate', value: '60fps', improvement: 'maintained' },
-            { label: 'React Renders', value: '0', improvement: 'per mousemove' },
+            {
+              label: 'React Renders',
+              value: '0',
+              improvement: 'per mousemove',
+            },
             { label: 'CPU Usage', value: '< 5%', improvement: 'on hover' },
-            { label: 'Memory Allocation', value: '0', improvement: 'no object creation' },
+            {
+              label: 'Memory Allocation',
+              value: '0',
+              improvement: 'no object creation',
+            },
           ],
         },
       ],
-      conclusion: 'Magnetic cursor effects don\'t have to be performance killers. With direct DOM manipulation, proper event handling, and CSS optimization, you can create smooth 60fps interactions.',
+      conclusion:
+        "Magnetic cursor effects don't have to be performance killers. With direct DOM manipulation, proper event handling, and CSS optimization, you can create smooth 60fps interactions.",
       keyTakeaways: [
         'Direct DOM manipulation for high-frequency animations',
         'Event delegation over individual listeners',
