@@ -1,5 +1,5 @@
 import type { MouseEvent, ReactNode } from 'react';
-import { flushSync } from 'react-dom';
+import { forwardRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 interface TransitionLinkProps {
@@ -11,46 +11,31 @@ interface TransitionLinkProps {
 
 const SCROLL_KEY = 'portfolio:scroll-position';
 
-export function TransitionLink({
-  to,
-  children,
-  className,
-  onClick,
-}: TransitionLinkProps) {
-  const navigate = useNavigate();
-  const location = useLocation();
+export const TransitionLink = forwardRef<HTMLAnchorElement, TransitionLinkProps>(
+  function TransitionLink({ to, children, className, onClick }, ref) {
+    const navigate = useNavigate();
+    const location = useLocation();
 
-  const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
+    const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
+      e.preventDefault();
 
-    // Save scroll position when navigating away from home page
-    if (location.pathname === '/') {
-      sessionStorage.setItem(SCROLL_KEY, window.scrollY.toString());
-    }
+      // Save scroll position when navigating away from home page
+      if (location.pathname === '/') {
+        sessionStorage.setItem(SCROLL_KEY, window.scrollY.toString());
+      }
 
-    if (onClick) {
-      onClick();
-    }
+      if (onClick) {
+        onClick();
+      }
 
-    // Simple page crossfade with View Transitions API
-    if (
-      'startViewTransition' in document &&
-      typeof (document as any).startViewTransition === 'function'
-    ) {
-      (document as any).startViewTransition(() => {
-        flushSync(() => {
-          navigate(to);
-        });
-      });
-    } else {
-      // Fallback for browsers without View Transitions support
+      // Just navigate - let CSS handle transitions
       navigate(to);
-    }
-  };
+    };
 
-  return (
-    <a href={to} onClick={handleClick} className={className}>
-      {children}
-    </a>
-  );
-}
+    return (
+      <a ref={ref} href={to} onClick={handleClick} className={className}>
+        {children}
+      </a>
+    );
+  },
+);

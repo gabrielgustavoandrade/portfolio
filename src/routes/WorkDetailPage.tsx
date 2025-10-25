@@ -1,14 +1,13 @@
-import { useEffect } from 'react';
-import { flushSync } from 'react-dom';
-import { useNavigate, useParams } from 'react-router-dom';
-import { About } from '../components/About';
-import { Contact } from '../components/Contact';
-import { Footer } from '../components/Footer';
-import { WorkDetail } from '../components/WorkDetail';
-import { projects } from '../data/projects';
+import { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { About } from "../components/About";
+import { Contact } from "../components/Contact";
+import { Footer } from "../components/Footer";
+import { WorkDetail } from "../components/WorkDetail";
+import { projects } from "../data/projects";
 
-const LAST_FOCUSED_CARD_KEY = 'work:last-focused-slug';
-const SCROLL_KEY = 'portfolio:scroll-position';
+const LAST_FOCUSED_CARD_KEY = "work:last-focused-slug";
+const SCROLL_KEY = "portfolio:scroll-position";
 
 export function WorkDetailPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -25,39 +24,21 @@ export function WorkDetailPage() {
 
   if (!project) {
     // Redirect to home if project not found
-    navigate('/');
+    navigate("/");
     return null;
   }
 
   const handleClose = () => {
     sessionStorage.setItem(LAST_FOCUSED_CARD_KEY, project.slug);
+    navigate("/");
 
+    // Restore scroll position immediately after navigation
     const savedScroll = sessionStorage.getItem(SCROLL_KEY);
-
-    // Simple page crossfade with View Transitions API
-    if (
-      'startViewTransition' in document &&
-      typeof (document as any).startViewTransition === 'function'
-    ) {
-      const transition = (document as any).startViewTransition(() => {
-        flushSync(() => {
-          navigate('/');
-        });
-      });
-
-      // Restore scroll position after transition completes
-      transition.finished.then(() => {
-        if (savedScroll) {
-          window.scrollTo(0, parseInt(savedScroll, 10));
-        }
-      });
-    } else {
-      navigate('/');
-      if (savedScroll) {
-        requestAnimationFrame(() => {
-          window.scrollTo(0, parseInt(savedScroll, 10));
-        });
-      }
+    if (savedScroll) {
+      // Use setTimeout to ensure DOM is ready
+      setTimeout(() => {
+        window.scrollTo(0, parseInt(savedScroll, 10));
+      }, 0);
     }
   };
 

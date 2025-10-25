@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { ScrollProgress } from './components/ScrollProgress';
 import { HomePage } from './routes/HomePage';
 import { WorkDetailPage } from './routes/WorkDetailPage';
 import './App.css';
@@ -11,6 +12,7 @@ function App() {
         v7_relativeSplatPath: true,
       }}
     >
+      <ScrollProgress />
       <div className="app">
         <Routes>
           <Route path="/" element={<HomePage />} />
