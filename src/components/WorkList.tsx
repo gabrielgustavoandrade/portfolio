@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { Project } from '../data/projects';
+import type { Project } from '../data/projects';
 import { getTitleSegments } from '../utils/titleSegments';
 import { TransitionLink } from './TransitionLink';
 import './WorkList.css';
@@ -26,18 +26,22 @@ export function WorkList({ projects }: WorkListProps) {
       {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px',
-      }
+      },
     );
 
-    cards.forEach((card) => observer.observe(card));
+    cards.forEach((card) => {
+      observer.observe(card);
+    });
 
     return () => observer.disconnect();
-  }, [projects]);
+  }, []);
 
   // Magnetic cursor effect on title words
   useEffect(() => {
     // Skip magnetic effect if user prefers reduced motion
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches;
     if (prefersReducedMotion) return;
 
     const cards = cardsRef.current?.querySelectorAll('.work-card');
@@ -62,7 +66,8 @@ export function WorkList({ projects }: WorkListProps) {
           const moveX = deltaX * strength;
           const moveY = deltaY * strength;
 
-          (word as HTMLElement).style.transform = `translate(${moveX}px, ${moveY}px)`;
+          (word as HTMLElement).style.transform =
+            `translate(${moveX}px, ${moveY}px)`;
         } else {
           (word as HTMLElement).style.transform = 'translate(0, 0)';
         }
@@ -76,21 +81,32 @@ export function WorkList({ projects }: WorkListProps) {
       });
     };
 
+    const handlers = new Map<
+      Element,
+      { move: EventListener; leave: EventListener }
+    >();
+
     cards.forEach((card) => {
-      const mouseMoveHandler = (e: Event) => handleMouseMove(e as MouseEvent, card);
-      const mouseLeaveHandler = () => handleMouseLeave(card);
+      const mouseMoveHandler: EventListener = (e) =>
+        handleMouseMove(e as MouseEvent, card);
+      const mouseLeaveHandler: EventListener = () => handleMouseLeave(card);
+
+      handlers.set(card, {
+        move: mouseMoveHandler,
+        leave: mouseLeaveHandler,
+      });
 
       card.addEventListener('mousemove', mouseMoveHandler);
       card.addEventListener('mouseleave', mouseLeaveHandler);
     });
 
     return () => {
-      cards.forEach((card) => {
-        card.removeEventListener('mousemove', handleMouseMove as any);
-        card.removeEventListener('mouseleave', handleMouseLeave as any);
+      handlers.forEach((h, card) => {
+        card.removeEventListener('mousemove', h.move);
+        card.removeEventListener('mouseleave', h.leave);
       });
     };
-  }, [projects]);
+  }, []);
 
   return (
     <section className="work-list" id="work">
@@ -116,7 +132,7 @@ export function WorkList({ projects }: WorkListProps) {
                   {titleSegments.map((segment, index) => (
                     <span
                       key={segment.id}
-                      style={{ viewTransitionName: segment.viewTransitionName } as any}
+                      style={{ viewTransitionName: segment.viewTransitionName }}
                     >
                       {segment.text}
                       {index < titleSegments.length - 1 ? ' ' : ''}
@@ -125,7 +141,7 @@ export function WorkList({ projects }: WorkListProps) {
                 </h3>
                 <p className="work-card__subtitle">{project.subtitle}</p>
                 <div className="work-card__meta">
-                  {project.meta.role} · {project.meta.years} · {project.meta.location}
+                  {project.meta.role} · {project.meta.location}
                 </div>
                 <p className="work-card__summary">{project.summary}</p>
               </TransitionLink>

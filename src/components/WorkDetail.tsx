@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { Project } from '../data/projects';
+import type { Project } from '../data/projects';
 import { getTitleSegments } from '../utils/titleSegments';
 import './WorkDetail.css';
 
@@ -43,16 +43,22 @@ export function WorkDetail({ project, onClose }: WorkDetailProps) {
   // Parallax scroll effect
   useEffect(() => {
     const handleScroll = () => {
-      const sections = sectionsRef.current?.querySelectorAll('.work-detail__section');
+      const sections = sectionsRef.current?.querySelectorAll(
+        '.work-detail__section',
+      );
       if (!sections) return;
 
-      sections.forEach((section, index) => {
+      sections.forEach((section) => {
         const rect = section.getBoundingClientRect();
-        const scrollPercent = (window.innerHeight - rect.top) / window.innerHeight;
+        const scrollPercent =
+          (window.innerHeight - rect.top) / window.innerHeight;
         const translateY = Math.max(0, (1 - scrollPercent) * 20);
 
-        (section as HTMLElement).style.transform = `translateY(${translateY}px)`;
-        (section as HTMLElement).style.opacity = String(Math.min(1, scrollPercent * 1.5));
+        (section as HTMLElement).style.transform =
+          `translateY(${translateY}px)`;
+        (section as HTMLElement).style.opacity = String(
+          Math.min(1, scrollPercent * 1.5),
+        );
       });
     };
 
@@ -68,6 +74,7 @@ export function WorkDetail({ project, onClose }: WorkDetailProps) {
     <section className="work-detail" ref={detailRef}>
       <div className="work-detail__container">
         <button
+          type="button"
           className="work-detail__back"
           onClick={onClose}
           aria-label="Go back to work list"
@@ -85,7 +92,7 @@ export function WorkDetail({ project, onClose }: WorkDetailProps) {
             {titleSegments.map((segment, index) => (
               <span
                 key={segment.id}
-                style={{ viewTransitionName: segment.viewTransitionName } as any}
+                style={{ viewTransitionName: segment.viewTransitionName }}
               >
                 {segment.text}
                 {index < titleSegments.length - 1 ? ' ' : ''}
@@ -96,7 +103,7 @@ export function WorkDetail({ project, onClose }: WorkDetailProps) {
           <p className="work-detail__subtitle">{project.subtitle}</p>
 
           <div className="work-detail__meta">
-            {project.meta.role} · {project.meta.years} · {project.meta.location}
+            {project.meta.role} · {project.meta.location}
           </div>
 
           <div className="work-detail__section">
@@ -107,8 +114,8 @@ export function WorkDetail({ project, onClose }: WorkDetailProps) {
           <div className="work-detail__section">
             <h3 className="work-detail__section-title">Key Challenges</h3>
             <ul className="work-detail__list">
-              {project.challenges.map((challenge, index) => (
-                <li key={index} className="work-detail__list-item">
+              {project.challenges.map((challenge) => (
+                <li key={challenge} className="work-detail__list-item">
                   {challenge}
                 </li>
               ))}
@@ -118,8 +125,8 @@ export function WorkDetail({ project, onClose }: WorkDetailProps) {
           <div className="work-detail__section">
             <h3 className="work-detail__section-title">Solutions</h3>
             <ul className="work-detail__list">
-              {project.solutions.map((solution, index) => (
-                <li key={index} className="work-detail__list-item">
+              {project.solutions.map((solution) => (
+                <li key={solution} className="work-detail__list-item">
                   {solution}
                 </li>
               ))}
