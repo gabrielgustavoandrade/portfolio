@@ -48,8 +48,8 @@ export const techStack: TechCategory[] = [
         icon: '🛣️',
       },
       {
-        name: 'View Transitions API',
-        description: 'Native browser page transitions',
+        name: 'CSS Transitions',
+        description: 'Smooth page crossfade transitions',
         icon: '✨',
       },
     ],
@@ -117,7 +117,7 @@ export const architecturalDecisions: ArchitecturalDecision[] = [
     title: 'Why React Router over Next.js App Router?',
     decision: 'React Router v6 for navigation',
     rationale:
-      'Lighter weight than Next.js App Router. Full control over route transitions using View Transitions API. No framework magic, explicit behavior. Perfect for SPA with view transitions.',
+      'Lighter weight than Next.js App Router. Full control over route transitions using CSS. No framework magic, explicit behavior. Perfect for SPA with smooth page transitions.',
   },
   {
     title: 'Why CSS over CSS-in-JS?',
@@ -135,7 +135,7 @@ export const architecturalDecisions: ArchitecturalDecision[] = [
     title: 'No External Dependencies for UI',
     decision: 'Custom implementations over libraries',
     rationale:
-      'Magnetic cursor, scroll animations, view transitions - all custom built. No Framer Motion, GSAP, or other animation libraries. Keeps bundle under 200KB and gives precise control over performance.',
+      'Magnetic cursor, scroll animations, page transitions - all custom built. No Framer Motion, GSAP, or other animation libraries. Keeps bundle under 200KB and gives precise control over performance.',
   },
 ];
 

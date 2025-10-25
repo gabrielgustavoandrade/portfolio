@@ -14,7 +14,7 @@ console.log(
 );
 console.log(
   '%c• Frontend:%c React 18 + TypeScript + Vite\n' +
-    '%c• Routing:%c React Router v6 with View Transitions API\n' +
+    '%c• Routing:%c React Router v6 with CSS transitions\n' +
     '%c• Animations:%c Custom CSS + Intersection Observer\n' +
     '%c• Performance:%c Code splitting, lazy loading, optimized assets',
   'color: #60a5fa; font-weight: bold;',
@@ -51,8 +51,8 @@ console.log(
   'font-size: 14px; color: #94a3b8; font-weight: bold;',
 );
 console.log(
-  '%c• Per-word View Transitions API implementation\n' +
-    '• Magnetic cursor effects on all interactive elements\n' +
+  '%c• Magnetic cursor effects on all interactive elements\n' +
+    '• Smooth page transitions with CSS crossfade\n' +
     '• Scroll-triggered reveal animations\n' +
     '• Intersection Observer for lazy animations\n' +
     '• Accessibility: full keyboard nav + reduced motion support',
