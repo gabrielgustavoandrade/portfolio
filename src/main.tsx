@@ -31,9 +31,9 @@ console.log(
   'font-size: 14px; color: #94a3b8; font-weight: bold;',
 );
 console.log(
-  '%c• Lighthouse Score:%c 98+ across all categories\n' +
-    '%c• Build Size:%c < 200KB gzipped\n' +
-    '%c• FCP:%c < 1s | %cTTI:%c < 2s\n' +
+  '%c• Lighthouse Score:%c 95+ Performance | 100 Accessibility\n' +
+    '%c• Build Size:%c 200KB gzipped (732KB total)\n' +
+    '%c• FCP:%c < 1.8s | %cINP:%c < 200ms\n' +
     '%c• Animations:%c 60fps maintained',
   'color: #10b981; font-weight: bold;',
   'color: #e2e8f0;',
@@ -52,8 +52,8 @@ console.log(
 );
 console.log(
   '%c• Per-word View Transitions API implementation\n' +
-    '• Magnetic cursor effects on hover\n' +
-    '• Scroll-based parallax animations\n' +
+    '• Magnetic cursor effects on all interactive elements\n' +
+    '• Scroll-triggered reveal animations\n' +
     '• Intersection Observer for lazy animations\n' +
     '• Accessibility: full keyboard nav + reduced motion support',
   'color: #e2e8f0; line-height: 1.6;',
