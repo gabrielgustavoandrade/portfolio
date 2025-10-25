@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import {
-  techStack,
   architecturalDecisions,
-  performanceOptimizations,
   buildPipeline,
   metrics,
+  performanceOptimizations,
+  techStack,
 } from '../data/techStack';
 import './TechStackModal.css';
 
@@ -36,11 +36,18 @@ export function TechStackModal({ isOpen, onClose }: TechStackModalProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="tech-modal-overlay" onClick={onClose}>
-      <div className="tech-modal" onClick={(e) => e.stopPropagation()}>
+    <div className="tech-modal-overlay" onClick={onClose} aria-hidden="true">
+      <div
+        className="tech-modal"
+        onClick={(e) => e.stopPropagation()}
+        onKeyDown={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+      >
         <div className="tech-modal__header">
           <h2 className="tech-modal__title">How I Built This</h2>
           <button
+            type="button"
             className="tech-modal__close"
             onClick={onClose}
             aria-label="Close modal"
@@ -59,7 +66,9 @@ export function TechStackModal({ isOpen, onClose }: TechStackModalProps) {
                 <div className="tech-modal__metric-values">
                   <span>Performance: {metrics.lighthouse.performance}</span>
                   <span>Accessibility: {metrics.lighthouse.accessibility}</span>
-                  <span>Best Practices: {metrics.lighthouse.bestPractices}</span>
+                  <span>
+                    Best Practices: {metrics.lighthouse.bestPractices}
+                  </span>
                   <span>SEO: {metrics.lighthouse.seo}</span>
                 </div>
               </div>
@@ -113,10 +122,12 @@ export function TechStackModal({ isOpen, onClose }: TechStackModalProps) {
 
           {/* Architectural Decisions */}
           <section className="tech-modal__section">
-            <h3 className="tech-modal__section-title">Architectural Decisions</h3>
+            <h3 className="tech-modal__section-title">
+              Architectural Decisions
+            </h3>
             <div className="tech-modal__decisions">
-              {architecturalDecisions.map((decision, index) => (
-                <div key={index} className="tech-modal__decision">
+              {architecturalDecisions.map((decision) => (
+                <div key={decision.title} className="tech-modal__decision">
                   <h4 className="tech-modal__decision-title">
                     {decision.title}
                   </h4>
@@ -133,16 +144,21 @@ export function TechStackModal({ isOpen, onClose }: TechStackModalProps) {
 
           {/* Performance Optimizations */}
           <section className="tech-modal__section">
-            <h3 className="tech-modal__section-title">Performance Optimizations</h3>
+            <h3 className="tech-modal__section-title">
+              Performance Optimizations
+            </h3>
             <div className="tech-modal__optimizations">
               {performanceOptimizations.map((category) => (
-                <div key={category.category} className="tech-modal__optimization">
+                <div
+                  key={category.category}
+                  className="tech-modal__optimization"
+                >
                   <h4 className="tech-modal__optimization-title">
                     {category.category}
                   </h4>
                   <ul className="tech-modal__optimization-list">
-                    {category.optimizations.map((opt, index) => (
-                      <li key={index}>{opt}</li>
+                    {category.optimizations.map((opt) => (
+                      <li key={opt}>{opt}</li>
                     ))}
                   </ul>
                 </div>
@@ -157,24 +173,24 @@ export function TechStackModal({ isOpen, onClose }: TechStackModalProps) {
               <div className="tech-modal__pipeline-stage">
                 <h4>Development</h4>
                 <ul>
-                  {buildPipeline.development.map((step, index) => (
-                    <li key={index}>{step}</li>
+                  {buildPipeline.development.map((step) => (
+                    <li key={step}>{step}</li>
                   ))}
                 </ul>
               </div>
               <div className="tech-modal__pipeline-stage">
                 <h4>Production Build</h4>
                 <ul>
-                  {buildPipeline.production.map((step, index) => (
-                    <li key={index}>{step}</li>
+                  {buildPipeline.production.map((step) => (
+                    <li key={step}>{step}</li>
                   ))}
                 </ul>
               </div>
               <div className="tech-modal__pipeline-stage">
                 <h4>Deployment</h4>
                 <ul>
-                  {buildPipeline.deployment.map((step, index) => (
-                    <li key={index}>{step}</li>
+                  {buildPipeline.deployment.map((step) => (
+                    <li key={step}>{step}</li>
                   ))}
                 </ul>
               </div>
@@ -188,8 +204,8 @@ export function TechStackModal({ isOpen, onClose }: TechStackModalProps) {
               technologies. No proprietary dependencies.
             </p>
             <p>
-              <strong>Want to see more?</strong> Check out the browser console and
-              Performance panel for additional technical details.
+              <strong>Want to see more?</strong> Check out the browser console
+              and Performance panel for additional technical details.
             </p>
           </div>
         </div>
