@@ -124,11 +124,7 @@ export function WorkList({ projects }: WorkListProps) {
               to={`/work/${project.slug}`}
               className="work-card"
             >
-              <h3
-                className="work-card__title"
-                aria-label={project.title}
-                style={{ viewTransitionName: `work-title-${project.slug}` }}
-              >
+              <h3 className="work-card__title" aria-label={project.title}>
                 {project.title}
               </h3>
               <p className="work-card__subtitle">{project.subtitle}</p>

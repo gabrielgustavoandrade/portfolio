@@ -85,7 +85,6 @@ export function WorkDetail({ project, onClose }: WorkDetailProps) {
             className="work-detail__title"
             tabIndex={-1}
             aria-label={project.title}
-            style={{ viewTransitionName: `work-title-${project.slug}` }}
           >
             {project.title}
           </h2>

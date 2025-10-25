@@ -32,25 +32,27 @@ export function WorkDetailPage() {
   const handleClose = () => {
     sessionStorage.setItem(LAST_FOCUSED_CARD_KEY, project.slug);
 
+    const savedScroll = sessionStorage.getItem(SCROLL_KEY);
+
     // Simple page crossfade with View Transitions API
     if (
       'startViewTransition' in document &&
       typeof (document as any).startViewTransition === 'function'
     ) {
-      (document as any).startViewTransition(() => {
+      const transition = (document as any).startViewTransition(() => {
         flushSync(() => {
           navigate('/');
         });
+      });
 
-        // Restore scroll position after navigation
-        const savedScroll = sessionStorage.getItem(SCROLL_KEY);
+      // Restore scroll position after transition completes
+      transition.finished.then(() => {
         if (savedScroll) {
           window.scrollTo(0, parseInt(savedScroll, 10));
         }
       });
     } else {
       navigate('/');
-      const savedScroll = sessionStorage.getItem(SCROLL_KEY);
       if (savedScroll) {
         requestAnimationFrame(() => {
           window.scrollTo(0, parseInt(savedScroll, 10));
