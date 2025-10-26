@@ -1,8 +1,8 @@
 .reveal-text {
   opacity: 0;
   transform: translateY(20px);
-  transition: opacity 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
-    transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: opacity var(--transition-duration-slower) var(--transition-easing-bounce),
+    transform var(--transition-duration-slower) var(--transition-easing-bounce);
 }
 
 .reveal-text.is-visible {
@@ -29,14 +29,7 @@
 }
 
 .reveal-text__word.is-visible {
-  animation: revealWord 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
-
-@keyframes revealWord {
-  to {
-    opacity: 1;
-    transform: translateY(0) rotateX(0);
-  }
+  animation: revealWord var(--transition-duration-slower) var(--transition-easing-bounce) forwards;
 }
 
 @media (prefers-reduced-motion: reduce) {
