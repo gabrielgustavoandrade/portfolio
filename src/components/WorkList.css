@@ -19,7 +19,7 @@
 }
 
 .work-list__title {
-  font-size: 32px;
+  font-size: var(--font-size-3xl);
   font-weight: 600;
   line-height: var(--line-height-tight);
   color: var(--color-text-primary);
@@ -27,7 +27,7 @@
 }
 
 .work-list__subtitle {
-  font-size: 18px;
+  font-size: var(--font-size-md);
   line-height: var(--line-height-normal);
   color: var(--color-text-muted);
 }
@@ -48,22 +48,22 @@
   display: block;
   opacity: 0;
   transform: translateY(20px);
-  animation: fadeInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation: fadeInUp var(--transition-duration-slower) var(--transition-easing-bounce) forwards;
   border-radius: var(--space-8);
-  transition: all 0.3s var(--transition-easing);
+  transition: all var(--transition-duration-normal) var(--transition-easing);
 }
 
 .work-card:nth-child(1) {
-  animation-delay: 0.1s;
+  animation-delay: var(--transition-duration-instant);
 }
 .work-card:nth-child(2) {
-  animation-delay: 0.2s;
+  animation-delay: var(--transition-duration-fast);
 }
 .work-card:nth-child(3) {
-  animation-delay: 0.3s;
+  animation-delay: var(--transition-duration-normal);
 }
 .work-card:nth-child(4) {
-  animation-delay: 0.4s;
+  animation-delay: var(--transition-duration-slow);
 }
 .work-card:nth-child(5) {
   animation-delay: 0.5s;
@@ -73,13 +73,6 @@
 .work-card.is-visible {
   opacity: 1;
   transform: translateY(0);
-}
-
-@keyframes fadeInUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .work-card:last-child {
@@ -110,20 +103,20 @@
 }
 
 .work-card__link:hover .work-card__title {
-  color: #60a5fa;
+  color: var(--color-accent-blue);
 }
 
 .work-card__title {
-  font-size: 24px;
+  font-size: var(--font-size-xl);
   font-weight: 600;
   line-height: var(--line-height-tight);
   color: var(--color-text-primary);
   margin-bottom: var(--space-8);
-  transition: color 0.3s ease;
+  transition: color var(--transition-duration-normal) ease;
 }
 
 .work-card__subtitle {
-  font-size: 16px;
+  font-size: var(--font-size-base);
   line-height: var(--line-height-normal);
   color: var(--color-text-muted);
   margin-bottom: var(--space-12);
@@ -153,7 +146,7 @@
   border-radius: var(--space-8);
   cursor: pointer;
   text-align: center;
-  transition: all 0.3s var(--transition-easing);
+  transition: all var(--transition-duration-normal) var(--transition-easing);
   font-weight: 500;
   min-height: 44px;
   display: inline-flex;
@@ -174,18 +167,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-24);
-  animation: expandContent 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-@keyframes expandContent {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  animation: expandContent var(--transition-duration-slow) var(--transition-easing-bounce);
 }
 
 .work-card__preview-section {
@@ -195,7 +177,7 @@
 }
 
 .work-card__preview-title {
-  font-size: 16px;
+  font-size: var(--font-size-base);
   font-weight: 600;
   color: var(--color-text-primary);
   margin: 0;
@@ -209,12 +191,12 @@
 
 .work-card__stack-item {
   display: inline-block;
-  padding: 4px 12px;
+  padding: var(--space-4) var(--space-12);
   background: rgba(96, 165, 250, 0.1);
   border: 1px solid rgba(96, 165, 250, 0.3);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   font-size: var(--font-size-small);
-  color: #60a5fa;
+  color: var(--color-accent-blue);
 }
 
 .work-card__list {
@@ -238,20 +220,20 @@
   content: "•";
   position: absolute;
   left: 0;
-  color: #60a5fa;
+  color: var(--color-accent-blue);
 }
 
 .work-card__full-link {
   display: inline-block;
   font-size: var(--font-size-base);
-  color: #60a5fa;
+  color: var(--color-accent-blue);
   text-decoration: none;
-  transition: color 0.3s var(--transition-easing);
+  transition: color var(--transition-duration-normal) var(--transition-easing);
   margin-top: var(--space-8);
 }
 
 .work-card__full-link:hover {
-  color: #93c5fd;
+  color: var(--color-accent-blue-light);
   text-decoration: underline;
 }
 
@@ -262,11 +244,11 @@
   }
 
   .work-list__title {
-    font-size: 28px;
+    font-size: var(--font-size-2xl);
   }
 
   .work-list__subtitle {
-    font-size: 16px;
+    font-size: var(--font-size-base);
   }
 
   .work-card {
@@ -274,7 +256,7 @@
   }
 
   .work-card__title {
-    font-size: 20px;
+    font-size: var(--font-size-lg);
   }
 }
 
