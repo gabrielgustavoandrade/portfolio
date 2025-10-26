@@ -1,32 +1,19 @@
-import { useEffect, useRef } from 'react';
-import { useCardMagneticTitle } from '../hooks/useCardMagneticTitle';
-import type { Project } from '../data/projects';
-import { TransitionLink } from './TransitionLink';
-import './WorkList.css';
+import { useEffect, useRef } from "react";
+import type { Project } from "../data/projects";
+import { TransitionLink } from "./TransitionLink";
+import "./WorkList.css";
 
 interface WorkListProps {
   projects: Project[];
 }
 
 function WorkCard({ project }: { project: Project }) {
-  const [cardRef, titleRef] = useCardMagneticTitle<
-    HTMLAnchorElement,
-    HTMLHeadingElement
-  >({ strength: 0.1 });
-
   return (
-    <TransitionLink
-      ref={cardRef}
-      to={`/work/${project.slug}`}
-      className="work-card"
-    >
-      <h3 ref={titleRef} className="work-card__title" aria-label={project.title}>
+    <TransitionLink to={`/work/${project.slug}`} className="work-card">
+      <h3 className="work-card__title" aria-label={project.title}>
         {project.title}
       </h3>
       <p className="work-card__subtitle">{project.subtitle}</p>
-      <div className="work-card__meta">
-        {project.meta.role} · {project.meta.location}
-      </div>
       <p className="work-card__summary">{project.summary}</p>
     </TransitionLink>
   );
@@ -36,20 +23,20 @@ export function WorkList({ projects }: WorkListProps) {
   const cardsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const cards = cardsRef.current?.querySelectorAll('.work-card');
+    const cards = cardsRef.current?.querySelectorAll(".work-card");
     if (!cards) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
+            entry.target.classList.add("is-visible");
           }
         });
       },
       {
         threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px',
+        rootMargin: "0px 0px -50px 0px",
       },
     );
 

@@ -38,11 +38,12 @@ export function Hero({ onWorkClick, onContactClick }: HeroProps) {
             Gabriel Andrade
           </RevealText>
           <p className="hero__subtitle">
-            Frontend / Full-stack Engineer crafting fast, aesthetic, reliable
-            interfaces.
+            Software Engineer | React, Node.js, TypeScript
           </p>
           <p className="hero__tagline">
-            I build software that feels invisible.
+            Six years designing and delivering scalable applications across
+            consumer and commerce platforms. Full-stack engineer focused on
+            performance, maintainability, and measurable impact.
           </p>
 
           <div className="hero__cta">

@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 import { useMagneticHover } from '../hooks/useMagneticHover';
-import { useGlobalMagneticHover } from '../hooks/useGlobalMagneticHover';
 import type { Project } from '../data/projects';
 import './WorkDetail.css';
 
@@ -12,16 +11,14 @@ interface WorkDetailProps {
 export function WorkDetail({ project, onClose }: WorkDetailProps) {
   const detailRef = useRef<HTMLElement>(null);
   const sectionsRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
   const backButtonRef = useMagneticHover<HTMLButtonElement>({
     strength: 0.2,
     maxDistance: 60,
   });
-  const titleMagneticRef = useGlobalMagneticHover<HTMLHeadingElement>({
-    strength: 0.025,
-  });
 
   useEffect(() => {
-    titleMagneticRef.current?.focus();
+    titleRef.current?.focus();
 
     const announcement = document.createElement('div');
     announcement.setAttribute('role', 'status');
@@ -90,7 +87,7 @@ export function WorkDetail({ project, onClose }: WorkDetailProps) {
 
         <article className="work-detail__content" ref={sectionsRef}>
           <h2
-            ref={titleMagneticRef}
+            ref={titleRef}
             className="work-detail__title"
             tabIndex={-1}
             aria-label={project.title}
@@ -99,10 +96,6 @@ export function WorkDetail({ project, onClose }: WorkDetailProps) {
           </h2>
 
           <p className="work-detail__subtitle">{project.subtitle}</p>
-
-          <div className="work-detail__meta">
-            {project.meta.role} · {project.meta.location}
-          </div>
 
           <div className="work-detail__section">
             <h3 className="work-detail__section-title">Overview</h3>

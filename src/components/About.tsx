@@ -21,8 +21,11 @@ export function About() {
             stagger={true}
             delay={100}
           >
-            Over six years I've worked on consumer and commerce products —
-            blending UX thinking with strong engineering foundations.
+            Six years building scalable full-stack applications for consumer
+            platforms, e-commerce, and financial services. I've led
+            modernization projects, improved performance in high-traffic systems,
+            and mentored developers across distributed teams in the US and
+            Europe.
           </RevealText>
           <RevealText
             as="p"
@@ -30,7 +33,10 @@ export function About() {
             stagger={true}
             delay={200}
           >
-            I focus on speed, clarity, and design systems that scale.
+            My approach emphasizes clean architecture, maintainability, and
+            performance—ensuring every solution is both robust and measurable.
+            I work across the stack with React, Node.js, TypeScript, and modern
+            tooling, focusing on reliable, user-centric products that scale.
           </RevealText>
           <RevealText
             as="p"

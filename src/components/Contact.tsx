@@ -6,6 +6,14 @@ export function Contact() {
     strength: 0.2,
     maxDistance: 60,
   });
+  const linkedinButtonRef = useMagneticHover<HTMLAnchorElement>({
+    strength: 0.2,
+    maxDistance: 60,
+  });
+  const githubButtonRef = useMagneticHover<HTMLAnchorElement>({
+    strength: 0.2,
+    maxDistance: 60,
+  });
 
   return (
     <section className="contact" id="contact">
@@ -25,6 +33,7 @@ export function Contact() {
             Email me
           </a>
           <a
+            ref={linkedinButtonRef}
             href="https://www.linkedin.com/in/gabrielgustavoandrade"
             className="contact__link"
             target="_blank"
@@ -32,6 +41,16 @@ export function Contact() {
             aria-label="Visit my LinkedIn profile"
           >
             LinkedIn
+          </a>
+          <a
+            ref={githubButtonRef}
+            href="https://github.com/gabrielgustavoandrade"
+            className="contact__link"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Visit my GitHub profile"
+          >
+            GitHub
           </a>
         </div>
       </div>
