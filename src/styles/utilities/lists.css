@@ -1,0 +1,282 @@
+/* List Utilities */
+
+/* List Style */
+
+.list-none {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.list-disc {
+  list-style-type: disc;
+}
+
+.list-decimal {
+  list-style-type: decimal;
+}
+
+.list-inside {
+  list-style-position: inside;
+}
+
+.list-outside {
+  list-style-position: outside;
+}
+
+/* Custom Bullet Lists */
+
+.custom-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.custom-list li {
+  position: relative;
+  padding-left: var(--space-lg);
+  margin-bottom: var(--space-sm);
+}
+
+.custom-list li::before {
+  content: '•';
+  position: absolute;
+  left: var(--space-xs);
+  color: var(--color-accent);
+  font-size: 1.2em;
+  line-height: 1;
+}
+
+/* Accent Bullet List */
+
+.accent-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.accent-list li {
+  position: relative;
+  padding-left: var(--space-md);
+  margin-bottom: var(--space-xs);
+  color: var(--color-text-secondary);
+}
+
+.accent-list li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--color-accent);
+  font-weight: bold;
+}
+
+/* Checkmark List */
+
+.checkmark-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.checkmark-list li {
+  position: relative;
+  padding-left: var(--space-lg);
+  margin-bottom: var(--space-sm);
+}
+
+.checkmark-list li::before {
+  content: '✓';
+  position: absolute;
+  left: var(--space-xs);
+  color: var(--color-accent);
+  font-weight: bold;
+}
+
+/* Numbered List */
+
+.numbered-list {
+  counter-reset: item;
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.numbered-list li {
+  position: relative;
+  padding-left: var(--space-xl);
+  margin-bottom: var(--space-md);
+  counter-increment: item;
+}
+
+.numbered-list li::before {
+  content: counter(item);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-accent-muted);
+  color: var(--color-accent-light);
+  border-radius: 50%;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+}
+
+/* Spaced List */
+
+.list-spaced li {
+  margin-bottom: var(--space-md);
+}
+
+.list-spaced-lg li {
+  margin-bottom: var(--space-lg);
+}
+
+.list-spaced-sm li {
+  margin-bottom: var(--space-xs);
+}
+
+/* Divided List */
+
+.list-divided li {
+  padding-top: var(--space-sm);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.list-divided li:first-child {
+  padding-top: 0;
+}
+
+.list-divided li:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+/* Inline List */
+
+.list-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.list-inline-sm {
+  gap: var(--space-sm);
+}
+
+.list-inline-lg {
+  gap: var(--space-lg);
+}
+
+/* Horizontal List with Separators */
+
+.list-separator {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.list-separator li:not(:last-child)::after {
+  content: '·';
+  margin-left: var(--space-sm);
+  color: var(--color-text-muted);
+}
+
+/* Grid List */
+
+.list-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: var(--space-md);
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.list-grid-sm {
+  gap: var(--space-sm);
+}
+
+.list-grid-lg {
+  gap: var(--space-lg);
+}
+
+/* Stack List */
+
+.list-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+/* Feature List */
+
+.feature-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.feature-list li {
+  position: relative;
+  padding-left: var(--space-xl);
+  margin-bottom: var(--space-lg);
+}
+
+.feature-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 4px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  box-shadow: 0 0 10px var(--color-accent-muted);
+}
+
+/* Description List */
+
+.description-list {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-sm) var(--space-lg);
+  margin: 0;
+}
+
+.description-list dt {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.description-list dd {
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* Compact List */
+
+.list-compact li {
+  margin-bottom: var(--space-xs);
+}
+
+/* Large List */
+
+.list-large li {
+  margin-bottom: var(--space-xl);
+  font-size: var(--font-size-lg);
+}

@@ -1,0 +1,275 @@
+/* Accessibility Utilities */
+
+/* Reduced Motion Support */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Screen Reader Only */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.sr-only-focusable:focus,
+.sr-only-focusable:active {
+  position: static;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* Not Screen Reader Only (opposite of sr-only) */
+
+.not-sr-only {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* Focus Visible */
+
+.focus-visible:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+.focus-ring:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.focus-ring-inset:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
+}
+
+/* Remove focus outline (use with caution and ensure alternative focus indicators) */
+
+.focus-none:focus {
+  outline: none;
+}
+
+/* Focus Within */
+
+.focus-within:focus-within {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Keyboard Focus Only */
+
+.focus-keyboard:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.focus-keyboard:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* High Contrast Mode Support */
+
+@media (prefers-contrast: high) {
+  .btn,
+  .badge,
+  .tag {
+    border-width: 2px;
+  }
+
+  .card-border {
+    border-width: 2px;
+  }
+
+  a:not(.btn) {
+    text-decoration: underline;
+  }
+}
+
+/* Skip Links */
+
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--color-accent);
+  color: #ffffff;
+  padding: var(--space-sm) var(--space-md);
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  z-index: 100;
+  transition: top var(--transition-duration-fast) var(--transition-timing-default);
+}
+
+.skip-link:focus {
+  top: var(--space-sm);
+}
+
+/* Touch Target Size */
+
+.touch-target {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.touch-target-lg {
+  min-width: 48px;
+  min-height: 48px;
+}
+
+/* Clickable Area Extension */
+
+.clickable-area::after {
+  content: '';
+  position: absolute;
+  inset: -8px;
+}
+
+/* Disabled State */
+
+.disabled,
+[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ARIA Hidden */
+
+.aria-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+/* Print Styles */
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+}
+
+.print-only {
+  display: none;
+}
+
+/* Dark Mode Support (if needed in future) */
+
+@media (prefers-color-scheme: light) {
+  .dark-only {
+    display: none;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .light-only {
+    display: none;
+  }
+}
+
+/* Forced Colors Mode (Windows High Contrast) */
+
+@media (forced-colors: active) {
+  .btn {
+    border: 1px solid currentColor;
+  }
+
+  .card-border {
+    border: 1px solid currentColor;
+  }
+}
+
+/* Tabindex -1 (programmatic focus) */
+
+[tabindex='-1']:focus {
+  outline: none;
+}
+
+/* Focus Trap */
+
+.focus-trap {
+  position: relative;
+}
+
+/* Ensure Interactive Elements are Keyboard Accessible */
+
+.keyboard-accessible {
+  cursor: pointer;
+}
+
+.keyboard-accessible:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Content Visibility (Performance) */
+
+.content-auto {
+  content-visibility: auto;
+}
+
+/* Text Accessibility */
+
+.text-readable {
+  max-width: 70ch;
+  line-height: 1.6;
+}
+
+/* Color Contrast Helpers */
+
+.contrast-high {
+  color: #ffffff;
+  background: #000000;
+}
+
+.contrast-enhanced {
+  color: var(--color-text-primary);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Loading State Announcement */
+
+[aria-busy='true'] {
+  cursor: wait;
+}
+
+/* Live Region */
+
+.live-region {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}

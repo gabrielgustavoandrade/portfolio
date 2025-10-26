@@ -1,0 +1,200 @@
+/* Hover Effect Utilities */
+
+/* Lift Effect */
+
+.hover-lift {
+  transition: transform var(--transition-duration-normal) var(--transition-timing-default),
+              box-shadow var(--transition-duration-normal) var(--transition-timing-default);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+}
+
+.hover-lift-sm {
+  transition: transform var(--transition-duration-fast) var(--transition-timing-default);
+}
+
+.hover-lift-sm:hover {
+  transform: translateY(-2px);
+}
+
+.hover-lift-lg {
+  transition: transform var(--transition-duration-normal) var(--transition-timing-default),
+              box-shadow var(--transition-duration-normal) var(--transition-timing-default);
+}
+
+.hover-lift-lg:hover {
+  transform: translateY(-8px);
+}
+
+/* Scale Effects */
+
+.hover-scale {
+  transition: transform var(--transition-duration-normal) var(--transition-timing-default);
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+.hover-scale-sm {
+  transition: transform var(--transition-duration-fast) var(--transition-timing-default);
+}
+
+.hover-scale-sm:hover {
+  transform: scale(1.02);
+}
+
+.hover-scale-lg {
+  transition: transform var(--transition-duration-normal) var(--transition-timing-default);
+}
+
+.hover-scale-lg:hover {
+  transform: scale(1.1);
+}
+
+/* Accent Border Effect */
+
+.hover-accent-border {
+  position: relative;
+  transition: border-color var(--transition-duration-fast) var(--transition-timing-default);
+}
+
+.hover-accent-border:hover {
+  border-color: var(--color-accent);
+}
+
+.hover-accent-border::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 2px solid var(--color-accent);
+  opacity: 0;
+  transition: opacity var(--transition-duration-fast) var(--transition-timing-default);
+  pointer-events: none;
+}
+
+.hover-accent-border:hover::after {
+  opacity: 1;
+}
+
+/* Background Hover Effects */
+
+.hover-bg {
+  transition: background var(--transition-duration-fast) var(--transition-timing-default);
+}
+
+.hover-bg:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.hover-bg-accent {
+  transition: background var(--transition-duration-fast) var(--transition-timing-default);
+}
+
+.hover-bg-accent:hover {
+  background: var(--color-accent-muted);
+}
+
+/* Opacity Hover Effects */
+
+.hover-opacity {
+  transition: opacity var(--transition-duration-fast) var(--transition-timing-default);
+}
+
+.hover-opacity:hover {
+  opacity: 0.8;
+}
+
+.hover-opacity-low {
+  transition: opacity var(--transition-duration-fast) var(--transition-timing-default);
+}
+
+.hover-opacity-low:hover {
+  opacity: 0.6;
+}
+
+/* Glow Effect */
+
+.hover-glow {
+  transition: box-shadow var(--transition-duration-normal) var(--transition-timing-default);
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2),
+              0 0 40px rgba(255, 255, 255, 0.1);
+}
+
+.hover-glow-accent {
+  transition: box-shadow var(--transition-duration-normal) var(--transition-timing-default);
+}
+
+.hover-glow-accent:hover {
+  box-shadow: 0 0 20px var(--color-accent-muted),
+              0 0 40px rgba(var(--color-accent-rgb), 0.3);
+}
+
+/* Text Color Hover */
+
+.hover-text-accent {
+  transition: color var(--transition-duration-fast) var(--transition-timing-default);
+}
+
+.hover-text-accent:hover {
+  color: var(--color-accent);
+}
+
+/* Combined Hover Effects */
+
+.hover-card {
+  transition: transform var(--transition-duration-normal) var(--transition-timing-default),
+              background var(--transition-duration-normal) var(--transition-timing-default),
+              box-shadow var(--transition-duration-normal) var(--transition-timing-default);
+}
+
+.hover-card:hover {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* Underline Effect */
+
+.hover-underline {
+  position: relative;
+}
+
+.hover-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--color-accent);
+  transition: width var(--transition-duration-normal) var(--transition-timing-default);
+}
+
+.hover-underline:hover::after {
+  width: 100%;
+}
+
+/* Rotate Effect */
+
+.hover-rotate {
+  transition: transform var(--transition-duration-normal) var(--transition-timing-default);
+}
+
+.hover-rotate:hover {
+  transform: rotate(5deg);
+}
+
+.hover-rotate-sm {
+  transition: transform var(--transition-duration-fast) var(--transition-timing-default);
+}
+
+.hover-rotate-sm:hover {
+  transform: rotate(2deg);
+}

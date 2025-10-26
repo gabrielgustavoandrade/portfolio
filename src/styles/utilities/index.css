@@ -1,0 +1,24 @@
+/* Utility CSS Index - Import all utility modules */
+
+/* Core Utilities */
+@import './layout.css';
+@import './typography.css';
+@import './backgrounds.css';
+@import './borders.css';
+@import './shadows.css';
+
+/* Interactive Utilities */
+@import './hover.css';
+@import './buttons.css';
+@import './overlays.css';
+
+/* Component Utilities */
+@import './badges.css';
+@import './lists.css';
+@import './scrollbar.css';
+
+/* Animation Utilities */
+@import './animations.css';
+
+/* Accessibility */
+@import './accessibility.css';

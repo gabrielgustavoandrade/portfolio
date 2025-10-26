@@ -1,0 +1,101 @@
+/* Background Utilities */
+
+/* Card Backgrounds */
+
+.bg-card {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.bg-card-hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.bg-card-active {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+/* Glass Effect Backgrounds */
+
+.bg-glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.bg-glass-strong {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* Overlay Backgrounds */
+
+.bg-overlay {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.bg-overlay-light {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.bg-overlay-heavy {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+/* Gradient Backgrounds */
+
+.bg-gradient-radial {
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 70%
+  );
+}
+
+.bg-gradient-accent {
+  background: linear-gradient(
+    135deg,
+    var(--color-accent-light) 0%,
+    var(--color-accent) 100%
+  );
+}
+
+/* State Backgrounds */
+
+.bg-hover-lift {
+  transition: background var(--transition-duration-normal) var(--transition-timing-default);
+}
+
+.bg-hover-lift:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Transparent Backgrounds */
+
+.bg-transparent {
+  background: transparent;
+}
+
+.bg-none {
+  background: none;
+}
+
+/* Accent Backgrounds */
+
+.bg-accent {
+  background: var(--color-accent);
+}
+
+.bg-accent-muted {
+  background: var(--color-accent-muted);
+}
+
+/* Surface Backgrounds */
+
+.bg-surface {
+  background: var(--color-surface);
+}
+
+.bg-surface-elevated {
+  background: rgba(255, 255, 255, 0.08);
+}
