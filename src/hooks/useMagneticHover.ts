@@ -37,6 +37,12 @@ export function useMagneticHover<T extends HTMLElement>(
     ).matches;
     if (prefersReducedMotion) return;
 
+    // Disable magnetic effect on touch devices
+    const isTouchDevice =
+      'ontouchstart' in window ||
+      navigator.maxTouchPoints > 0;
+    if (isTouchDevice) return;
+
     let rafId: number | null = null;
 
     const handleMouseMove = (e: MouseEvent) => {

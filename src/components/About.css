@@ -1,6 +1,12 @@
 .about {
-  padding: var(--space-80) var(--space-24);
+  padding: var(--space-section-mobile) var(--space-24);
   background-color: var(--color-bg);
+}
+
+@media (min-width: 768px) {
+  .about {
+    padding-block: var(--space-section-desktop);
+  }
 }
 
 .about__container {

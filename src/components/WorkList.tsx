@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Project } from "../data/projects";
 import { TransitionLink } from "./TransitionLink";
 import "./WorkList.css";
@@ -8,14 +8,79 @@ interface WorkListProps {
 }
 
 function WorkCard({ project }: { project: Project }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const handleToggle = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsExpanded(!isExpanded);
+  };
+
   return (
-    <TransitionLink to={`/work/${project.slug}`} className="work-card">
-      <h3 className="work-card__title" aria-label={project.title}>
-        {project.title}
-      </h3>
-      <p className="work-card__subtitle">{project.subtitle}</p>
-      <p className="work-card__summary">{project.summary}</p>
-    </TransitionLink>
+    <div className={`work-card ${isExpanded ? 'work-card--expanded' : ''}`}>
+      <div className="work-card__main">
+        <TransitionLink
+          to={`/work/${project.slug}`}
+          className="work-card__link"
+        >
+          <h3 className="work-card__title" aria-label={project.title}>
+            {project.title}
+          </h3>
+        </TransitionLink>
+        <p className="work-card__subtitle">{project.subtitle}</p>
+        <p className="work-card__summary">{project.summary}</p>
+
+        <button
+          type="button"
+          className="work-card__preview-toggle"
+          onClick={handleToggle}
+          aria-expanded={isExpanded}
+          aria-label={isExpanded ? 'Hide preview' : 'Show preview'}
+        >
+          {isExpanded ? 'Hide details' : 'Show preview'}
+        </button>
+      </div>
+
+      {isExpanded && (
+        <div className="work-card__preview">
+          <div className="work-card__preview-section">
+            <h4 className="work-card__preview-title">Tech Stack</h4>
+            <div className="work-card__stack">
+              {project.stack.map((tech) => (
+                <span key={tech} className="work-card__stack-item">
+                  {tech}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div className="work-card__preview-section">
+            <h4 className="work-card__preview-title">Key Challenges</h4>
+            <ul className="work-card__list">
+              {project.challenges.slice(0, 3).map((challenge, idx) => (
+                <li key={idx}>{challenge}</li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="work-card__preview-section">
+            <h4 className="work-card__preview-title">Solutions</h4>
+            <ul className="work-card__list">
+              {project.solutions.slice(0, 3).map((solution, idx) => (
+                <li key={idx}>{solution}</li>
+              ))}
+            </ul>
+          </div>
+
+          <TransitionLink
+            to={`/work/${project.slug}`}
+            className="work-card__full-link"
+          >
+            View full case study →
+          </TransitionLink>
+        </div>
+      )}
+    </div>
   );
 }
 

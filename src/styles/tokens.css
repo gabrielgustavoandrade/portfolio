@@ -3,7 +3,7 @@
   --color-bg: #0b0c10;
   --color-text-primary: #e8e8e8;
   --color-text-muted: #a1a1aa;
-  --color-border: rgba(255, 255, 255, 0.12);
+  --color-border: rgba(255, 255, 255, 0.20);
   --color-card-bg: rgba(255, 255, 255, 0.05);
   --color-card-bg-hover: rgba(255, 255, 255, 0.08);
   --color-focus: rgba(255, 255, 255, 0.4);
@@ -16,6 +16,8 @@
   --space-40: 40px;
   --space-80: 80px;
   --space-120: 120px;
+  --space-section-mobile: 40px;
+  --space-section-desktop: 60px;
 
   /* Radius */
   --radius: 16px;
@@ -97,4 +99,23 @@ body {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border-width: 0;
+}
+
+/* Skip link for accessibility */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: var(--space-16);
+  background: var(--color-text-primary);
+  color: var(--color-bg);
+  padding: var(--space-8) var(--space-16);
+  text-decoration: none;
+  border-radius: var(--space-8);
+  font-weight: 500;
+  z-index: 100;
+  transition: top var(--transition-duration) var(--transition-easing);
+}
+
+.skip-link:focus {
+  top: var(--space-16);
 }

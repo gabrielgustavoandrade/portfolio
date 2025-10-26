@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import {
   architecturalDecisions,
   buildPipeline,
@@ -14,9 +14,16 @@ interface TechStackModalProps {
 }
 
 export function TechStackModal({ isOpen, onClose }: TechStackModalProps) {
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (isOpen) {
+      // Prevent body scroll
       document.body.style.overflow = 'hidden';
+
+      // Focus the close button when modal opens
+      closeButtonRef.current?.focus();
 
       const handleEscape = (e: KeyboardEvent) => {
         if (e.key === 'Escape') {
@@ -24,11 +31,32 @@ export function TechStackModal({ isOpen, onClose }: TechStackModalProps) {
         }
       };
 
+      // Focus trap: Keep focus within modal
+      const handleTab = (e: KeyboardEvent) => {
+        if (e.key !== 'Tab' || !modalRef.current) return;
+
+        const focusableElements = modalRef.current.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        const firstElement = focusableElements[0] as HTMLElement;
+        const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+
+        if (e.shiftKey && document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement?.focus();
+        } else if (!e.shiftKey && document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement?.focus();
+        }
+      };
+
       document.addEventListener('keydown', handleEscape);
+      document.addEventListener('keydown', handleTab);
 
       return () => {
         document.body.style.overflow = '';
         document.removeEventListener('keydown', handleEscape);
+        document.removeEventListener('keydown', handleTab);
       };
     }
   }, [isOpen, onClose]);
@@ -38,6 +66,7 @@ export function TechStackModal({ isOpen, onClose }: TechStackModalProps) {
   return (
     <div className="tech-modal-overlay" onClick={onClose} aria-hidden="true">
       <div
+        ref={modalRef}
         className="tech-modal"
         onClick={(e) => e.stopPropagation()}
         onKeyDown={(e) => e.stopPropagation()}
@@ -47,6 +76,7 @@ export function TechStackModal({ isOpen, onClose }: TechStackModalProps) {
         <div className="tech-modal__header">
           <h2 className="tech-modal__title">How I Built This</h2>
           <button
+            ref={closeButtonRef}
             type="button"
             className="tech-modal__close"
             onClick={onClose}

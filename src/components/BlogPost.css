@@ -35,7 +35,7 @@
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: var(--space-16);
   margin-top: var(--space-16);
-  padding: var(--space-20);
+  padding: var(--space-16);
   background: rgba(16, 185, 129, 0.05);
   border: 1px solid rgba(16, 185, 129, 0.2);
   border-radius: 8px;
@@ -76,7 +76,7 @@
 }
 
 .blog-post__code pre {
-  padding: var(--space-20);
+  padding: var(--space-16);
   margin: 0;
   overflow-x: auto;
 }

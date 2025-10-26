@@ -18,11 +18,16 @@ export function HomePage() {
 
   return (
     <>
+      <a href="#main-content" className="skip-link">
+        Skip to main content
+      </a>
       <Hero onWorkClick={handleWorkClick} onContactClick={handleContactClick} />
-      <WorkList projects={projects} />
-      <BlogList posts={posts} />
-      <About />
-      <Contact />
+      <main id="main-content" role="main">
+        <WorkList projects={projects} />
+        <BlogList posts={posts} />
+        <About />
+        <Contact />
+      </main>
       <Footer />
     </>
   );

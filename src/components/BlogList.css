@@ -1,6 +1,12 @@
 .blog-list {
-  padding: var(--space-80) var(--space-24);
+  padding: var(--space-section-mobile) var(--space-24);
   background-color: var(--color-bg);
+}
+
+@media (min-width: 768px) {
+  .blog-list {
+    padding-block: var(--space-section-desktop);
+  }
 }
 
 .blog-list__container {
@@ -178,7 +184,7 @@
 /* Mobile styles */
 @media (max-width: 640px) {
   .blog-list {
-    padding: var(--space-80) var(--space-16);
+    padding: var(--space-section-mobile) var(--space-16);
   }
 
   .blog-list__title {
@@ -190,7 +196,7 @@
   }
 
   .blog-card__header {
-    padding: var(--space-20);
+    padding: var(--space-16);
   }
 
   .blog-card__title {
@@ -199,12 +205,12 @@
   }
 
   .blog-card__expand-icon {
-    top: var(--space-20);
-    right: var(--space-20);
+    top: var(--space-16);
+    right: var(--space-16);
   }
 
   .blog-card__content {
-    padding: 0 var(--space-20) var(--space-20);
+    padding: 0 var(--space-16) var(--space-16);
   }
 }
 
