@@ -3,7 +3,7 @@
     top: 85%;
     right: 55px;
     transform: translateY(-50%);
-    z-index: 10;
+    z-index: var(--z-index-dropdown);
     opacity: 0;
     animation: fadeInNote 0.8s ease-out 0.5s forwards;
     pointer-events: none;
@@ -11,18 +11,12 @@
 
 .handwritten-note__text {
     font-family: "Caveat", "Brush Script MT", cursive, sans-serif;
-    font-size: 20px;
+    font-size: var(--font-size-lg);
     color: rgba(255, 255, 255, 0.7);
     margin: 0;
     transform: rotate(-3deg);
     white-space: nowrap;
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-}
-
-@keyframes fadeInNote {
-    to {
-        opacity: 1;
-    }
 }
 
 /* Mobile - hide the note on smaller screens */
