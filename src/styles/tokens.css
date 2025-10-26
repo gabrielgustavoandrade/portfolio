@@ -1,5 +1,5 @@
 :root {
-  /* Colors */
+  /* Colors - Base */
   --color-bg: #0b0c10;
   --color-text-primary: #e8e8e8;
   --color-text-muted: #a1a1aa;
@@ -8,35 +8,77 @@
   --color-card-bg-hover: rgba(255, 255, 255, 0.08);
   --color-focus: rgba(255, 255, 255, 0.4);
 
-  /* Spacing */
+  /* Colors - Accent */
+  --color-accent-blue: #60a5fa;
+  --color-accent-blue-light: #93c5fd;
+  --color-accent-green: #10b981;
+  --color-accent-orange: #f59e0b;
+  --color-accent-red: #ef4444;
+
+  /* Colors - Status */
+  --color-status-good: #10b981;
+  --color-status-warning: #f59e0b;
+  --color-status-error: #ef4444;
+
+  /* Spacing Scale */
+  --space-4: 4px;
   --space-8: 8px;
   --space-12: 12px;
   --space-16: 16px;
+  --space-20: 20px;
   --space-24: 24px;
+  --space-32: 32px;
   --space-40: 40px;
+  --space-48: 48px;
   --space-80: 80px;
   --space-120: 120px;
   --space-section-mobile: 40px;
   --space-section-desktop: 60px;
 
-  /* Radius */
-  --radius: 16px;
+  /* Radius Scale */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+  --radius-3xl: 24px;
+  --radius-full: 50%;
 
   /* Transitions */
-  --transition-duration: 200ms;
-  --transition-duration-short: 180ms;
-  --transition-duration-long: 220ms;
+  --transition-duration-instant: 100ms;
+  --transition-duration-fast: 200ms;
+  --transition-duration-normal: 300ms;
+  --transition-duration-slow: 400ms;
+  --transition-duration-slower: 600ms;
   --transition-easing: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --transition-easing-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  /* Typography */
+  /* Typography Scale */
   --font-family: "Inter", system-ui, -apple-system, sans-serif;
-  --font-size-hero-desktop: 48px;
-  --font-size-hero-mobile: 34px;
-  --font-size-base: 16px;
+  --font-size-xs: 12px;
+  --font-size-sm: 13px;
   --font-size-small: 14px;
+  --font-size-base: 16px;
+  --font-size-md: 18px;
+  --font-size-lg: 20px;
+  --font-size-xl: 24px;
+  --font-size-2xl: 28px;
+  --font-size-3xl: 32px;
+  --font-size-hero-mobile: 34px;
+  --font-size-hero-desktop: 48px;
   --line-height-tight: 1.2;
   --line-height-normal: 1.5;
   --line-height-relaxed: 1.7;
+
+  /* Z-Index Scale */
+  --z-index-below: -1;
+  --z-index-base: 0;
+  --z-index-above: 1;
+  --z-index-dropdown: 10;
+  --z-index-sticky: 50;
+  --z-index-fixed: 100;
+  --z-index-modal-backdrop: 1000;
+  --z-index-modal: 1001;
 
   /* Layout */
   --max-width-content: 720px;
@@ -112,7 +154,7 @@ body {
   text-decoration: none;
   border-radius: var(--space-8);
   font-weight: 500;
-  z-index: 100;
+  z-index: var(--z-index-fixed);
   transition: top var(--transition-duration) var(--transition-easing);
 }
 
