@@ -70,7 +70,7 @@ export function Hero({ onWorkClick, onContactClick }: HeroProps) {
 
         <div className="hero__visual" aria-hidden="true">
           <EarthCanvas />
-          <HandwrittenNote text="You can spin it!" delay={1500} />
+          <HandwrittenNote text="You can spin it!" />
         </div>
       </div>
 
