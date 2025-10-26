@@ -97,7 +97,7 @@ export function PerformanceToggle() {
             </button>
           </div>
 
-          <div className="performance-panel__content">
+          <div className="performance-panel__content u-scrollbar">
             {/* FPS */}
             <div className="performance-metric">
               <div className="performance-metric__label">

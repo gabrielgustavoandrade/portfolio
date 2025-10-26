@@ -86,7 +86,7 @@ export function TechStackModal({ isOpen, onClose }: TechStackModalProps) {
           </button>
         </div>
 
-        <div className="tech-modal__content">
+        <div className="tech-modal__content u-scrollbar">
           {/* Metrics Overview */}
           <section className="tech-modal__section">
             <h3 className="tech-modal__section-title">Performance Metrics</h3>

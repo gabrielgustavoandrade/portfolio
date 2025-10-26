@@ -37,7 +37,7 @@ export function BlogPost({ post }: BlogPostProps) {
 
           {section.code && (
             <div className="blog-post__code">
-              <pre>
+              <pre className="u-scrollbar">
                 <code className={`language-${section.code.language}`}>
                   {section.code.snippet}
                 </code>
