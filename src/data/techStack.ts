@@ -58,14 +58,19 @@ export const techStack: TechCategory[] = [
     name: 'Styling',
     items: [
       {
-        name: 'CSS Modules',
-        description: 'Zero-runtime styling',
+        name: 'CSS Custom Properties',
+        description: 'Comprehensive design token system',
+        icon: '🎯',
+      },
+      {
+        name: 'Utility-First CSS',
+        description: '14 utility modules for composable patterns',
         icon: '🎨',
       },
       {
-        name: 'CSS Custom Properties',
-        description: 'Design tokens for theming',
-        icon: '🎯',
+        name: 'Zero Runtime',
+        description: 'Plain CSS with no JavaScript overhead',
+        icon: '⚡',
       },
     ],
   },
@@ -120,10 +125,16 @@ export const architecturalDecisions: ArchitecturalDecision[] = [
       'Lighter weight than Next.js App Router. Full control over route transitions using CSS. No framework magic, explicit behavior. Perfect for SPA with smooth page transitions.',
   },
   {
-    title: 'Why CSS over CSS-in-JS?',
-    decision: 'Plain CSS with custom properties',
+    title: 'Why Utility-First CSS?',
+    decision: 'Custom utility system with design tokens',
     rationale:
-      'Zero runtime cost, better caching, native browser optimizations. CSS custom properties for theming without JavaScript. Smaller bundle size, faster paint times. CSS-in-JS adds unnecessary runtime overhead for a static site.',
+      'Built a comprehensive utility-first CSS system with 14 modules (animations, layout, typography, etc.) and 40+ design tokens. Zero runtime cost, better caching, native browser optimizations. Eliminated 39 duplicate patterns while maintaining full design control. No Tailwind overhead—just the utilities we actually need.',
+  },
+  {
+    title: 'Design Token System',
+    decision: 'CSS custom properties for all design values',
+    rationale:
+      'Single source of truth for spacing, colors, typography, transitions, and z-index. Makes theming trivial, ensures consistency across components, and enables easy dark mode implementation in the future. All values reference tokens—zero hardcoded magic numbers.',
   },
   {
     title: 'Performance-First Architecture',
@@ -135,7 +146,7 @@ export const architecturalDecisions: ArchitecturalDecision[] = [
     title: 'No External Dependencies for UI',
     decision: 'Custom implementations over libraries',
     rationale:
-      'Magnetic cursor, scroll animations, page transitions - all custom built. No Framer Motion, GSAP, or other animation libraries. Keeps bundle under 200KB and gives precise control over performance.',
+      'Magnetic cursor, scroll animations, page transitions - all custom built. No Framer Motion, GSAP, or other animation libraries. Keeps bundle under 202KB gzipped and gives precise control over performance.',
   },
 ];
 
