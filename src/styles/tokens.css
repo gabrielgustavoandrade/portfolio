@@ -32,8 +32,8 @@
   --space-48: 48px;
   --space-80: 80px;
   --space-120: 120px;
-  --space-section-mobile: 40px;
-  --space-section-desktop: 60px;
+  --space-section-mobile: 48px;
+  --space-section-desktop: 80px;
 
   /* Radius Scale */
   --radius-sm: 4px;

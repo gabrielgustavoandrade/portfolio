@@ -86,7 +86,7 @@ export function TechStackModal({ isOpen, onClose }: TechStackModalProps) {
           </button>
         </div>
 
-        <div className="tech-modal__content u-scrollbar">
+        <div className="tech-modal__content custom-scrollbar">
           {/* Metrics Overview */}
           <section className="tech-modal__section">
             <h3 className="tech-modal__section-title">Performance Metrics</h3>
@@ -132,8 +132,12 @@ export function TechStackModal({ isOpen, onClose }: TechStackModalProps) {
                     {category.name}
                   </h4>
                   <div className="tech-modal__stack-items">
-                    {category.items.map((item) => (
-                      <div key={item.name} className="tech-modal__stack-item">
+                    {category.items.map((item, itemIndex) => (
+                      <div
+                        key={item.name}
+                        className="tech-modal__stack-item"
+                        style={{ animationDelay: `${itemIndex * 50}ms` }}
+                      >
                         <div className="tech-modal__stack-info">
                           <span className="tech-modal__stack-name">
                             {item.name}

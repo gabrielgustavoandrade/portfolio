@@ -45,7 +45,7 @@ export function Footer() {
             <span>How I Built This</span>
           </button>
 
-          <p className="footer__text">© Gabriel Andrade 2025</p>
+          <p className="footer__text">© Gabriel Andrade 2026</p>
 
           <div className="footer__performance">
             <PerformanceToggle />

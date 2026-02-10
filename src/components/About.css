@@ -18,6 +18,7 @@
   font-size: var(--font-size-3xl);
   font-weight: 600;
   line-height: var(--line-height-tight);
+  letter-spacing: -0.02em;
   color: var(--color-text-primary);
   margin-bottom: var(--space-40);
 }

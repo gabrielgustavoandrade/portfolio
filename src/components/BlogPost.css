@@ -32,7 +32,7 @@
 
 .blog-post__metrics {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: var(--space-16);
   margin-top: var(--space-16);
   padding: var(--space-16);

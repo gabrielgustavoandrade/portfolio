@@ -25,7 +25,7 @@ export const posts: Post[] = [
     title: 'Building an Interactive 3D Earth with Three.js',
     description:
       'A deep dive into creating a GPU-accelerated, interactive Earth visualization with realistic textures, custom shaders, and smooth 60fps performance.',
-    date: '2025-01-18',
+    date: '2026-01-18',
     readTime: '12 min read',
     tags: ['Three.js', 'WebGL', 'Performance', '3D Graphics'],
     content: {
@@ -250,7 +250,7 @@ scene.add(earthGroup);`,
     title: 'Achieving 95+ Lighthouse Score with 3D Graphics',
     description:
       'A technical deep dive into the optimization strategies, tooling choices, and performance budget decisions that maintained high Lighthouse scores even with Three.js 3D rendering.',
-    date: '2025-01-15',
+    date: '2026-01-15',
     readTime: '8 min read',
     tags: ['Performance', 'Vite', 'Optimization'],
     content: {
@@ -394,7 +394,7 @@ useEffect(() => {
     title: 'Magnetic Cursor Effects Without Performance Jank',
     description:
       'Building smooth, 60fps magnetic cursor interactions using requestAnimationFrame and proper event handling optimization.',
-    date: '2025-01-08',
+    date: '2026-01-08',
     readTime: '6 min read',
     tags: ['Performance', 'Animations', 'UX'],
     content: {

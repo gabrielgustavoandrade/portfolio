@@ -41,7 +41,7 @@ export function Hero({ onWorkClick, onContactClick }: HeroProps) {
             Software Engineer | React, Node.js, TypeScript
           </p>
           <p className="hero__tagline">
-            Six years designing and delivering scalable applications across
+            Seven years designing and delivering scalable applications across
             consumer and commerce platforms. Full-stack engineer focused on
             performance, maintainability, and measurable impact.
           </p>

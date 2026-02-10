@@ -151,6 +151,8 @@
 .tech-modal__stack-item {
   display: flex;
   align-items: flex-start;
+  opacity: 0;
+  animation: fadeInUp var(--transition-duration-slow) var(--transition-easing) forwards;
 }
 
 .tech-modal__stack-info {

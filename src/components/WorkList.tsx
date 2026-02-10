@@ -35,6 +35,7 @@ function WorkCard({ project }: { project: Project }) {
           className="work-card__preview-toggle"
           onClick={handleToggle}
           aria-expanded={isExpanded}
+          aria-controls={`preview-${project.slug}`}
           aria-label={isExpanded ? 'Hide preview' : 'Show preview'}
         >
           {isExpanded ? 'Hide details' : 'Show preview'}
@@ -42,7 +43,7 @@ function WorkCard({ project }: { project: Project }) {
       </div>
 
       {isExpanded && (
-        <div className="work-card__preview">
+        <div className="work-card__preview" id={`preview-${project.slug}`}>
           <div className="work-card__preview-section">
             <h4 className="work-card__preview-title">Tech Stack</h4>
             <div className="work-card__stack">

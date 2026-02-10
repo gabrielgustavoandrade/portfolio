@@ -3,7 +3,7 @@ import { useFPS } from '../hooks/useFPS';
 import { usePerformanceMetrics } from '../hooks/usePerformanceMetrics';
 import './PerformanceToggle.css';
 
-// Performance metric thresholds based on Google's Core Web Vitals (2025)
+// Performance metric thresholds based on Google's Core Web Vitals (2026)
 const METRIC_THRESHOLDS = {
   fcp: { good: 1800, poor: 3000 },
   lcp: { good: 2500, poor: 4000 },
@@ -97,7 +97,7 @@ export function PerformanceToggle() {
             </button>
           </div>
 
-          <div className="performance-panel__content u-scrollbar">
+          <div className="performance-panel__content custom-scrollbar">
             {/* FPS */}
             <div className="performance-metric">
               <div className="performance-metric__label">

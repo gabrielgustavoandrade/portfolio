@@ -37,6 +37,7 @@ export function BlogList({ posts }: BlogListProps) {
                 className="blog-card__header"
                 onClick={() => handlePostClick(post.id)}
                 aria-expanded={expandedPostId === post.id}
+                aria-controls={`blog-content-${post.id}`}
               >
                 <div className="blog-card__meta">
                   <time className="blog-card__date">
@@ -63,7 +64,7 @@ export function BlogList({ posts }: BlogListProps) {
               </button>
 
               {expandedPostId === post.id && (
-                <div className="blog-card__content">
+                <div className="blog-card__content" id={`blog-content-${post.id}`}>
                   <BlogPost post={post} />
                 </div>
               )}

@@ -5,12 +5,12 @@
   overflow-x: hidden;
 }
 
-/* Simple crossfade page transitions */
+/* Page transitions */
 ::view-transition-old(root) {
-  animation: fade-out 0.3s ease-out;
+  animation: fade-out 0.25s ease-out;
 }
 
 ::view-transition-new(root) {
-  animation: fade-in 0.3s ease-in;
+  animation: slideInUp 0.3s ease-out;
 }
 

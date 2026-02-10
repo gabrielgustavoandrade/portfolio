@@ -46,6 +46,11 @@ export function WorkDetail({ project, onClose }: WorkDetailProps) {
 
   // Parallax scroll effect
   useEffect(() => {
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches;
+    if (prefersReducedMotion) return;
+
     const handleScroll = () => {
       const sections = sectionsRef.current?.querySelectorAll(
         '.work-detail__section',
