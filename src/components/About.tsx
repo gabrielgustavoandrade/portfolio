@@ -38,14 +38,6 @@ export function About() {
             I work across the stack with React, Node.js, TypeScript, and modern
             tooling, focusing on reliable, user-centric products that scale.
           </RevealText>
-          <RevealText
-            as="p"
-            className="about__paragraph about__paragraph--muted"
-            stagger={true}
-            delay={300}
-          >
-            Currently exploring new projects across Europe.
-          </RevealText>
         </div>
       </div>
     </section>
