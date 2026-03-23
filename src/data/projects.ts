@@ -1,3 +1,8 @@
+interface ProjectLink {
+  label: string;
+  url: string;
+}
+
 export interface Project {
   slug: string;
   title: string;
@@ -8,6 +13,7 @@ export interface Project {
   solutions: string[];
   impact: string;
   stack: string[];
+  links?: ProjectLink[];
 }
 
 export const projects: Project[] = [
@@ -186,3 +192,64 @@ export const projects: Project[] = [
     ],
   },
 ];
+
+export const openSourceProjects: Project[] = [
+  {
+    slug: "smart-date-input",
+    title: "Smart Date Input",
+    subtitle: "npm package — natural language date/time input for React",
+    summary:
+      "Published npm package: an intelligent date/time input that understands natural language like \"tomorrow 7am\" or \"next Friday at 2pm\", with confidence scoring and smart suggestions.",
+    overview:
+      "Smart Date Input is an open-source React component published on npm that replaces traditional date pickers with a natural language interface. Users type expressions like \"tomorrow 10am\", \"in 3 days\", or \"next friday at 2pm\" and get real-time parsing with confidence indicators, context-aware autocomplete, and keyboard navigation — all fully typed in TypeScript.",
+    challenges: [
+      "Parsing ambiguous natural language date expressions with varying formats and relative references.",
+      "Providing real-time feedback without blocking the UI during continuous input parsing.",
+      "Building a confidence scoring system that accurately reflects parse reliability.",
+      "Designing an API flexible enough for different use cases while keeping the default experience simple.",
+    ],
+    solutions: [
+      "Built a multi-pattern parser handling relative dates, weekdays, time expressions, durations, and combined inputs with cascading fallback strategies.",
+      "Implemented confidence scoring (0–1) based on pattern match specificity — exact matches like \"tomorrow\" score 0.9+, while ambiguous month/date patterns score lower.",
+      "Exposed utility functions (parseSmartDateString, generateSmartSuggestions, getDueDateStatus) alongside the component for headless usage.",
+      "Designed keyboard-navigable suggestion dropdown with category-based grouping and live date previews.",
+    ],
+    impact:
+      "Published as open-source npm package with full TypeScript definitions. Supports React 16.8+ with zero required configuration. Handles relative dates, specific weekdays, time expressions, durations, and combined natural language inputs. Exports both the component and standalone utility functions for flexible integration.",
+    stack: ["React", "TypeScript", "date-fns", "Lucide React"],
+    links: [
+      { label: "npm", url: "https://www.npmjs.com/package/@gabrielgustavoadnrade/smart-date-input" },
+      { label: "GitHub", url: "https://github.com/gabrielgustavoandrade/smart-date-input" },
+    ],
+  },
+
+  {
+    slug: "intentional-youtube",
+    title: "Intentional YouTube",
+    subtitle: "Chrome extension that removes algorithmic distractions from YouTube",
+    summary:
+      "Chrome extension (Manifest V3) that transforms YouTube into an intentional-use platform by removing algorithmic recommendations, Shorts, and autoplay.",
+    overview:
+      "Intentional YouTube is a Chrome extension that strips away YouTube's engagement-driven features — homepage algorithm, Shorts, sidebar recommendations, end-screen suggestions, and autoplay. It redirects the homepage to subscriptions and restructures the watch page to show comments directly below the video instead of behind a wall of recommendations.",
+    challenges: [
+      "YouTube is a single-page application with aggressive dynamic content injection, making static CSS hiding insufficient.",
+      "DOM selectors change frequently with YouTube's deployments, requiring a resilient selector strategy.",
+      "Maintaining cleanup state across YouTube's internal navigation without full page reloads.",
+      "Balancing strictness levels — some users want minimal cleanup, others want monk-mode isolation.",
+    ],
+    solutions: [
+      "Built a rules engine with MutationObserver (throttled at 200ms) that continuously monitors and cleans newly injected content across page transitions.",
+      "Centralized all DOM selectors in a single module with fallback chains, making updates to YouTube's markup a one-file fix.",
+      "Implemented a page-type router that detects navigation events and applies page-specific cleanup rules for home, watch, search, channel, and shorts pages.",
+      "Created three strictness modes (Balanced, Strict, Monk Mode) with granular per-feature toggles accessible from the extension popup.",
+    ],
+    impact:
+      "Removes Shorts, homepage algorithm, sidebar recommendations, end-screen suggestions, and autoplay UI. Three strictness modes from balanced cleanup to monk-mode isolation. Handles YouTube's SPA navigation and dynamic content injection. Configurable per-feature toggles via extension popup.",
+    stack: ["JavaScript", "Chrome Extensions API", "Manifest V3", "CSS"],
+    links: [
+      { label: "GitHub", url: "https://github.com/gabrielgustavoandrade/intentional-youtube" },
+    ],
+  },
+];
+
+export const allProjects: Project[] = [...projects, ...openSourceProjects];

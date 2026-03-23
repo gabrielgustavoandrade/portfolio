@@ -5,6 +5,9 @@ import "./WorkList.css";
 
 interface WorkListProps {
   projects: Project[];
+  id?: string;
+  title?: string;
+  subtitle?: string;
 }
 
 function WorkCard({ project }: { project: Project }) {
@@ -29,6 +32,23 @@ function WorkCard({ project }: { project: Project }) {
         </TransitionLink>
         <p className="work-card__subtitle">{project.subtitle}</p>
         <p className="work-card__summary">{project.summary}</p>
+
+        {project.links && project.links.length > 0 && (
+          <div className="work-card__links">
+            {project.links.map((link) => (
+              <a
+                key={link.url}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="work-card__link-item"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {link.label} ↗
+              </a>
+            ))}
+          </div>
+        )}
 
         <button
           type="button"
@@ -85,7 +105,12 @@ function WorkCard({ project }: { project: Project }) {
   );
 }
 
-export function WorkList({ projects }: WorkListProps) {
+export function WorkList({
+  projects,
+  id = "work",
+  title = "Selected Work",
+  subtitle = "Products and systems I helped design and build.",
+}: WorkListProps) {
   const cardsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -114,13 +139,11 @@ export function WorkList({ projects }: WorkListProps) {
   }, [projects]);
 
   return (
-    <section className="work-list" id="work">
+    <section className="work-list" id={id}>
       <div className="work-list__container">
         <div className="work-list__header">
-          <h2 className="work-list__title">Selected Work</h2>
-          <p className="work-list__subtitle">
-            Products and systems I helped design and build.
-          </p>
+          <h2 className="work-list__title">{title}</h2>
+          <p className="work-list__subtitle">{subtitle}</p>
         </div>
 
         <div className="work-list__grid" ref={cardsRef}>

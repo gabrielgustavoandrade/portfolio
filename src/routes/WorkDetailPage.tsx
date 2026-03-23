@@ -4,7 +4,7 @@ import { About } from "../components/About";
 import { Contact } from "../components/Contact";
 import { Footer } from "../components/Footer";
 import { WorkDetail } from "../components/WorkDetail";
-import { projects } from "../data/projects";
+import { allProjects } from "../data/projects";
 
 const LAST_FOCUSED_CARD_KEY = "work:last-focused-slug";
 const SCROLL_KEY = "portfolio:scroll-position";
@@ -12,7 +12,7 @@ const SCROLL_KEY = "portfolio:scroll-position";
 export function WorkDetailPage() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
-  const project = projects.find((item) => item.slug === slug);
+  const project = allProjects.find((item) => item.slug === slug);
 
   useEffect(() => {
     if (slug) {

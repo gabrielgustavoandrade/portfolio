@@ -102,6 +102,22 @@ export function WorkDetail({ project, onClose }: WorkDetailProps) {
 
           <p className="work-detail__subtitle">{project.subtitle}</p>
 
+          {project.links && project.links.length > 0 && (
+            <div className="work-detail__links">
+              {project.links.map((link) => (
+                <a
+                  key={link.url}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="work-detail__link-item"
+                >
+                  {link.label} ↗
+                </a>
+              ))}
+            </div>
+          )}
+
           <div className="work-detail__section">
             <h3 className="work-detail__section-title">Overview</h3>
             <p className="work-detail__text">{project.overview}</p>

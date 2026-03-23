@@ -226,6 +226,30 @@
   color: var(--color-accent-blue);
 }
 
+.work-card__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+}
+
+.work-card__link-item {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-4) var(--space-12);
+  font-size: var(--font-size-small);
+  color: var(--color-text-muted);
+  text-decoration: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-duration-normal) var(--transition-easing);
+}
+
+.work-card__link-item:hover {
+  color: var(--color-accent-blue);
+  border-color: rgba(96, 165, 250, 0.3);
+  background: rgba(96, 165, 250, 0.1);
+}
+
 .work-card__full-link {
   display: inline-block;
   font-size: var(--font-size-base);

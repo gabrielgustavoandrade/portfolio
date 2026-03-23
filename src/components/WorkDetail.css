@@ -69,6 +69,33 @@
   border-bottom: 1px solid var(--color-border);
 }
 
+.work-detail__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+  margin-bottom: var(--space-40);
+  padding-bottom: var(--space-24);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.work-detail__link-item {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-8) var(--space-16);
+  font-size: var(--font-size-small);
+  color: var(--color-text-muted);
+  text-decoration: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-duration-normal) var(--transition-easing);
+}
+
+.work-detail__link-item:hover {
+  color: var(--color-accent-blue);
+  border-color: rgba(96, 165, 250, 0.3);
+  background: rgba(96, 165, 250, 0.1);
+}
+
 .work-detail__section {
   margin-bottom: var(--space-40);
 }
