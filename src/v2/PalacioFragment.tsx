@@ -67,7 +67,7 @@ export function PalacioFragment({
     const targetZ = THREE.MathUtils.lerp(-0.35, -4.1, recede);
     const targetScale = THREE.MathUtils.lerp(1, 0.58, recede);
 
-    node.position.x = 2.45;
+    node.position.x = 2.7;
     node.position.y = THREE.MathUtils.damp(node.position.y, targetY, 5, delta);
     node.position.z = THREE.MathUtils.damp(node.position.z, targetZ, 5, delta);
     node.scale.setScalar(
@@ -90,7 +90,7 @@ export function PalacioFragment({
   return (
     <group
       ref={group}
-      position={[2.45, -0.98, -0.35]}
+      position={[2.7, -0.98, -0.35]}
       onPointerOver={(event) => {
         event.stopPropagation();
         onHover(true);

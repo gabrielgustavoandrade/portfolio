@@ -51,7 +51,7 @@ export function TeatroMass({
     const targetZ = THREE.MathUtils.lerp(0.15, -3.6, recede);
     const targetScale = THREE.MathUtils.lerp(1, 0.62, recede);
 
-    node.position.x = -2.35;
+    node.position.x = -2.7;
     node.position.y = THREE.MathUtils.damp(node.position.y, targetY, 5, delta);
     node.position.z = THREE.MathUtils.damp(node.position.z, targetZ, 5, delta);
     node.scale.setScalar(
@@ -79,7 +79,7 @@ export function TeatroMass({
   return (
     <group
       ref={group}
-      position={[-2.35, -1.05, 0.15]}
+      position={[-2.7, -1.05, 0.15]}
       onPointerOver={(event) => {
         event.stopPropagation();
         onHover(true);

@@ -2,7 +2,7 @@
 
 .v2-page {
   min-block-size: 220vh;
-  background: #102733;
+  background: #0e2433;
   color: #f3ead8;
 }
 
@@ -66,11 +66,11 @@
 }
 
 .v2-hero__line {
-  margin-block-start: 1.25rem;
-  font-size: clamp(1rem, 1.55vw, 1.25rem);
+  margin-block-start: 0.7rem;
+  font-size: clamp(0.95rem, 1.35vw, 1.15rem);
   letter-spacing: 0.04em;
   color: #f0d7b0;
-  max-inline-size: 28ch;
+  max-inline-size: 18ch;
 }
 
 .v2-plate {
