@@ -38,12 +38,13 @@ export function Hero({ onWorkClick, onContactClick }: HeroProps) {
             Gabriel Andrade
           </RevealText>
           <p className="hero__subtitle">
-            Software Engineer | React, Node.js, TypeScript
+            Software Engineer | Agent systems, commerce, performance
           </p>
           <p className="hero__tagline">
-            Seven years designing and delivering scalable applications across
-            consumer and commerce platforms. Full-stack engineer focused on
-            performance, maintainability, and measurable impact.
+            I build AI agent systems and care about traces, latency, cost, and
+            evals. Seven years designing and delivering scalable applications
+            across consumer and commerce platforms — same performance bar,
+            maintainability, and measurable impact.
           </p>
 
           <div className="hero__cta">

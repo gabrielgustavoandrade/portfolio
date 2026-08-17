@@ -30,7 +30,7 @@ export function RevealText({
     );
   }
 
-  const words = children.split(' ');
+  const words = children.trim().split(/\s+/).filter(Boolean);
 
   return (
     <Component
@@ -44,6 +44,7 @@ export function RevealText({
           style={{ animationDelay: `${delay + index * 50}ms` }}
         >
           {word}
+          {index < words.length - 1 ? '\u00A0' : null}
         </span>
       ))}
     </Component>

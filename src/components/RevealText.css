@@ -1,7 +1,8 @@
 .reveal-text {
   opacity: 0;
   transform: translateY(20px);
-  transition: opacity var(--transition-duration-slower) var(--transition-easing-bounce),
+  transition:
+    opacity var(--transition-duration-slower) var(--transition-easing-bounce),
     transform var(--transition-duration-slower) var(--transition-easing-bounce);
 }
 
@@ -21,15 +22,12 @@
   transform: translateY(20px) rotateX(-90deg);
   transform-origin: bottom;
   animation-fill-mode: forwards;
-  margin-right: 0.25em;
-}
-
-.reveal-text__word:last-child {
-  margin-right: 0;
+  white-space: pre;
 }
 
 .reveal-text__word.is-visible {
-  animation: revealWord var(--transition-duration-slower) var(--transition-easing-bounce) forwards;
+  animation: revealWord var(--transition-duration-slower)
+    var(--transition-easing-bounce) forwards;
 }
 
 @media (prefers-reduced-motion: reduce) {

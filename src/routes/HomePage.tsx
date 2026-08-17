@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { About } from "../components/About";
 import { BlogList } from "../components/BlogList";
 import { Contact } from "../components/Contact";
@@ -8,6 +10,19 @@ import { posts } from "../data/posts";
 import { openSourceProjects, projects } from "../data/projects";
 
 export function HomePage() {
+  const { hash } = useLocation();
+
+  useEffect(() => {
+    if (!hash) return;
+
+    const id = hash.slice(1);
+    const frame = window.requestAnimationFrame(() => {
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [hash]);
+
   const handleWorkClick = () => {
     document.getElementById("work")?.scrollIntoView({ behavior: "smooth" });
   };

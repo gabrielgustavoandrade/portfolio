@@ -218,7 +218,7 @@ export const openSourceProjects: Project[] = [
       "Published as open-source npm package with full TypeScript definitions. Supports React 16.8+ with zero required configuration. Handles relative dates, specific weekdays, time expressions, durations, and combined natural language inputs. Exports both the component and standalone utility functions for flexible integration.",
     stack: ["React", "TypeScript", "date-fns", "Lucide React"],
     links: [
-      { label: "npm", url: "https://www.npmjs.com/package/@gabrielgustavoadnrade/smart-date-input" },
+      { label: "npm", url: "https://www.npmjs.com/package/@gabrielgustavoandrade/smart-date-input" },
       { label: "GitHub", url: "https://github.com/gabrielgustavoandrade/smart-date-input" },
     ],
   },
