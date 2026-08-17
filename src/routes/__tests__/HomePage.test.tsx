@@ -8,6 +8,10 @@ vi.mock('../../components/earth/EarthCanvas', () => ({
   EarthCanvas: () => <div data-testid="earth-canvas" />,
 }));
 
+vi.mock('../../components/HeroStarfield', () => ({
+  HeroStarfield: () => <div data-testid="hero-starfield" />,
+}));
+
 const renderHomePage = () =>
   render(
     <MemoryRouter
@@ -28,6 +32,16 @@ describe('HomePage', () => {
 
     expect(
       screen.getByRole('heading', { name: /selected work/i }),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByText(/agent systems — traces, latency, cost, evals/i),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/consumer and commerce platforms/i),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/focused on performance, maintainability/i),
     ).toBeInTheDocument();
   });
 

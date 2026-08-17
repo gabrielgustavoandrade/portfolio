@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { ScrollProgress } from './components/ScrollProgress';
 import { HomePage } from './routes/HomePage';
 import { WorkDetailPage } from './routes/WorkDetailPage';
@@ -17,6 +17,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/work/:slug" element={<WorkDetailPage />} />
+          <Route path="/blog" element={<Navigate to="/#build-log" replace />} />
         </Routes>
       </div>
     </BrowserRouter>
