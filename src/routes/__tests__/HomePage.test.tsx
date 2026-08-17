@@ -35,10 +35,13 @@ describe('HomePage', () => {
     ).toBeInTheDocument();
 
     expect(
-      screen.getByText(/agent systems, commerce, performance/i),
+      screen.getByText(/agent systems — traces, latency, cost, evals/i),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(/traces, latency, cost, and evals/i),
+      screen.getByText(/consumer and commerce platforms/i),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/focused on performance, maintainability/i),
     ).toBeInTheDocument();
   });
 

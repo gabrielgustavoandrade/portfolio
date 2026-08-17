@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import './RevealText.css';
 
@@ -38,14 +39,15 @@ export function RevealText({
       className={`reveal-text reveal-text--stagger ${className}`}
     >
       {words.map((word, index) => (
-        <span
-          key={index}
-          className={`reveal-text__word ${isVisible ? 'is-visible' : ''}`}
-          style={{ animationDelay: `${delay + index * 50}ms` }}
-        >
-          {word}
-          {index < words.length - 1 ? '\u00A0' : null}
-        </span>
+        <Fragment key={index}>
+          <span
+            className={`reveal-text__word ${isVisible ? 'is-visible' : ''}`}
+            style={{ animationDelay: `${delay + index * 50}ms` }}
+          >
+            {word}
+          </span>
+          {index < words.length - 1 ? ' ' : null}
+        </Fragment>
       ))}
     </Component>
   );

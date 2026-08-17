@@ -22,7 +22,6 @@
   transform: translateY(20px) rotateX(-90deg);
   transform-origin: bottom;
   animation-fill-mode: forwards;
-  white-space: pre;
 }
 
 .reveal-text__word.is-visible {
