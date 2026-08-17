@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useMagneticHover } from '../hooks/useMagneticHover';
 import { PerformanceToggle } from './PerformanceToggle';
 import { TechStackModal } from './TechStackModal';
+import { TransitionLink } from './TransitionLink';
 import './Footer.css';
 
 export function Footer() {
@@ -45,7 +46,12 @@ export function Footer() {
             <span>How I Built This</span>
           </button>
 
-          <p className="footer__text">© Gabriel Andrade 2026</p>
+          <p className="footer__text">
+            © Gabriel Andrade 2026
+            <TransitionLink to="/v2" className="footer__v2">
+              v2
+            </TransitionLink>
+          </p>
 
           <div className="footer__performance">
             <PerformanceToggle />

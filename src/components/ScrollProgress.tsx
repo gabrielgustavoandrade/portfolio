@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import './ScrollProgress.css';
 
 export function ScrollProgress() {
+  const { pathname } = useLocation();
   const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
@@ -38,6 +40,10 @@ export function ScrollProgress() {
       window.removeEventListener('resize', updateScrollProgress);
     };
   }, []);
+
+  if (pathname.startsWith('/v2')) {
+    return null;
+  }
 
   return (
     <div className="scroll-progress" aria-hidden="true">

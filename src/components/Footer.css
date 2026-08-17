@@ -28,7 +28,8 @@
   font-family: var(--font-family);
   font-size: var(--font-size-small);
   cursor: pointer;
-  transition: all var(--transition-duration-normal) var(--transition-easing-bounce);
+  transition: all var(--transition-duration-normal)
+    var(--transition-easing-bounce);
 }
 
 .footer__tech-button:hover {
@@ -47,6 +48,20 @@
   font-size: var(--font-size-xs);
   line-height: var(--line-height-normal);
   color: var(--color-text-muted);
+}
+
+.footer__v2 {
+  margin-inline-start: 0.65em;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: inherit;
+  text-decoration: none;
+  opacity: 0.32;
+}
+
+.footer__v2:hover,
+.footer__v2:focus-visible {
+  opacity: 0.7;
 }
 
 .footer__performance {
