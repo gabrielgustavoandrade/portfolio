@@ -17,9 +17,9 @@ export function WorkPlate({
 }: WorkPlateProps) {
   const progress = workOpen ? 1 : scroll;
   const lifted = hover === 'work' && !workOpen;
-  const scale = 0.42 + progress * 0.78;
+  const scale = 0.38 + progress * 0.82;
   const lift = lifted ? -14 : 0;
-  const shiftY = 26 - progress * 34;
+  const shiftY = 36 - progress * 40;
 
   return (
     <button
@@ -30,7 +30,7 @@ export function WorkPlate({
           ? undefined
           : {
               transform: `translate(-50%, ${shiftY}%) scale(${scale}) translateY(${lift}px)`,
-              opacity: 0.28 + progress * 0.72,
+              opacity: 0.62 + progress * 0.38,
             }
       }
       onMouseEnter={() => onHover(true)}

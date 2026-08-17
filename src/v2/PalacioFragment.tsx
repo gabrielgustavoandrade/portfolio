@@ -62,12 +62,12 @@ export function PalacioFragment({
 
     const active = hover === 'palacio';
     const recede = hover === 'work' ? 1 : scroll;
-    const rise = THREE.MathUtils.lerp(-0.12, 0.04, intro);
-    const targetY = rise + THREE.MathUtils.lerp(0, 0.7, recede);
+    const rise = THREE.MathUtils.lerp(-0.98, -0.72, intro);
+    const targetY = rise + THREE.MathUtils.lerp(0, 0.85, recede);
     const targetZ = THREE.MathUtils.lerp(-0.35, -4.1, recede);
     const targetScale = THREE.MathUtils.lerp(1, 0.58, recede);
 
-    node.position.x = 2.15;
+    node.position.x = 2.45;
     node.position.y = THREE.MathUtils.damp(node.position.y, targetY, 5, delta);
     node.position.z = THREE.MathUtils.damp(node.position.z, targetZ, 5, delta);
     node.scale.setScalar(
@@ -90,7 +90,7 @@ export function PalacioFragment({
   return (
     <group
       ref={group}
-      position={[2.15, -0.12, -0.35]}
+      position={[2.45, -0.98, -0.35]}
       onPointerOver={(event) => {
         event.stopPropagation();
         onHover(true);

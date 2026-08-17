@@ -30,8 +30,8 @@ function CameraRig({
   useFrame((_, delta) => {
     const recede = workOpen ? 1 : scroll;
     const targetX = 0;
-    const targetY = THREE.MathUtils.lerp(0.52, 2.15, recede);
-    const targetZ = THREE.MathUtils.lerp(7.35, 13.8, recede);
+    const targetY = THREE.MathUtils.lerp(0.95, 2.35, recede);
+    const targetZ = THREE.MathUtils.lerp(7.6, 14.2, recede);
 
     camera.position.x = THREE.MathUtils.damp(
       camera.position.x,
@@ -52,7 +52,7 @@ function CameraRig({
       delta,
     );
 
-    lookTarget.current.set(look.x * 0.48, look.y * 0.26 + 0.12, 0);
+    lookTarget.current.set(look.x * 0.48, look.y * 0.22 - 0.35, 0);
     camera.lookAt(lookTarget.current);
   });
 
@@ -88,7 +88,7 @@ export function V2Scene({
   onHover,
 }: V2SceneProps) {
   const recede = workOpen || hover === 'work' ? 1 : scroll;
-  const dim = hover === 'work' || workOpen ? 0.42 : 1;
+  const dim = workOpen ? 0.72 : hover === 'work' ? 0.45 : 1;
 
   return (
     <Canvas
@@ -100,7 +100,7 @@ export function V2Scene({
         powerPreference: 'high-performance',
         stencil: false,
       }}
-      camera={{ fov: 28, position: [0, 0.52, 7.35], near: 0.1, far: 40 }}
+      camera={{ fov: 28, position: [0, 0.95, 7.6], near: 0.1, far: 40 }}
       style={{ opacity: dim }}
       onPointerMissed={() => onHover(null)}
     >

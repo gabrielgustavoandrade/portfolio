@@ -15,7 +15,7 @@ export function V2Stage() {
   const { scroll, look, hover, setHover, workOpen, setWorkOpen, intro } =
     useV2Motion(reducedMotion, ready);
 
-  const typeOpacity = workOpen ? 0 : 1 - scroll * 0.55;
+  const typeOpacity = workOpen ? 0 : 1 - scroll * 0.82;
   const veil = (workOpen ? 1 : scroll) * 0.26;
 
   return (
@@ -55,7 +55,11 @@ export function V2Stage() {
         ) : null}
 
         <header className="v2-hero" style={{ opacity: typeOpacity }}>
-          <h1 className="v2-hero__name">Gabriel Andrade</h1>
+          <h1 className="v2-hero__name">
+            Gabriel
+            <br />
+            Andrade
+          </h1>
           <p className="v2-hero__line">Commerce, built for speed.</p>
         </header>
 
