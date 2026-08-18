@@ -17,7 +17,11 @@ export function HomePage() {
 
     const id = hash.slice(1);
     const frame = window.requestAnimationFrame(() => {
-      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+      document.getElementById(id)?.scrollIntoView({
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+          ? 'auto'
+          : 'smooth',
+      });
     });
 
     return () => window.cancelAnimationFrame(frame);
