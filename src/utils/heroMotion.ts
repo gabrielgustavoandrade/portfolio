@@ -15,16 +15,16 @@ export function easeMotion(t: number) {
 export const MOTION = {
   scrubSeconds: 0.8,
   settleEpsilon: 0.0007,
-  titleHold: 0.16,
-  titleEnd: 0.78,
-  titleLeaveVh: 0.22,
+  titleHold: 0.1,
+  titleEnd: 0.4,
+  titleLeaveVh: 0.28,
   ledeStart: 0.05,
   ledeEnd: 0.36,
   ledeLiftPx: 14,
   globeStart: 0,
   globeEnd: 1,
-  railStart: 0.26,
-  railEnd: 0.88,
+  railStart: 0.44,
+  railEnd: 0.92,
   railStagger: 0.045,
   railShiftX: 28,
   railShiftYVh: 0.84,
@@ -67,8 +67,9 @@ export function getGlobeLayout(viewportWidth: number, viewportHeight: number) {
   const endSize = isMobile ? 68 : 104;
   const startX = (viewportWidth - size) / 2;
   const startY = viewportHeight * (isMobile ? 0.5 : 0.4);
-  const endX = isMobile ? 16 : 28;
-  const endY = isMobile ? 18 : 24;
+  const inset = isMobile ? 16 : 56;
+  const endX = inset;
+  const endY = isMobile ? 20 : 40;
 
   return {
     size,

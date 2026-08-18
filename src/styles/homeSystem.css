@@ -10,7 +10,7 @@
   --sys-void: #050505;
   --sys-ink: #0c0c0c;
   --sys-cream: #f2eee6;
-  --sys-muted: rgba(242, 238, 230, 0.62);
+  --sys-muted: rgba(242, 238, 230, 0.72);
   --sys-faint: rgba(242, 238, 230, 0.38);
   --sys-line: rgba(242, 238, 230, 0.22);
   --sys-focus: rgba(242, 238, 230, 0.45);
@@ -36,7 +36,7 @@
   --sys-space-4: 24px;
   --sys-space-5: 40px;
   --sys-inset: clamp(16px, 4vw, 56px);
-  --sys-stack: clamp(72px, 12vh, 128px);
+  --sys-stack: var(--sys-space-5);
   --sys-gap: clamp(16px, 2.4vw, 32px);
   --sys-measure: 1040px;
   --sys-measure-text: 36rem;
@@ -75,6 +75,22 @@
 
 .app:has(.home) {
   background-color: var(--sys-void);
+}
+
+.home main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sys-stack);
+  padding-block: var(--sys-stack);
+}
+
+.home,
+.home button,
+.home input,
+.home textarea,
+.home select,
+.home a {
+  font-family: var(--sys-font);
 }
 
 .home .skip-link {
@@ -200,6 +216,17 @@ a.sys-card:hover,
 
 .sys-section {
   padding: var(--sys-stack) var(--sys-inset);
+}
+
+.home .sys-section {
+  padding-block: 0;
+}
+
+.sys-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--sys-gap);
+  align-items: start;
 }
 
 .sys-section__inner {
@@ -348,6 +375,10 @@ a.sys-card:hover,
 @media (max-width: 720px) {
   .sys-card {
     aspect-ratio: 4 / 3;
+  }
+
+  .sys-grid {
+    grid-template-columns: 1fr;
   }
 }
 

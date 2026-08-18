@@ -24,7 +24,7 @@ function CardStill({ id }: { id: (typeof heroWorkCards)[number]['id'] }) {
 
   return (
     <div className="sys-card hero-rail__still--hole">
-      <span className="sys-meta">Still to come</span>
+      <span className="sys-kicker">Still to come</span>
     </div>
   );
 }

@@ -46,7 +46,7 @@
   width: min(94vw, 1120px);
   transform: translate3d(-50%, 0, 0);
   text-align: center;
-  z-index: 3;
+  z-index: 1;
   pointer-events: none;
   will-change: transform;
 }
@@ -94,6 +94,12 @@
 .hero--rail-live .hero-rail,
 .hero--reduced .hero-rail {
   pointer-events: auto;
+}
+
+.hero--rail-live .hero__copy,
+.hero--reduced .hero__copy,
+.hero--released .hero__copy {
+  visibility: hidden;
 }
 
 .hero--rail-live .hero__sticky,

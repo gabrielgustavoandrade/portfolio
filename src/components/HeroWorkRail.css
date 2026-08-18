@@ -3,7 +3,7 @@
   padding: 0;
   position: absolute;
   inset-inline: var(--sys-inset);
-  top: clamp(132px, 24vh, 220px);
+  top: clamp(148px, 26vh, 232px);
   z-index: 4;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -28,36 +28,24 @@
 
 .hero-rail__still--earth {
   place-items: center;
-  background: radial-gradient(circle at 50% 40%, #161616, var(--sys-void) 72%);
 }
 
 .hero-rail__earth-sphere {
-  width: min(72%, 220px);
+  width: min(68%, 200px);
   aspect-ratio: 1;
   border-radius: 50%;
   background:
-    radial-gradient(
-      circle at 30% 28%,
-      rgba(255, 255, 255, 0.16),
-      transparent 34%
-    ),
-    url("/textures/earth/lo/earthmap.jpg") 42% 48% / 180% auto;
-  box-shadow: inset -22px 0 36px rgba(0, 0, 0, 0.72);
+    #020308 url("/textures/earth/lo/earthlights.jpg") 42% 48% / 180% auto;
+  box-shadow: inset -18px 0 28px rgba(0, 0, 0, 0.88);
 }
 
 .hero-rail__still--hole {
   place-items: center;
-  background:
-    repeating-linear-gradient(
-      -12deg,
-      rgba(255, 255, 255, 0.015) 0 8px,
-      transparent 8px 16px
-    ), var(--sys-ink);
 }
 
 @media (max-width: 720px) {
   .hero-rail {
-    top: 112px;
+    top: 132px;
     display: flex;
     gap: var(--sys-space-3);
     overflow-x: auto;

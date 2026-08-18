@@ -24,8 +24,8 @@ describe('heroMotion', () => {
 
     expect(pose.scale).toBeLessThan(0.25);
     expect(pose.interactive).toBe(false);
-    expect(pose.visualX).toBeCloseTo(28);
-    expect(pose.visualY).toBeCloseTo(24);
+    expect(pose.visualX).toBeCloseTo(56);
+    expect(pose.visualY).toBeCloseTo(40);
     expect(pose.size * pose.scale).toBeCloseTo(104);
   });
 
@@ -36,12 +36,17 @@ describe('heroMotion', () => {
     expect(getTitleLeave(1)).toBe(1);
   });
 
+  it('finishes clipping the name before the rail owns the frame', () => {
+    expect(getTitleLeave(MOTION.railStart)).toBe(1);
+    expect(getRailProgress(MOTION.titleEnd)).toBe(0);
+  });
+
   it('holds the work rail until the pin is underway', () => {
     expect(getRailProgress(0)).toBe(0);
     expect(getRailProgress(MOTION.railStart)).toBe(0);
     expect(getRailProgress(1)).toBe(1);
-    expect(getRailItemProgress(0.4, 2)).toBeLessThan(
-      getRailItemProgress(0.4, 0),
+    expect(getRailItemProgress(0.62, 2)).toBeLessThan(
+      getRailItemProgress(0.62, 0),
     );
   });
 

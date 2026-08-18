@@ -99,6 +99,7 @@ const applyPose = (
 
   if (refs.titleRef.current) {
     refs.titleRef.current.style.transform = `translate3d(0, ${titleLeave * -8}%, 0)`;
+    refs.titleRef.current.style.opacity = String(1 - titleLeave);
   }
 
   const ledeY = ledeLeave * -MOTION.ledeLiftPx;

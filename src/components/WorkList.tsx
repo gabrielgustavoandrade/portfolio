@@ -40,9 +40,7 @@ function WorkCard({ project, index }: { project: Project; index: number }) {
       ) : (
         <TransitionLink to={`/work/${project.slug}`} className="sys-card-block">
           {label}
-          <div className="sys-card">
-            <p className="sys-kicker">{project.subtitle}</p>
-          </div>
+          <p className="sys-kicker">{project.subtitle}</p>
         </TransitionLink>
       )}
       <p className="sys-kicker">{project.summary}</p>
@@ -81,7 +79,7 @@ export function WorkList({
           <p className="sys-kicker">{subtitle}</p>
         </SectionHeader>
 
-        <div className="work-list__grid">
+        <div className="sys-grid">
           {projects.map((project, cardIndex) => (
             <WorkCard key={project.slug} project={project} index={cardIndex} />
           ))}

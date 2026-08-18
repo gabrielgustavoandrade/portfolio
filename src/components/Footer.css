@@ -9,38 +9,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--sys-space-4);
-  position: relative;
-}
-
-.footer__tech-button {
-  position: absolute;
-  left: 0;
-  gap: var(--sys-space-1);
-  padding: 0;
 }
 
 .footer__text {
   margin: 0;
-}
-
-.footer__performance {
-  position: absolute;
-  right: 0;
-}
-
-@media (max-width: 720px) {
-  .footer__container {
-    flex-direction: column;
-    gap: var(--sys-space-3);
-  }
-
-  .footer__tech-button,
-  .footer__performance {
-    position: static;
-  }
-
-  .footer__tech-button span {
-    display: none;
-  }
 }

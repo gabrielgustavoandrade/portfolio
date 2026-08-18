@@ -1,7 +1,3 @@
-.contact {
-  padding-block-start: var(--sys-space-5);
-}
-
 .contact__inner {
   display: flex;
   justify-content: center;

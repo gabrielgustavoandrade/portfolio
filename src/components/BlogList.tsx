@@ -25,7 +25,7 @@ export function BlogList({ posts }: BlogListProps) {
           </p>
         </SectionHeader>
 
-        <div className="blog-list__grid">
+        <div className="sys-grid">
           {posts.map((post, index) => {
             const expanded = expandedPostId === post.id;
             const ordinal = String(index + 1).padStart(2, '0');
@@ -33,13 +33,13 @@ export function BlogList({ posts }: BlogListProps) {
             return (
               <article
                 key={post.id}
-                className={`blog-card enter${expanded ? ' blog-card--expanded' : ''}`}
+                className={`work-card enter${expanded ? ' blog-card--expanded' : ''}`}
                 data-enter
                 style={{ '--enter-delay': `${index * 45}ms` } as CSSProperties}
               >
                 <button
                   type="button"
-                  className="blog-card__header"
+                  className="sys-card-block blog-card__header"
                   onClick={() => setExpandedPostId(expanded ? null : post.id)}
                   aria-expanded={expanded}
                   aria-controls={`blog-content-${post.id}`}
