@@ -11,12 +11,26 @@
   height: 100vh;
 }
 
+/* Fixed pin — ancestors use overflow-x: hidden, which breaks position: sticky. */
 .hero__sticky {
-  position: sticky;
+  position: absolute;
+  inset-inline: 0;
   top: 0;
   height: 100vh;
   overflow: hidden;
   background-color: var(--hero-void);
+}
+
+.hero--pinned .hero__sticky {
+  position: fixed;
+  inset: 0;
+  height: 100vh;
+}
+
+.hero--released .hero__sticky {
+  position: absolute;
+  top: auto;
+  bottom: 0;
 }
 
 .hero__nav {
@@ -45,7 +59,7 @@
   left: 50%;
   top: clamp(72px, 16vh, 148px);
   width: min(94vw, 1120px);
-  transform: translateX(-50%) translateY(calc(var(--hero-progress) * -32vh));
+  transform: translateX(-50%) translateY(calc(var(--hero-progress) * -22vh));
   text-align: center;
   z-index: 3;
   pointer-events: none;
@@ -141,7 +155,7 @@
   }
 
   .hero__copy {
-    transform: translateX(-50%) translateY(-32vh);
+    transform: translateX(-50%) translateY(-22vh);
   }
 
   .hero__lede,

@@ -8,8 +8,11 @@ interface UsePinnedProgressOptions {
   disabled?: boolean;
 }
 
+export type PinPhase = 'start' | 'pin' | 'end';
+
 interface PinnedProgress {
   progress: number;
+  phase: PinPhase;
   viewportWidth: number;
   viewportHeight: number;
 }
@@ -25,6 +28,7 @@ export function usePinnedProgress(
   const { disabled = false } = options;
   const [state, setState] = useState<PinnedProgress>(() => ({
     progress: disabled ? 1 : 0,
+    phase: disabled ? 'end' : 'start',
     viewportWidth: typeof window === 'undefined' ? 1280 : window.innerWidth,
     viewportHeight: typeof window === 'undefined' ? 800 : window.innerHeight,
   }));
@@ -34,6 +38,7 @@ export function usePinnedProgress(
       setState((current) => ({
         ...current,
         progress: 1,
+        phase: 'end',
         viewportWidth: window.innerWidth,
         viewportHeight: window.innerHeight,
       }));
@@ -52,20 +57,45 @@ export function usePinnedProgress(
 
       // jsdom and first paint can report 0. Stay on beat 1 until layout exists.
       if (height === 0) {
-        setState({ progress: 0, viewportWidth, viewportHeight });
+        setState({
+          progress: 0,
+          phase: 'start',
+          viewportWidth,
+          viewportHeight,
+        });
         return;
       }
 
       const scrollable = height - viewportHeight;
+      const rect = element.getBoundingClientRect();
 
       if (scrollable <= 0) {
-        setState({ progress: 1, viewportWidth, viewportHeight });
+        setState({
+          progress: 1,
+          phase: 'end',
+          viewportWidth,
+          viewportHeight,
+        });
         return;
       }
 
-      const traveled = -element.getBoundingClientRect().top;
+      let progress = 0;
+      let phase: PinPhase = 'start';
+
+      if (rect.top > 0) {
+        progress = 0;
+        phase = 'start';
+      } else if (rect.bottom <= viewportHeight) {
+        progress = 1;
+        phase = 'end';
+      } else {
+        progress = clamp(-rect.top / scrollable);
+        phase = 'pin';
+      }
+
       setState({
-        progress: clamp(traveled / scrollable),
+        progress,
+        phase,
         viewportWidth,
         viewportHeight,
       });

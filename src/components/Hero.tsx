@@ -9,7 +9,7 @@ import './Hero.css';
 export function Hero() {
   const pinRef = useRef<HTMLElement>(null);
   const reducedMotion = usePrefersReducedMotion();
-  const { progress, viewportWidth, viewportHeight } = usePinnedProgress(
+  const { progress, phase, viewportWidth, viewportHeight } = usePinnedProgress(
     pinRef,
     { disabled: reducedMotion },
   );
@@ -21,6 +21,8 @@ export function Hero() {
       ref={pinRef}
       className={`hero${reducedMotion ? ' hero--reduced' : ''}${
         railProgress > 0.55 ? ' hero--rail-live' : ''
+      }${phase === 'pin' ? ' hero--pinned' : ''}${
+        phase === 'end' ? ' hero--released' : ''
       }`}
       style={{ '--hero-progress': progress } as CSSProperties}
       aria-label="Introduction"
