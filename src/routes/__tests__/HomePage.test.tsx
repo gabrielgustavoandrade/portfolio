@@ -90,7 +90,9 @@ describe('HomePage', () => {
 
     expect(document.querySelector('.hero')).toHaveClass('hero--reduced');
     expect(screen.getByTestId('earth-canvas')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /01\s+earth/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: /01\s+earth/i }),
+    ).toBeInTheDocument();
 
     window.matchMedia = matchMedia;
   });

@@ -1,5 +1,4 @@
 .hero-rail {
-  --rail-progress: 0;
   margin: 0;
   padding: 0;
   position: absolute;
@@ -9,13 +8,9 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: clamp(16px, 2.4vw, 32px);
-  opacity: var(--rail-progress);
-  transform: translate3d(
-    calc((1 - var(--rail-progress)) * 3.5rem),
-    calc((1 - var(--rail-progress)) * 4.5rem),
-    0
-  );
+  transform: translate3d(40px, 72px, 0);
   pointer-events: none;
+  will-change: transform;
 }
 
 .hero-rail__item {
@@ -23,6 +18,7 @@
   flex-direction: column;
   min-width: 0;
   list-style: none;
+  will-change: transform;
 }
 
 .hero-rail__link {
@@ -163,9 +159,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-rail {
-    opacity: 1;
+  .hero-rail,
+  .hero-rail__item {
     transform: none;
     pointer-events: auto;
+    will-change: auto;
   }
 }

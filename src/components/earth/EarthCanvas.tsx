@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { type MutableRefObject, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { getFresnelMaterial } from './getFresnelMaterial';
@@ -36,8 +36,14 @@ const ROTATION_SPEED = {
   clouds: 0.0023,
 } as const;
 
-export function EarthCanvas() {
+export function EarthCanvas({
+  paceRef,
+}: {
+  paceRef?: MutableRefObject<'full' | 'idle'>;
+}) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const paceBag = useRef(paceRef);
+  paceBag.current = paceRef;
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -128,20 +134,26 @@ export function EarthCanvas() {
     controls.rotateSpeed = ROTATE_SPEED;
 
     let animationFrame: number;
+    let frame = 0;
     const animate = () => {
       animationFrame = requestAnimationFrame(animate);
+      const idle = paceBag.current?.current === 'idle';
+      controls.enabled = !idle;
       controls.update();
 
-      // Update light position to always be to the left of the camera view
-      const lightOffset = new THREE.Vector3(LIGHT_OFFSET_X, 0, 0);
-      lightOffset.applyQuaternion(camera.quaternion);
-      sunLight.position.copy(lightOffset);
-
-      // Rotate Earth layers
       earthMesh.rotation.y += ROTATION_SPEED.earth;
       lightsMesh.rotation.y += ROTATION_SPEED.earth;
       cloudsMesh.rotation.y += ROTATION_SPEED.clouds;
       glowMesh.rotation.y += ROTATION_SPEED.earth;
+
+      frame += 1;
+      if (idle && frame % 3 !== 0) {
+        return;
+      }
+
+      const lightOffset = new THREE.Vector3(LIGHT_OFFSET_X, 0, 0);
+      lightOffset.applyQuaternion(camera.quaternion);
+      sunLight.position.copy(lightOffset);
       renderer.render(scene, camera);
     };
     animate();

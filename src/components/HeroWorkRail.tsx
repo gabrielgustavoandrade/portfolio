@@ -1,11 +1,7 @@
-import type { CSSProperties } from 'react';
+import { forwardRef } from 'react';
 import { heroWorkCards } from '../data/heroWork';
 import { TransitionLink } from './TransitionLink';
 import './HeroWorkRail.css';
-
-interface HeroWorkRailProps {
-  progress: number;
-}
 
 function CalendarMark() {
   return (
@@ -59,44 +55,44 @@ function CardStill({ id }: { id: (typeof heroWorkCards)[number]['id'] }) {
   );
 }
 
-export function HeroWorkRail({ progress }: HeroWorkRailProps) {
-  const style = {
-    '--rail-progress': progress,
-  } as CSSProperties;
+export const HeroWorkRail = forwardRef<HTMLUListElement>(
+  function HeroWorkRail(_props, ref) {
+    return (
+      <ul className="hero-rail" ref={ref}>
+        {heroWorkCards.map((card) => {
+          const body = (
+            <>
+              <p className="hero-rail__label">
+                <span>{card.index}</span> {card.title}
+              </p>
+              <CardStill id={card.id} />
+            </>
+          );
 
-  return (
-    <ul className="hero-rail" style={style}>
-      {heroWorkCards.map((card) => {
-        const body = (
-          <>
-            <p className="hero-rail__label">
-              <span>{card.index}</span> {card.title}
-            </p>
-            <CardStill id={card.id} />
-          </>
-        );
-
-        return (
-          <li
-            key={card.id}
-            className={`hero-rail__item${
-              card.kind === 'placeholder' ? ' hero-rail__item--placeholder' : ''
-            }`}
-          >
-            {card.kind === 'placeholder' ? (
-              body
-            ) : card.href.startsWith('#') ? (
-              <a href={card.href} className="hero-rail__link">
-                {body}
-              </a>
-            ) : (
-              <TransitionLink to={card.href} className="hero-rail__link">
-                {body}
-              </TransitionLink>
-            )}
-          </li>
-        );
-      })}
-    </ul>
-  );
-}
+          return (
+            <li
+              key={card.id}
+              className={`hero-rail__item${
+                card.kind === 'placeholder'
+                  ? ' hero-rail__item--placeholder'
+                  : ''
+              }`}
+            >
+              {card.kind === 'placeholder' ? (
+                body
+              ) : card.href.startsWith('#') ? (
+                <a href={card.href} className="hero-rail__link">
+                  {body}
+                </a>
+              ) : (
+                <TransitionLink to={card.href} className="hero-rail__link">
+                  {body}
+                </TransitionLink>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    );
+  },
+);

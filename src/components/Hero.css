@@ -1,5 +1,4 @@
 .hero {
-  --hero-progress: 0;
   --hero-void: #050505;
   --hero-cream: #f2eee6;
   height: 200vh;
@@ -59,10 +58,11 @@
   left: 50%;
   top: clamp(72px, 16vh, 148px);
   width: min(94vw, 1120px);
-  transform: translateX(-50%) translateY(calc(var(--hero-progress) * -22vh));
+  transform: translate3d(-50%, 0, 0);
   text-align: center;
   z-index: 3;
   pointer-events: none;
+  will-change: transform;
 }
 
 .hero__title-clip {
@@ -77,13 +77,14 @@
   line-height: 0.9;
   letter-spacing: -0.045em;
   color: var(--hero-cream);
+  will-change: transform;
 }
 
 .hero__lede,
 .hero__kicker {
   margin: 0 auto;
   color: var(--hero-cream);
-  opacity: calc(1 - min(var(--hero-progress) * 2.15, 1));
+  will-change: transform, opacity;
 }
 
 .hero__lede {
@@ -106,7 +107,7 @@
   top: 0;
   left: 0;
   z-index: 2;
-  transform-origin: top left;
+  transform-origin: center center;
   will-change: transform;
 }
 
@@ -151,15 +152,13 @@
 @media (prefers-reduced-motion: reduce) {
   .hero {
     height: 100vh;
-    --hero-progress: 1;
   }
 
-  .hero__copy {
-    transform: translateX(-50%) translateY(-22vh);
-  }
-
+  .hero__copy,
+  .hero__title,
   .hero__lede,
-  .hero__kicker {
-    opacity: 0;
+  .hero__kicker,
+  .hero__globe {
+    will-change: auto;
   }
 }
