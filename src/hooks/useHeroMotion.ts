@@ -23,7 +23,7 @@ export interface HeroMotionRefs {
   globeRef: RefObject<HTMLDivElement | null>;
   copyRef: RefObject<HTMLDivElement | null>;
   titleRef: RefObject<HTMLHeadingElement | null>;
-  ledeRef: RefObject<HTMLParagraphElement | null>;
+  ledeRef?: RefObject<HTMLParagraphElement | null>;
   kickerRef: RefObject<HTMLParagraphElement | null>;
   railRef: RefObject<HTMLUListElement | null>;
   paceRef: MutableRefObject<'full' | 'idle'>;
@@ -103,7 +103,7 @@ const applyPose = (
 
   const ledeY = ledeLeave * -MOTION.ledeLiftPx;
   const ledeOpacity = String(1 - ledeLeave);
-  if (refs.ledeRef.current) {
+  if (refs.ledeRef?.current) {
     refs.ledeRef.current.style.transform = `translate3d(0, ${ledeY}px, 0)`;
     refs.ledeRef.current.style.opacity = ledeOpacity;
   }

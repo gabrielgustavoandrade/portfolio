@@ -10,7 +10,6 @@ export function Hero() {
   const globeRef = useRef<HTMLDivElement>(null);
   const copyRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
-  const ledeRef = useRef<HTMLParagraphElement>(null);
   const kickerRef = useRef<HTMLParagraphElement>(null);
   const railRef = useRef<HTMLUListElement>(null);
   const paceRef = useRef<'full' | 'idle'>('full');
@@ -21,7 +20,6 @@ export function Hero() {
     globeRef,
     copyRef,
     titleRef,
-    ledeRef,
     kickerRef,
     railRef,
     paceRef,
@@ -50,9 +48,10 @@ export function Hero() {
               Gabriel Andrade
             </h1>
           </div>
-          <p className="hero__lede" ref={ledeRef}>
-            Commerce, built for speed.
-          </p>
+          {/*
+            One-line lede slot. Wait for Gabriel's line.
+            Do not invent a slogan.
+          */}
           <p className="hero__kicker" ref={kickerRef}>
             Software Engineer | Agent systems — traces, latency, cost, evals
           </p>

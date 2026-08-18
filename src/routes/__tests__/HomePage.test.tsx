@@ -28,7 +28,9 @@ describe('HomePage', () => {
     expect(
       screen.getByRole('heading', { name: /gabriel andrade/i }),
     ).toBeInTheDocument();
-    expect(screen.getByText(/commerce, built for speed/i)).toBeInTheDocument();
+    expect(
+      screen.queryByText(/commerce, built for speed/i),
+    ).not.toBeInTheDocument();
     expect(
       screen.getByText(/agent systems — traces, latency, cost, evals/i),
     ).toBeInTheDocument();

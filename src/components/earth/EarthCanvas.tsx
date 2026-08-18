@@ -2,9 +2,12 @@ import { type MutableRefObject, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { getFresnelMaterial } from './getFresnelMaterial';
+import {
+  configureEarthTexture,
+  pickEarthTextureTier,
+} from './loadEarthTextures';
 
 // Scene configuration
-const EARTH_TEXTURE_PATH = '/textures/earth/';
 const EARTH_RADIUS = 2.592;
 const EARTH_TILT_DEGREES = -23.4;
 const EARTH_GEOMETRY_DETAIL = 12;
@@ -16,8 +19,8 @@ const CAMERA_FAR = 1000;
 const CAMERA_POSITION_Z = 5;
 
 // Material configuration
-const BUMP_SCALE = 0.04;
-const CLOUDS_OPACITY = 0.8;
+const NORMAL_SCALE = 0.65;
+const CLOUDS_OPACITY = 0.72;
 const CLOUDS_SCALE = 1.003;
 const GLOW_SCALE = 1.01;
 
@@ -28,7 +31,8 @@ const LIGHT_OFFSET_X = -5;
 // Controls configuration
 const DAMPING_FACTOR = 0.05;
 const ROTATE_SPEED = 0.5;
-const MAX_PIXEL_RATIO = 1.75;
+const MAX_PIXEL_RATIO_HI = 2;
+const MAX_PIXEL_RATIO_LO = 1.5;
 
 // Animation configuration
 const ROTATION_SPEED = {
@@ -62,24 +66,30 @@ export function EarthCanvas({
     );
     camera.position.z = CAMERA_POSITION_Z;
 
+    const tier = pickEarthTextureTier();
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, MAX_PIXEL_RATIO));
+    const maxAnisotropy = renderer.capabilities.getMaxAnisotropy();
+    const anisotropy = Math.min(tier === 'hi' ? 8 : 4, maxAnisotropy);
+    renderer.setPixelRatio(
+      Math.min(
+        window.devicePixelRatio,
+        tier === 'hi' ? MAX_PIXEL_RATIO_HI : MAX_PIXEL_RATIO_LO,
+      ),
+    );
     renderer.setSize(sizes.width, sizes.height);
     renderer.domElement.style.width = '100%';
     renderer.domElement.style.height = '100%';
     renderer.setClearColor(0x000000, 0);
-    renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.05;
     containerRef.current.appendChild(renderer.domElement);
 
     const loader = new THREE.TextureLoader();
-    loader.setPath(EARTH_TEXTURE_PATH);
-    const loadTexture = (file: string, useSRGB = true) => {
+    loader.setPath(`/textures/earth/${tier}/`);
+    const loadMap = (file: string, color: boolean) => {
       const texture = loader.load(file);
-      if (useSRGB) {
-        texture.colorSpace = THREE.SRGBColorSpace;
-      }
-      return texture;
+      return configureEarthTexture(texture, { color, anisotropy });
     };
 
     const earthGroup = new THREE.Group();
@@ -90,29 +100,39 @@ export function EarthCanvas({
       EARTH_RADIUS,
       EARTH_GEOMETRY_DETAIL,
     );
+    const dayMap = loadMap('earthmap.jpg', true);
+    const specMap = loadMap('earthspec.jpg', false);
+    const normalMap = loadMap('earthnormal.jpg', false);
+    const nightMap = loadMap('earthlights.jpg', true);
+    const cloudMap = loadMap('earthclouds.jpg', true);
+
     const material = new THREE.MeshPhongMaterial({
-      map: loadTexture('00_earthmap1k.jpg'),
-      specularMap: loadTexture('02_earthspec1k.jpg'),
-      bumpMap: loadTexture('01_earthbump1k.jpg', false),
-      bumpScale: BUMP_SCALE,
+      map: dayMap,
+      specularMap: specMap,
+      normalMap,
+      normalScale: new THREE.Vector2(NORMAL_SCALE, NORMAL_SCALE),
+      specular: new THREE.Color(0x1a1a1a),
+      shininess: 14,
     });
     const earthMesh = new THREE.Mesh(geometry, material);
     earthGroup.add(earthMesh);
 
     const lightsMat = new THREE.MeshBasicMaterial({
-      map: loadTexture('03_earthlights1k.jpg'),
+      map: nightMap,
       blending: THREE.AdditiveBlending,
       transparent: true,
+      depthWrite: false,
     });
     const lightsMesh = new THREE.Mesh(geometry, lightsMat);
     earthGroup.add(lightsMesh);
 
     const cloudsMat = new THREE.MeshStandardMaterial({
-      map: loadTexture('04_earthcloudmap.jpg'),
+      map: cloudMap,
+      alphaMap: cloudMap,
       transparent: true,
       opacity: CLOUDS_OPACITY,
       blending: THREE.AdditiveBlending,
-      alphaMap: loadTexture('05_earthcloudmaptrans.jpg', false),
+      depthWrite: false,
     });
     const cloudsMesh = new THREE.Mesh(geometry, cloudsMat);
     cloudsMesh.scale.setScalar(CLOUDS_SCALE);
@@ -179,6 +199,11 @@ export function EarthCanvas({
       lightsMat.dispose();
       cloudsMat.dispose();
       fresnelMat.dispose();
+      dayMap.dispose();
+      specMap.dispose();
+      normalMap.dispose();
+      nightMap.dispose();
+      cloudMap.dispose();
     };
   }, []);
 
