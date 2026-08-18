@@ -1,35 +1,21 @@
-import { useMagneticHover } from '../hooks/useMagneticHover';
+import { useEnterList } from '../hooks/useEnterList';
 import './Contact.css';
 
 export function Contact() {
-  const emailButtonRef = useMagneticHover<HTMLAnchorElement>({
-    strength: 0.2,
-    maxDistance: 60,
-  });
-  const linkedinButtonRef = useMagneticHover<HTMLAnchorElement>({
-    strength: 0.2,
-    maxDistance: 60,
-  });
-  const githubButtonRef = useMagneticHover<HTMLAnchorElement>({
-    strength: 0.2,
-    maxDistance: 60,
-  });
+  const rootRef = useEnterList();
 
   return (
-    <section className="contact" id="contact">
-      <div className="contact__container">
-
-        <div className="contact__actions">
+    <section className="contact home-block" id="contact" ref={rootRef}>
+      <div className="home-block__inner contact__inner">
+        <div className="contact__actions enter" data-enter>
           <a
-            ref={emailButtonRef}
             href="mailto:gabrielgustavoandrade@gmail.com"
-            className="button button--primary"
+            className="contact__link"
             aria-label="Send me an email"
           >
             Email me
           </a>
           <a
-            ref={linkedinButtonRef}
             href="https://www.linkedin.com/in/gabrielgustavoandrade"
             className="contact__link"
             target="_blank"
@@ -39,7 +25,6 @@ export function Contact() {
             LinkedIn
           </a>
           <a
-            ref={githubButtonRef}
             href="https://github.com/gabrielgustavoandrade"
             className="contact__link"
             target="_blank"

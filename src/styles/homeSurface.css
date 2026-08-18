@@ -1,0 +1,107 @@
+/* Homepage surface — shared with Beat 1–2. Do not bounce or scramble. */
+:root {
+  --void: #050505;
+  --cream: #f2eee6;
+  --cream-muted: rgba(242, 238, 230, 0.62);
+  --line: rgba(242, 238, 230, 0.22);
+  --motion-ease: cubic-bezier(0.65, 0, 0.35, 1);
+  --motion-ms: 800ms;
+}
+
+.home,
+.home-block,
+.footer {
+  background-color: var(--void);
+  color: var(--cream);
+  font-family: var(--font-family-display);
+}
+
+.app:has(.home) {
+  background-color: var(--void);
+}
+
+.home-block {
+  padding: clamp(72px, 12vh, 128px) clamp(16px, 4vw, 56px);
+  background-color: var(--void);
+  color: var(--cream);
+}
+
+.home-block__inner {
+  max-width: 1040px;
+  margin-inline: auto;
+}
+
+.home-block__header {
+  margin-block-end: clamp(36px, 5vw, 56px);
+}
+
+.home-block__title {
+  margin: 0;
+  font-family: var(--font-family-display);
+  font-size: clamp(2rem, 4.6vw, 3.6rem);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  color: var(--cream);
+}
+
+.home-block__lede {
+  margin: 18px 0 0;
+  max-width: 36rem;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--cream-muted);
+}
+
+.enter {
+  opacity: 0;
+  transform: translate3d(0, 20px, 0);
+  transition:
+    transform var(--motion-ms) var(--motion-ease),
+    opacity var(--motion-ms) var(--motion-ease);
+  transition-delay: var(--enter-delay, 0ms);
+}
+
+.enter.is-in {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+@keyframes home-enter-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.rail-label {
+  margin: 0;
+  padding-block-end: 10px;
+  border-block-end: 1px solid var(--line);
+  font-family: var(--font-family-display);
+  font-size: 13px;
+  letter-spacing: 0.03em;
+  color: #f6f3ec;
+}
+
+.rail-label span {
+  color: var(--cream-muted);
+  margin-inline-end: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enter {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .blog-card__content,
+  .performance-panel {
+    animation: none;
+  }
+}

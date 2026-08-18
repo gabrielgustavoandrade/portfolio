@@ -73,6 +73,22 @@ describe('HomePage', () => {
     expect(
       screen.getByRole('heading', { name: /selected work/i }),
     ).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: /open source/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: /build log/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: /about me/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/i'm a brazilian software engineer based in madrid/i),
+    ).toBeInTheDocument();
+    expect(document.querySelector('.reveal-text__word')).toBeNull();
+    expect(
+      screen.getByRole('link', { name: /send me an email/i }),
+    ).toBeInTheDocument();
   });
 
   it('jumps to the beat 2 end pose when reduced motion is preferred', () => {
@@ -95,6 +111,8 @@ describe('HomePage', () => {
     expect(
       screen.getByRole('link', { name: /01\s+earth/i }),
     ).toBeInTheDocument();
+    expect(document.querySelector('.work-card')).toHaveClass('is-in');
+    expect(document.querySelector('.about__paragraph')).toHaveClass('is-in');
 
     window.matchMedia = matchMedia;
   });

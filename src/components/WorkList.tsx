@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from "react";
-import type { Project } from "../data/projects";
-import { TransitionLink } from "./TransitionLink";
-import "./WorkList.css";
+import type { CSSProperties } from 'react';
+import type { Project } from '../data/projects';
+import { useEnterList } from '../hooks/useEnterList';
+import { TransitionLink } from './TransitionLink';
+import './WorkList.css';
 
 interface WorkListProps {
   projects: Project[];
@@ -10,145 +11,60 @@ interface WorkListProps {
   subtitle?: string;
 }
 
-function WorkCard({ project }: { project: Project }) {
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  const handleToggle = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsExpanded(!isExpanded);
-  };
+function WorkCard({ project, index }: { project: Project; index: number }) {
+  const ordinal = String(index + 1).padStart(2, '0');
 
   return (
-    <div className={`work-card ${isExpanded ? 'work-card--expanded' : ''}`}>
-      <div className="work-card__main">
-        <TransitionLink
-          to={`/work/${project.slug}`}
-          className="work-card__link"
-        >
-          <h3 className="work-card__title" aria-label={project.title}>
-            {project.title}
-          </h3>
-        </TransitionLink>
-        <p className="work-card__subtitle">{project.subtitle}</p>
-        <p className="work-card__summary">{project.summary}</p>
-
-        {project.links && project.links.length > 0 && (
-          <div className="work-card__links">
-            {project.links.map((link) => (
-              <a
-                key={link.url}
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="work-card__link-item"
-                onClick={(e) => e.stopPropagation()}
-              >
-                {link.label} ↗
-              </a>
-            ))}
-          </div>
-        )}
-
-        <button
-          type="button"
-          className="work-card__preview-toggle"
-          onClick={handleToggle}
-          aria-expanded={isExpanded}
-          aria-controls={`preview-${project.slug}`}
-          aria-label={isExpanded ? 'Hide preview' : 'Show preview'}
-        >
-          {isExpanded ? 'Hide details' : 'Show preview'}
-        </button>
-      </div>
-
-      {isExpanded && (
-        <div className="work-card__preview" id={`preview-${project.slug}`}>
-          <div className="work-card__preview-section">
-            <h4 className="work-card__preview-title">Tech Stack</h4>
-            <div className="work-card__stack">
-              {project.stack.map((tech) => (
-                <span key={tech} className="work-card__stack-item">
-                  {tech}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          <div className="work-card__preview-section">
-            <h4 className="work-card__preview-title">Key Challenges</h4>
-            <ul className="work-card__list">
-              {project.challenges.slice(0, 3).map((challenge, idx) => (
-                <li key={idx}>{challenge}</li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="work-card__preview-section">
-            <h4 className="work-card__preview-title">Solutions</h4>
-            <ul className="work-card__list">
-              {project.solutions.slice(0, 3).map((solution, idx) => (
-                <li key={idx}>{solution}</li>
-              ))}
-            </ul>
-          </div>
-
-          <TransitionLink
-            to={`/work/${project.slug}`}
-            className="work-card__full-link"
-          >
-            View full case study →
-          </TransitionLink>
+    <article
+      className="work-card enter"
+      data-enter
+      style={{ '--enter-delay': `${index * 45}ms` } as CSSProperties}
+    >
+      <p className="rail-label">
+        <span>{ordinal}</span> {project.title}
+      </p>
+      <TransitionLink to={`/work/${project.slug}`} className="work-card__still">
+        <p className="work-card__still-text">{project.subtitle}</p>
+      </TransitionLink>
+      <p className="work-card__summary">{project.summary}</p>
+      {project.links && project.links.length > 0 && (
+        <div className="work-card__links">
+          {project.links.map((link) => (
+            <a
+              key={link.url}
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="work-card__link-item"
+            >
+              {link.label}
+            </a>
+          ))}
         </div>
       )}
-    </div>
+    </article>
   );
 }
 
 export function WorkList({
   projects,
-  id = "work",
-  title = "Selected Work",
-  subtitle = "Products and systems I helped design and build.",
+  id = 'work',
+  title = 'Selected Work',
+  subtitle = 'Products and systems I helped design and build.',
 }: WorkListProps) {
-  const cardsRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const cards = cardsRef.current?.querySelectorAll(".work-card");
-    if (!cards) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-          }
-        });
-      },
-      {
-        threshold: 0.1,
-        rootMargin: "0px 0px -50px 0px",
-      },
-    );
-
-    cards.forEach((card) => {
-      observer.observe(card);
-    });
-
-    return () => observer.disconnect();
-  }, [projects]);
+  const rootRef = useEnterList();
 
   return (
-    <section className="work-list" id={id}>
-      <div className="work-list__container">
-        <div className="work-list__header">
-          <h2 className="work-list__title">{title}</h2>
-          <p className="work-list__subtitle">{subtitle}</p>
-        </div>
+    <section className="work-list home-block" id={id} ref={rootRef}>
+      <div className="home-block__inner">
+        <header className="home-block__header enter" data-enter>
+          <h2 className="home-block__title">{title}</h2>
+          <p className="home-block__lede">{subtitle}</p>
+        </header>
 
-        <div className="work-list__grid" ref={cardsRef}>
-          {projects.map((project) => (
-            <WorkCard key={project.slug} project={project} />
+        <div className="work-list__grid">
+          {projects.map((project, index) => (
+            <WorkCard key={project.slug} project={project} index={index} />
           ))}
         </div>
       </div>

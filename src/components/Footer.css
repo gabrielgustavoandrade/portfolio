@@ -1,16 +1,16 @@
 .footer {
-  padding: var(--space-40) var(--space-24);
-  background-color: var(--color-bg);
-  border-top: 1px solid var(--color-border);
+  padding: 40px clamp(16px, 4vw, 56px);
+  background-color: var(--void);
+  border-top: 1px solid var(--line);
 }
 
 .footer__container {
-  max-width: var(--max-width-content);
-  margin: 0 auto;
+  max-width: 1040px;
+  margin-inline: auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-24);
+  gap: 24px;
   position: relative;
 }
 
@@ -19,34 +19,32 @@
   left: 0;
   display: flex;
   align-items: center;
-  gap: var(--space-8);
-  padding: var(--space-8) var(--space-16);
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: var(--radius-md);
-  color: var(--color-text-muted);
-  font-family: var(--font-family);
-  font-size: var(--font-size-small);
+  gap: 8px;
+  padding: 8px 0;
+  background: none;
+  border: none;
+  color: var(--cream-muted);
+  font-family: var(--font-family-display);
+  font-size: 13px;
+  letter-spacing: 0.04em;
   cursor: pointer;
-  transition: all var(--transition-duration-normal) var(--transition-easing-bounce);
 }
 
 .footer__tech-button:hover {
-  background: rgba(96, 165, 250, 0.1);
-  border-color: rgba(96, 165, 250, 0.3);
-  color: var(--color-accent-blue);
-  transform: translateY(-2px);
+  color: #fff;
 }
 
 .footer__tech-button svg {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
 }
 
 .footer__text {
-  font-size: var(--font-size-xs);
-  line-height: var(--line-height-normal);
-  color: var(--color-text-muted);
+  margin: 0;
+  font-family: var(--font-family-display);
+  font-size: 13px;
+  letter-spacing: 0.03em;
+  color: var(--cream-muted);
 }
 
 .footer__performance {
@@ -54,30 +52,18 @@
   right: 0;
 }
 
-/* Mobile styles */
 @media (max-width: 640px) {
-  .footer {
-    padding: var(--space-40) var(--space-16);
-  }
-
   .footer__container {
     flex-direction: column;
-    gap: var(--space-16);
+    gap: 16px;
   }
 
-  .footer__tech-button {
+  .footer__tech-button,
+  .footer__performance {
     position: static;
   }
 
   .footer__tech-button span {
     display: none;
-  }
-
-  .footer__tech-button {
-    padding: var(--space-8);
-  }
-
-  .footer__performance {
-    position: static;
   }
 }

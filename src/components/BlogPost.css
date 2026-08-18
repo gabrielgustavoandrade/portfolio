@@ -36,8 +36,8 @@
   gap: var(--space-16);
   margin-top: var(--space-16);
   padding: var(--space-16);
-  background: rgba(16, 185, 129, 0.05);
-  border: 1px solid rgba(16, 185, 129, 0.2);
+  background: #0c0c0c;
+  border: 1px solid rgba(242, 238, 230, 0.16);
   border-radius: var(--radius-md);
 }
 
@@ -55,7 +55,7 @@
 .blog-post__metric-value {
   font-size: var(--font-size-md);
   font-weight: 600;
-  color: var(--color-status-good);
+  color: var(--cream, var(--color-text-primary));
   font-family: "SF Mono", "Monaco", "Inconsolata", "Fira Code", monospace;
 }
 
@@ -107,7 +107,7 @@
   content: "→";
   position: absolute;
   left: 0;
-  color: var(--color-accent-blue);
+  color: var(--cream-muted, var(--color-text-muted));
   font-weight: 600;
 }
 
@@ -138,8 +138,8 @@
 .blog-post__takeaways {
   margin-top: var(--space-32);
   padding: var(--space-24);
-  background: rgba(96, 165, 250, 0.05);
-  border: 1px solid rgba(96, 165, 250, 0.2);
+  background: #0c0c0c;
+  border: 1px solid rgba(242, 238, 230, 0.16);
   border-radius: var(--radius-md);
 }
 
@@ -147,7 +147,7 @@
   font-size: var(--font-size-md);
   font-weight: 600;
   line-height: var(--line-height-tight);
-  color: var(--color-accent-blue);
+  color: var(--cream, var(--color-text-primary));
   margin-bottom: var(--space-16);
 }
 
@@ -167,10 +167,10 @@
 }
 
 .blog-post__takeaways-item::before {
-  content: "✓";
+  content: "–";
   position: absolute;
   left: 0;
-  color: var(--color-status-good);
+  color: var(--cream-muted, var(--color-text-muted));
   font-weight: 600;
 }
 

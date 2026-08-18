@@ -24,7 +24,7 @@ export function HomePage() {
   }, [hash]);
 
   return (
-    <>
+    <div className="home">
       <a href="#main-content" className="skip-link">
         Skip to main content
       </a>
@@ -42,6 +42,6 @@ export function HomePage() {
         <Contact />
       </main>
       <Footer />
-    </>
+    </div>
   );
 }
