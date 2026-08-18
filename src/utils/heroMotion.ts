@@ -26,9 +26,9 @@ export const MOTION = {
   railStart: 0.26,
   railEnd: 0.88,
   railStagger: 0.045,
-  railShiftX: 40,
-  railShiftY: 72,
-  railItemLift: 16,
+  railShiftX: 28,
+  railShiftYVh: 0.84,
+  railItemLift: 20,
   idleScale: 0.42,
 } as const;
 

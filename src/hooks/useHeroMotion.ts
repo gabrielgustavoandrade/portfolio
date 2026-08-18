@@ -54,7 +54,7 @@ const readTarget = (
     return { progress: 1, phase: 'end' };
   }
 
-  if (rect.top > 0) {
+  if (rect.top >= 0) {
     return { progress: 0, phase: 'start' };
   }
 
@@ -113,7 +113,7 @@ const applyPose = (
   }
 
   if (refs.railRef.current) {
-    refs.railRef.current.style.transform = `translate3d(${(1 - rail) * MOTION.railShiftX}px, ${(1 - rail) * MOTION.railShiftY}px, 0)`;
+    refs.railRef.current.style.transform = `translate3d(${(1 - rail) * MOTION.railShiftX}px, ${(1 - rail) * MOTION.railShiftYVh * viewportHeight}px, 0)`;
     const items =
       refs.railRef.current.querySelectorAll<HTMLElement>('.hero-rail__item');
     items.forEach((item, index) => {
