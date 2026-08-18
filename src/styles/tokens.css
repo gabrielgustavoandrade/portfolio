@@ -3,7 +3,7 @@
   --color-bg: #0b0c10;
   --color-text-primary: #e8e8e8;
   --color-text-muted: #a1a1aa;
-  --color-border: rgba(255, 255, 255, 0.20);
+  --color-border: rgba(255, 255, 255, 0.2);
   --color-card-bg: rgba(255, 255, 255, 0.05);
   --color-card-bg-hover: rgba(255, 255, 255, 0.08);
   --color-focus: rgba(255, 255, 255, 0.4);
@@ -55,6 +55,7 @@
 
   /* Typography Scale */
   --font-family: "Inter", system-ui, -apple-system, sans-serif;
+  --font-family-display: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
   --font-size-xs: 12px;
   --font-size-sm: 13px;
   --font-size-small: 14px;

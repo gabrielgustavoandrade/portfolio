@@ -1,5 +1,4 @@
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { vi } from 'vitest';
 import { HomePage } from '../HomePage';
@@ -23,57 +22,76 @@ const renderHomePage = () =>
   );
 
 describe('HomePage', () => {
-  it('renders the hero and work section headlines', () => {
+  it('renders beat 1 copy, the live earth canvas, and beat 2 work cards', () => {
     renderHomePage();
 
     expect(
       screen.getByRole('heading', { name: /gabriel andrade/i }),
     ).toBeInTheDocument();
+    expect(screen.getByText(/commerce, built for speed/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/agent systems — traces, latency, cost, evals/i),
+    ).toBeInTheDocument();
+    expect(screen.getByTestId('earth-canvas')).toBeInTheDocument();
+
+    expect(screen.getByRole('link', { name: /^work$/i })).toHaveAttribute(
+      'href',
+      '#work',
+    );
+    expect(screen.getByRole('link', { name: /^about$/i })).toHaveAttribute(
+      'href',
+      '#about',
+    );
+    expect(screen.getByRole('link', { name: /^lab$/i })).toHaveAttribute(
+      'href',
+      '#build-log',
+    );
+
+    expect(screen.getByRole('link', { name: /01\s+earth/i })).toHaveAttribute(
+      'href',
+      '#build-log',
+    );
+    expect(
+      screen.getByRole('link', { name: /02\s+smart-date-input/i }),
+    ).toHaveAttribute('href', '/work/smart-date-input');
+    expect(
+      screen.getByText((_, node) => {
+        return (
+          node?.classList.contains('hero-rail__label') === true &&
+          /03/.test(node.textContent ?? '') &&
+          /commerce/i.test(node.textContent ?? '')
+        );
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('link', { name: /03\s+commerce/i }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByText(/still to come/i)).toBeInTheDocument();
 
     expect(
       screen.getByRole('heading', { name: /selected work/i }),
     ).toBeInTheDocument();
-
-    expect(
-      screen.getByText(/agent systems — traces, latency, cost, evals/i),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(/consumer and commerce platforms/i),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(/focused on performance, maintainability/i),
-    ).toBeInTheDocument();
   });
 
-  it('scrolls to the requested section when hero CTAs are pressed', async () => {
-    const workSection = document.createElement('section');
-    workSection.id = 'work';
-    workSection.scrollIntoView = vi.fn() as typeof workSection.scrollIntoView;
+  it('jumps to the beat 2 end pose when reduced motion is preferred', () => {
+    const matchMedia = window.matchMedia;
+    window.matchMedia = (query: string): MediaQueryList => ({
+      matches: query.includes('prefers-reduced-motion'),
+      media: query,
+      onchange: null,
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    });
 
-    const contactSection = document.createElement('section');
-    contactSection.id = 'contact';
-    contactSection.scrollIntoView =
-      vi.fn() as typeof contactSection.scrollIntoView;
-
-    document.body.appendChild(workSection);
-    document.body.appendChild(contactSection);
-
-    const user = userEvent.setup();
     renderHomePage();
 
-    await user.click(
-      screen.getByRole('button', { name: /selected work section/i }),
-    );
-    expect(workSection.scrollIntoView).toHaveBeenCalledWith({
-      behavior: 'smooth',
-    });
+    expect(document.querySelector('.hero')).toHaveClass('hero--reduced');
+    expect(screen.getByTestId('earth-canvas')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /01\s+earth/i })).toBeInTheDocument();
 
-    await user.click(screen.getByRole('button', { name: /contact section/i }));
-    expect(contactSection.scrollIntoView).toHaveBeenCalledWith({
-      behavior: 'smooth',
-    });
-
-    workSection.remove();
-    contactSection.remove();
+    window.matchMedia = matchMedia;
   });
 });

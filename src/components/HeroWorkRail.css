@@ -1,0 +1,171 @@
+.hero-rail {
+  --rail-progress: 0;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  inset-inline: clamp(16px, 4vw, 56px);
+  top: clamp(132px, 24vh, 220px);
+  z-index: 4;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2.4vw, 32px);
+  opacity: var(--rail-progress);
+  transform: translate3d(
+    calc((1 - var(--rail-progress)) * 3.5rem),
+    calc((1 - var(--rail-progress)) * 4.5rem),
+    0
+  );
+  pointer-events: none;
+}
+
+.hero-rail__item {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  list-style: none;
+}
+
+.hero-rail__link {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  color: inherit;
+  text-decoration: none;
+}
+
+.hero-rail__item--placeholder {
+  gap: 10px;
+  cursor: default;
+}
+
+.hero-rail__label {
+  margin: 0;
+  padding-block-end: 10px;
+  border-block-end: 1px solid rgba(242, 238, 230, 0.22);
+  font-size: 13px;
+  letter-spacing: 0.03em;
+  color: #f6f3ec;
+}
+
+.hero-rail__label span {
+  color: rgba(246, 243, 236, 0.62);
+  margin-inline-end: 8px;
+}
+
+.hero-rail__still {
+  aspect-ratio: 5 / 4;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #0c0c0c;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.hero-rail__still--earth {
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 50% 40%, #161616, #050505 72%);
+}
+
+.hero-rail__earth-sphere {
+  width: min(72%, 220px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      circle at 30% 28%,
+      rgba(255, 255, 255, 0.16),
+      transparent 34%
+    ),
+    url("/textures/earth/00_earthmap1k.jpg") 42% 48% / 180% auto;
+  box-shadow:
+    inset -22px 0 36px rgba(0, 0, 0, 0.72),
+    0 0 40px rgba(0, 0, 0, 0.35);
+}
+
+.hero-rail__still--input {
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 50% 0%, #1a1a1a, #0a0a0a 70%);
+  padding: 24px;
+}
+
+.hero-rail__field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: min(100%, 280px);
+  min-height: 48px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(242, 238, 230, 0.16);
+  background: rgba(8, 8, 8, 0.86);
+  color: #f2eee6;
+  font-size: 14px;
+}
+
+.hero-rail__field-text {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hero-rail__caret {
+  width: 1px;
+  height: 16px;
+  background: #f2eee6;
+}
+
+.hero-rail__icon {
+  flex-shrink: 0;
+  color: rgba(242, 238, 230, 0.7);
+}
+
+.hero-rail__still--hole {
+  display: grid;
+  place-items: center;
+  background:
+    repeating-linear-gradient(
+      -12deg,
+      rgba(255, 255, 255, 0.015) 0 8px,
+      transparent 8px 16px
+    ), #0a0a0a;
+}
+
+.hero-rail__hole-label {
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(242, 238, 230, 0.38);
+}
+
+@media (max-width: 720px) {
+  .hero-rail {
+    top: 112px;
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding-block-end: 8px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .hero-rail__item {
+    flex: 0 0 74%;
+    scroll-snap-align: start;
+  }
+
+  .hero-rail__still {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-rail {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+}

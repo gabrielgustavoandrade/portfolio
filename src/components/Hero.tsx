@@ -1,94 +1,61 @@
-import { useEffect, useState } from "react";
-import { useMagneticHover } from "../hooks/useMagneticHover";
-import "./Hero.css";
-import { EarthCanvas } from "./earth/EarthCanvas";
-import { HandwrittenNote } from "./HandwrittenNote";
-import { HeroStarfield } from "./HeroStarfield";
-import { RevealText } from "./RevealText";
+import { type CSSProperties, useRef } from 'react';
+import { usePinnedProgress } from '../hooks/usePinnedProgress';
+import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
+import { getGlobePose, getRailProgress } from '../utils/heroMotion';
+import { EarthCanvas } from './earth/EarthCanvas';
+import { HeroWorkRail } from './HeroWorkRail';
+import './Hero.css';
 
-interface HeroProps {
-  onWorkClick: () => void;
-  onContactClick: () => void;
-}
-
-export function Hero({ onWorkClick, onContactClick }: HeroProps) {
-  const [showScrollCue, setShowScrollCue] = useState(false);
-  const primaryButtonRef = useMagneticHover<HTMLButtonElement>({
-    strength: 0.2,
-    maxDistance: 60,
-  });
-  const secondaryButtonRef = useMagneticHover<HTMLButtonElement>({
-    strength: 0.2,
-    maxDistance: 60,
-  });
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowScrollCue(true);
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, []);
+export function Hero() {
+  const pinRef = useRef<HTMLElement>(null);
+  const reducedMotion = usePrefersReducedMotion();
+  const { progress, viewportWidth, viewportHeight } = usePinnedProgress(
+    pinRef,
+    { disabled: reducedMotion },
+  );
+  const pose = getGlobePose(progress, viewportWidth, viewportHeight);
+  const railProgress = reducedMotion ? 1 : getRailProgress(progress);
 
   return (
-    <section className="hero">
-      <HeroStarfield />
-      <div className="hero__layout">
-        <div className="hero__content">
-          <RevealText as="h1" className="hero__title" stagger={true} delay={0}>
-            Gabriel Andrade
-          </RevealText>
-          <p className="hero__subtitle">
+    <section
+      ref={pinRef}
+      className={`hero${reducedMotion ? ' hero--reduced' : ''}${
+        railProgress > 0.55 ? ' hero--rail-live' : ''
+      }`}
+      style={{ '--hero-progress': progress } as CSSProperties}
+      aria-label="Introduction"
+    >
+      <div className="hero__sticky">
+        <nav className="hero__nav" aria-label="Primary">
+          <a href="#work">Work</a>
+          <a href="#about">About</a>
+          <a href="#build-log">Lab</a>
+        </nav>
+
+        <div className="hero__copy">
+          <div className="hero__title-clip">
+            <h1 className="hero__title">Gabriel Andrade</h1>
+          </div>
+          <p className="hero__lede">Commerce, built for speed.</p>
+          <p className="hero__kicker">
             Software Engineer | Agent systems — traces, latency, cost, evals
           </p>
-          <p className="hero__tagline">
-            Seven years designing and delivering scalable applications across
-            consumer and commerce platforms. Full-stack engineer focused on
-            performance, maintainability, and measurable impact.
-          </p>
-
-          <div className="hero__cta">
-            <button
-              ref={primaryButtonRef}
-              type="button"
-              className="button button--primary"
-              onClick={onWorkClick}
-              aria-label="Navigate to selected work section"
-            >
-              See my work
-            </button>
-            <button
-              ref={secondaryButtonRef}
-              type="button"
-              className="button button--secondary"
-              onClick={onContactClick}
-              aria-label="Navigate to contact section"
-            >
-              Contact
-            </button>
-          </div>
         </div>
 
-        <div className="hero__visual" aria-hidden="true">
+        <div
+          className={`hero__globe${pose.interactive ? '' : ' hero__globe--quiet'}`}
+          style={{
+            width: pose.size,
+            height: pose.size,
+            transform: `translate3d(${pose.x}px, ${pose.y}px, 0) scale(${pose.scale})`,
+          }}
+          aria-hidden="true"
+        >
           <EarthCanvas />
-          <HandwrittenNote text="You can spin it!" />
         </div>
-      </div>
 
-      {showScrollCue && (
-        <div className="hero__scroll-cue" aria-hidden="true">
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            aria-hidden="true"
-          >
-            <polyline points="6 9 12 15 18 9" />
-          </svg>
-        </div>
-      )}
+        <HeroWorkRail progress={railProgress} />
+      </div>
     </section>
   );
 }
