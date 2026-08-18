@@ -109,12 +109,24 @@
 }
 
 @media (max-width: 720px) {
-  .hero {
-    height: 175vh;
+  .hero,
+  .hero.hero--mobile,
+  .hero--reduced,
+  .hero--pinned,
+  .hero--released {
+    height: auto;
+    min-height: 100vh;
   }
 
-  .hero--reduced {
-    height: 100vh;
+  .hero__sticky,
+  .hero--pinned .hero__sticky,
+  .hero--released .hero__sticky,
+  .hero.hero--mobile .hero__sticky {
+    position: relative;
+    inset: auto;
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
   }
 
   .hero__nav {
@@ -122,8 +134,41 @@
     gap: var(--sys-space-3);
   }
 
-  .hero__copy {
-    top: 64px;
+  .hero__copy,
+  .hero--rail-live .hero__copy,
+  .hero--reduced .hero__copy,
+  .hero--released .hero__copy,
+  .hero.hero--mobile .hero__copy {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: auto;
+    transform: none;
+    visibility: visible;
+    text-align: left;
+    padding: 72px var(--sys-inset) var(--sys-space-3);
+    z-index: 3;
+  }
+
+  .hero__title {
+    font-size: clamp(5rem, 24vw, 7.5rem);
+    line-height: 0.86;
+    transform: none;
+    opacity: 1;
+  }
+
+  .hero__kicker {
+    margin-inline: 0;
+    transform: none;
+    opacity: 1;
+  }
+
+  .hero__globe {
+    position: relative;
+    width: min(88vw, 420px);
+    height: min(88vw, 420px);
+    margin-inline: auto;
+    transform: none;
   }
 }
 
@@ -137,5 +182,12 @@
   .hero__kicker,
   .hero__globe {
     will-change: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) and (max-width: 720px) {
+  .hero {
+    height: auto;
+    min-height: 100vh;
   }
 }

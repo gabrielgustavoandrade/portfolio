@@ -92,6 +92,13 @@ describe('HomePage', () => {
     expect(
       screen.getByRole('link', { name: /send me an email/i }),
     ).toBeInTheDocument();
+
+    const workSection = document.querySelector('#work');
+    expect(
+      workSection?.querySelector('.sys-card:not(.sys-card--live)'),
+    ).toBeNull();
+    expect(document.querySelector('.performance-toggle__button')).toBeNull();
+    expect(screen.queryByText(/how i built this/i)).not.toBeInTheDocument();
   });
 
   it('jumps to the beat 2 end pose when reduced motion is preferred', () => {

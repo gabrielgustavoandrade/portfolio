@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { useHeroMotion } from '../hooks/useHeroMotion';
+import { useIsNarrowViewport } from '../hooks/useIsNarrowViewport';
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
 import { EarthCanvas } from './earth/EarthCanvas';
 import { HeroWorkRail } from './HeroWorkRail';
@@ -14,8 +15,10 @@ export function Hero() {
   const railRef = useRef<HTMLUListElement>(null);
   const paceRef = useRef<'full' | 'idle'>('full');
   const reducedMotion = usePrefersReducedMotion();
+  const narrow = useIsNarrowViewport();
   const { phase, railLive } = useHeroMotion({
     reducedMotion,
+    staticLayout: narrow,
     pinRef,
     globeRef,
     copyRef,
@@ -28,11 +31,11 @@ export function Hero() {
   return (
     <section
       ref={pinRef}
-      className={`hero${reducedMotion ? ' hero--reduced' : ''}${
-        railLive ? ' hero--rail-live' : ''
-      }${phase === 'pin' ? ' hero--pinned' : ''}${
-        phase === 'end' ? ' hero--released' : ''
-      }`}
+      className={`hero${narrow ? ' hero--mobile' : ''}${
+        reducedMotion && !narrow ? ' hero--reduced' : ''
+      }${railLive && !narrow ? ' hero--rail-live' : ''}${
+        !narrow && phase === 'pin' ? ' hero--pinned' : ''
+      }${!narrow && phase === 'end' ? ' hero--released' : ''}`}
       aria-label="Introduction"
     >
       <div className="hero__sticky">

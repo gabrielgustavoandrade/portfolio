@@ -15,7 +15,7 @@
   --sys-line: rgba(242, 238, 230, 0.22);
   --sys-focus: rgba(242, 238, 230, 0.45);
 
-  --sys-type-hero: clamp(2.6rem, 11vw, 8.6rem);
+  --sys-type-hero: clamp(5rem, 14vw + 2.4rem, 8.6rem);
   --sys-type-section: clamp(2rem, 4.6vw, 3.6rem);
   --sys-type-body: 1.05rem;
   --sys-type-kicker: 0.92rem;
@@ -363,8 +363,24 @@ a.sys-card:hover,
   color: var(--sys-muted);
 }
 
-.home .scroll-progress {
+.home .scroll-progress,
+.app:has(.home) .scroll-progress {
   background-color: rgba(242, 238, 230, 0.08);
+}
+
+.home .fab,
+.home .performance-toggle,
+.home .performance-toggle__button,
+.home .performance-panel,
+.home .footer__tech-button,
+.home .footer__performance,
+#vercel-live-feedback,
+[data-vercel-toolbar],
+vercel-live-feedback,
+.vercel-toolbar,
+body > [id*="vercel"],
+body > [class*="vercel"] {
+  display: none !important;
 }
 
 .home .scroll-progress__bar {

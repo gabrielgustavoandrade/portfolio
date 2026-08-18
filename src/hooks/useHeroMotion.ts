@@ -31,6 +31,7 @@ export interface HeroMotionRefs {
 
 interface UseHeroMotionOptions extends HeroMotionRefs {
   reducedMotion: boolean;
+  staticLayout?: boolean;
 }
 
 const readTarget = (
@@ -128,8 +129,41 @@ const applyPose = (
   return { railLive: rail > 0.55 };
 };
 
+const clearPose = (refs: HeroMotionRefs) => {
+  if (refs.globeRef.current) {
+    refs.globeRef.current.style.width = '';
+    refs.globeRef.current.style.height = '';
+    refs.globeRef.current.style.transform = '';
+    refs.globeRef.current.classList.remove('hero__globe--quiet');
+  }
+  if (refs.copyRef.current) {
+    refs.copyRef.current.style.transform = '';
+  }
+  if (refs.titleRef.current) {
+    refs.titleRef.current.style.transform = '';
+    refs.titleRef.current.style.opacity = '';
+  }
+  if (refs.ledeRef?.current) {
+    refs.ledeRef.current.style.transform = '';
+    refs.ledeRef.current.style.opacity = '';
+  }
+  if (refs.kickerRef.current) {
+    refs.kickerRef.current.style.transform = '';
+    refs.kickerRef.current.style.opacity = '';
+  }
+  if (refs.railRef.current) {
+    refs.railRef.current.style.transform = '';
+    for (const item of refs.railRef.current.querySelectorAll<HTMLElement>(
+      '.hero-rail__item',
+    )) {
+      item.style.transform = '';
+    }
+  }
+};
+
 export function useHeroMotion({
   reducedMotion,
+  staticLayout = false,
   pinRef,
   globeRef,
   copyRef,
@@ -159,14 +193,23 @@ export function useHeroMotion({
     railRef,
     paceRef,
   };
-  const [phase, setPhase] = useState<PinPhase>(reducedMotion ? 'end' : 'start');
-  const [railLive, setRailLive] = useState(reducedMotion);
-  const smoothedRef = useRef(reducedMotion ? 1 : 0);
+  const [phase, setPhase] = useState<PinPhase>(
+    staticLayout || reducedMotion ? (staticLayout ? 'start' : 'end') : 'start',
+  );
+  const [railLive, setRailLive] = useState(staticLayout || reducedMotion);
+  const smoothedRef = useRef(staticLayout || reducedMotion ? 1 : 0);
   const lastTimeRef = useRef(0);
   const lastSizeRef = useRef(0);
 
   useLayoutEffect(() => {
     const refs = refsBag.current;
+    if (staticLayout) {
+      clearPose(refs);
+      refs.paceRef.current = 'full';
+      setPhase('start');
+      setRailLive(true);
+      return;
+    }
     const target = reducedMotion
       ? { progress: 1, phase: 'end' as const }
       : readTarget(refs.pinRef.current);
@@ -180,10 +223,17 @@ export function useHeroMotion({
     );
     setPhase(target.phase);
     setRailLive(next.railLive);
-  }, [reducedMotion]);
+  }, [reducedMotion, staticLayout]);
 
   useEffect(() => {
     const refs = refsBag.current;
+    if (staticLayout) {
+      clearPose(refs);
+      setPhase('start');
+      setRailLive(true);
+      refs.paceRef.current = 'full';
+      return;
+    }
     if (reducedMotion) {
       applyPose(refs, 1, window.innerWidth, window.innerHeight, lastSizeRef);
       setPhase('end');
@@ -253,7 +303,7 @@ export function useHeroMotion({
       window.removeEventListener('scroll', kick);
       window.removeEventListener('resize', kick);
     };
-  }, [reducedMotion]);
+  }, [reducedMotion, staticLayout]);
 
   return { phase, railLive };
 }
