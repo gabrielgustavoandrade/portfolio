@@ -1,16 +1,14 @@
 import { forwardRef } from 'react';
 import { heroWorkCards } from '../data/heroWork';
 import { LiveSmartDateInput } from './LiveSmartDateInput';
+import { RailLabel } from './system/RailLabel';
 import { TransitionLink } from './TransitionLink';
 import './HeroWorkRail.css';
 
 function CardStill({ id }: { id: (typeof heroWorkCards)[number]['id'] }) {
   if (id === 'earth') {
     return (
-      <div
-        className="hero-rail__still hero-rail__still--earth"
-        aria-hidden="true"
-      >
+      <div className="sys-card hero-rail__still--earth" aria-hidden="true">
         <div className="hero-rail__earth-sphere" />
       </div>
     );
@@ -18,15 +16,15 @@ function CardStill({ id }: { id: (typeof heroWorkCards)[number]['id'] }) {
 
   if (id === 'smart-date-input') {
     return (
-      <div className="hero-rail__still hero-rail__still--input">
+      <div className="sys-card sys-card--live">
         <LiveSmartDateInput />
       </div>
     );
   }
 
   return (
-    <div className="hero-rail__still hero-rail__still--hole">
-      <span className="hero-rail__hole-label">Still to come</span>
+    <div className="sys-card hero-rail__still--hole">
+      <span className="sys-meta">Still to come</span>
     </div>
   );
 }
@@ -36,11 +34,7 @@ export const HeroWorkRail = forwardRef<HTMLUListElement>(
     return (
       <ul className="hero-rail" ref={ref}>
         {heroWorkCards.map((card) => {
-          const label = (
-            <p className="hero-rail__label">
-              <span>{card.index}</span> {card.title}
-            </p>
-          );
+          const label = <RailLabel index={card.index}>{card.title}</RailLabel>;
 
           return (
             <li
@@ -54,24 +48,24 @@ export const HeroWorkRail = forwardRef<HTMLUListElement>(
               }`}
             >
               {card.kind === 'placeholder' ? (
-                <>
+                <div className="sys-card-block">
                   {label}
                   <CardStill id={card.id} />
-                </>
+                </div>
               ) : card.id === 'smart-date-input' ? (
                 <>
-                  <TransitionLink to={card.href} className="hero-rail__link">
+                  <TransitionLink to={card.href} className="sys-card-block">
                     {label}
                   </TransitionLink>
                   <CardStill id={card.id} />
                 </>
               ) : card.href.startsWith('#') ? (
-                <a href={card.href} className="hero-rail__link">
+                <a href={card.href} className="sys-card-block">
                   {label}
                   <CardStill id={card.id} />
                 </a>
               ) : (
-                <TransitionLink to={card.href} className="hero-rail__link">
+                <TransitionLink to={card.href} className="sys-card-block">
                   {label}
                   <CardStill id={card.id} />
                 </TransitionLink>

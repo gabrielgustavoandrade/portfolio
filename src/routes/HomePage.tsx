@@ -38,6 +38,7 @@ export function HomePage() {
         <WorkList
           projects={openSourceProjects}
           id="open-source"
+          index="02"
           title="Open Source"
           subtitle="Side projects and tools I built and published."
         />

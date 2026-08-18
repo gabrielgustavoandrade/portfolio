@@ -55,7 +55,7 @@ export function PerformanceToggle() {
     <>
       <button
         type="button"
-        className="performance-toggle__button"
+        className="sys-button sys-button--muted performance-toggle__button"
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Toggle performance metrics"
         aria-expanded={isOpen}
@@ -89,7 +89,7 @@ export function PerformanceToggle() {
             <h3>Performance Metrics</h3>
             <button
               type="button"
-              className="performance-panel__close"
+              className="sys-button sys-button--muted performance-panel__close"
               onClick={() => setIsOpen(false)}
               aria-label="Close performance panel"
             >

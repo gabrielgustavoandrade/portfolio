@@ -1,5 +1,5 @@
 .contact {
-  padding-block-start: clamp(32px, 6vh, 64px);
+  padding-block-start: var(--sys-space-5);
 }
 
 .contact__inner {
@@ -11,26 +11,11 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 28px;
+  gap: var(--sys-space-4);
 }
 
-.contact__link {
-  font-family: var(--font-family-display);
-  font-size: 13px;
-  letter-spacing: 0.04em;
-  color: var(--cream);
-  text-decoration: none;
-  min-height: 44px;
-  display: inline-flex;
-  align-items: center;
-}
-
-.contact__link:hover {
-  color: #fff;
-}
-
-@media (max-width: 640px) {
+@media (max-width: 720px) {
   .contact__actions {
-    gap: 18px;
+    gap: var(--sys-space-3);
   }
 }

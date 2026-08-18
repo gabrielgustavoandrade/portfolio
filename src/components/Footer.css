@@ -1,50 +1,27 @@
 .footer {
-  padding: 40px clamp(16px, 4vw, 56px);
-  background-color: var(--void);
-  border-top: 1px solid var(--line);
+  padding: var(--sys-space-5) var(--sys-inset);
+  border-top: var(--sys-hairline);
 }
 
 .footer__container {
-  max-width: 1040px;
+  max-width: var(--sys-measure);
   margin-inline: auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 24px;
+  gap: var(--sys-space-4);
   position: relative;
 }
 
 .footer__tech-button {
   position: absolute;
   left: 0;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 0;
-  background: none;
-  border: none;
-  color: var(--cream-muted);
-  font-family: var(--font-family-display);
-  font-size: 13px;
-  letter-spacing: 0.04em;
-  cursor: pointer;
-}
-
-.footer__tech-button:hover {
-  color: #fff;
-}
-
-.footer__tech-button svg {
-  width: 16px;
-  height: 16px;
+  gap: var(--sys-space-1);
+  padding: 0;
 }
 
 .footer__text {
   margin: 0;
-  font-family: var(--font-family-display);
-  font-size: 13px;
-  letter-spacing: 0.03em;
-  color: var(--cream-muted);
 }
 
 .footer__performance {
@@ -52,10 +29,10 @@
   right: 0;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 720px) {
   .footer__container {
     flex-direction: column;
-    gap: 16px;
+    gap: var(--sys-space-3);
   }
 
   .footer__tech-button,

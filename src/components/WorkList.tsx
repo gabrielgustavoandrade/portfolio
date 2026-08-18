@@ -2,18 +2,22 @@ import type { CSSProperties } from 'react';
 import type { Project } from '../data/projects';
 import { useEnterList } from '../hooks/useEnterList';
 import { LiveSmartDateInput } from './LiveSmartDateInput';
+import { RailLabel } from './system/RailLabel';
+import { SectionHeader } from './system/SectionHeader';
 import { TransitionLink } from './TransitionLink';
 import './WorkList.css';
 
 interface WorkListProps {
   projects: Project[];
   id?: string;
+  index?: string;
   title?: string;
   subtitle?: string;
 }
 
 function WorkCard({ project, index }: { project: Project; index: number }) {
   const ordinal = String(index + 1).padStart(2, '0');
+  const label = <RailLabel index={ordinal}>{project.title}</RailLabel>;
 
   return (
     <article
@@ -21,22 +25,27 @@ function WorkCard({ project, index }: { project: Project; index: number }) {
       data-enter
       style={{ '--enter-delay': `${index * 45}ms` } as CSSProperties}
     >
-      <p className="rail-label">
-        <span>{ordinal}</span> {project.title}
-      </p>
       {project.slug === 'smart-date-input' ? (
-        <div className="work-card__still work-card__still--live">
-          <LiveSmartDateInput />
-        </div>
+        <>
+          <TransitionLink
+            to={`/work/${project.slug}`}
+            className="sys-card-block"
+          >
+            {label}
+          </TransitionLink>
+          <div className="sys-card sys-card--live">
+            <LiveSmartDateInput />
+          </div>
+        </>
       ) : (
-        <TransitionLink
-          to={`/work/${project.slug}`}
-          className="work-card__still"
-        >
-          <p className="work-card__still-text">{project.subtitle}</p>
+        <TransitionLink to={`/work/${project.slug}`} className="sys-card-block">
+          {label}
+          <div className="sys-card">
+            <p className="sys-kicker">{project.subtitle}</p>
+          </div>
         </TransitionLink>
       )}
-      <p className="work-card__summary">{project.summary}</p>
+      <p className="sys-kicker">{project.summary}</p>
       {project.links && project.links.length > 0 && (
         <div className="work-card__links">
           {project.links.map((link) => (
@@ -45,7 +54,7 @@ function WorkCard({ project, index }: { project: Project; index: number }) {
               href={link.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="work-card__link-item"
+              className="sys-link sys-link--muted"
             >
               {link.label}
             </a>
@@ -59,22 +68,22 @@ function WorkCard({ project, index }: { project: Project; index: number }) {
 export function WorkList({
   projects,
   id = 'work',
+  index = '01',
   title = 'Selected Work',
   subtitle = 'Products and systems I helped design and build.',
 }: WorkListProps) {
   const rootRef = useEnterList();
 
   return (
-    <section className="work-list home-block" id={id} ref={rootRef}>
-      <div className="home-block__inner">
-        <header className="home-block__header enter" data-enter>
-          <h2 className="home-block__title">{title}</h2>
-          <p className="home-block__lede">{subtitle}</p>
-        </header>
+    <section className="sys-section" id={id} ref={rootRef}>
+      <div className="sys-section__inner">
+        <SectionHeader index={index} title={title}>
+          <p className="sys-kicker">{subtitle}</p>
+        </SectionHeader>
 
         <div className="work-list__grid">
-          {projects.map((project, index) => (
-            <WorkCard key={project.slug} project={project} index={index} />
+          {projects.map((project, cardIndex) => (
+            <WorkCard key={project.slug} project={project} index={cardIndex} />
           ))}
         </div>
       </div>

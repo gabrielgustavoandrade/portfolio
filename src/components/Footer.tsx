@@ -12,12 +12,12 @@ export function Footer() {
         <div className="footer__container">
           <button
             type="button"
-            className="footer__tech-button"
+            className="sys-button sys-button--muted footer__tech-button"
             onClick={() => setIsModalOpen(true)}
           >
             <svg
-              width="20"
-              height="20"
+              width="16"
+              height="16"
               viewBox="0 0 20 20"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -39,7 +39,7 @@ export function Footer() {
             <span>How I Built This</span>
           </button>
 
-          <p className="footer__text">© Gabriel Andrade 2026</p>
+          <p className="sys-meta footer__text">© Gabriel Andrade 2026</p>
 
           <div className="footer__performance">
             <PerformanceToggle />

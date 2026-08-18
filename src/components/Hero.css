@@ -1,8 +1,6 @@
 .hero {
-  --hero-void: #050505;
-  --hero-cream: #f2eee6;
   height: 200vh;
-  background-color: var(--hero-void);
+  background-color: var(--sys-void);
   position: relative;
 }
 
@@ -17,7 +15,7 @@
   top: 0;
   height: 100vh;
   overflow: hidden;
-  background-color: var(--hero-void);
+  background-color: var(--sys-void);
 }
 
 .hero--pinned .hero__sticky {
@@ -34,23 +32,11 @@
 
 .hero__nav {
   position: absolute;
-  top: 28px;
-  right: clamp(16px, 3vw, 40px);
+  top: var(--sys-space-4);
+  right: var(--sys-inset);
   z-index: 6;
   display: flex;
-  gap: 28px;
-}
-
-.hero__nav a {
-  color: var(--hero-cream);
-  font-family: var(--font-family-display);
-  font-size: 13px;
-  letter-spacing: 0.04em;
-  text-decoration: none;
-}
-
-.hero__nav a:hover {
-  color: #fff;
+  gap: var(--sys-space-4);
 }
 
 .hero__copy {
@@ -71,35 +57,19 @@
 
 .hero__title {
   margin: 0;
-  font-family: var(--font-family-display);
-  font-size: clamp(3.1rem, 11vw, 8.6rem);
+  font-family: var(--sys-font);
+  font-size: var(--sys-type-hero);
   font-weight: 700;
-  line-height: 0.9;
-  letter-spacing: -0.045em;
-  color: var(--hero-cream);
+  line-height: var(--sys-lead-hero);
+  letter-spacing: var(--sys-track-hero);
+  color: var(--sys-cream);
   will-change: transform;
 }
 
-.hero__lede,
 .hero__kicker {
-  margin: 0 auto;
-  color: var(--hero-cream);
+  margin: var(--sys-space-3) auto 0;
+  max-width: var(--sys-measure-text);
   will-change: transform, opacity;
-}
-
-.hero__lede {
-  margin-top: 18px;
-  font-family: var(--font-family-display);
-  font-size: clamp(1rem, 2vw, 1.35rem);
-  font-weight: 400;
-  letter-spacing: -0.01em;
-}
-
-.hero__kicker {
-  margin-top: 18px;
-  max-width: 36rem;
-  font-size: 0.92rem;
-  color: rgba(242, 238, 230, 0.62);
 }
 
 .hero__globe {
@@ -142,16 +112,12 @@
   }
 
   .hero__nav {
-    top: 18px;
-    gap: 18px;
+    top: var(--sys-space-3);
+    gap: var(--sys-space-3);
   }
 
   .hero__copy {
     top: 64px;
-  }
-
-  .hero__title {
-    font-size: clamp(2.6rem, 14vw, 4.2rem);
   }
 }
 
@@ -162,7 +128,6 @@
 
   .hero__copy,
   .hero__title,
-  .hero__lede,
   .hero__kicker,
   .hero__globe {
     will-change: auto;

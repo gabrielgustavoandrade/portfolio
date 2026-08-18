@@ -3,6 +3,8 @@ import { useState } from 'react';
 import type { Post } from '../data/posts';
 import { useEnterList } from '../hooks/useEnterList';
 import { BlogPost } from './BlogPost';
+import { RailLabel } from './system/RailLabel';
+import { SectionHeader } from './system/SectionHeader';
 import './BlogList.css';
 
 interface BlogListProps {
@@ -14,15 +16,14 @@ export function BlogList({ posts }: BlogListProps) {
   const rootRef = useEnterList();
 
   return (
-    <section className="blog-list home-block" id="build-log" ref={rootRef}>
-      <div className="home-block__inner">
-        <header className="home-block__header enter" data-enter>
-          <h2 className="home-block__title">Build Log</h2>
-          <p className="home-block__lede">
+    <section className="sys-section" id="build-log" ref={rootRef}>
+      <div className="sys-section__inner">
+        <SectionHeader index="03" title="Build Log">
+          <p className="sys-kicker">
             Technical deep dives into engineering decisions, performance
             optimizations, and implementation details.
           </p>
-        </header>
+        </SectionHeader>
 
         <div className="blog-list__grid">
           {posts.map((post, index) => {
@@ -43,22 +44,18 @@ export function BlogList({ posts }: BlogListProps) {
                   aria-expanded={expanded}
                   aria-controls={`blog-content-${post.id}`}
                 >
-                  <p className="rail-label">
-                    <span>{ordinal}</span> {post.title}
-                  </p>
+                  <RailLabel index={ordinal}>{post.title}</RailLabel>
                   <div className="blog-card__meta">
-                    <time className="blog-card__date" dateTime={post.date}>
+                    <time className="sys-meta" dateTime={post.date}>
                       {new Date(post.date).toLocaleDateString('en-US', {
                         month: 'short',
                         day: 'numeric',
                         year: 'numeric',
                       })}
                     </time>
-                    <span className="blog-card__read-time">
-                      {post.readTime}
-                    </span>
+                    <span className="sys-meta">{post.readTime}</span>
                   </div>
-                  <p className="blog-card__description">{post.description}</p>
+                  <p className="sys-kicker">{post.description}</p>
                 </button>
 
                 {expanded && (

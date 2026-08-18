@@ -62,7 +62,7 @@ describe('HomePage', () => {
     expect(
       screen.getByText((_, node) => {
         return (
-          node?.classList.contains('hero-rail__label') === true &&
+          node?.classList.contains('sys-label') === true &&
           /03/.test(node.textContent ?? '') &&
           /commerce/i.test(node.textContent ?? '')
         );

@@ -5,19 +5,19 @@ export function Contact() {
   const rootRef = useEnterList();
 
   return (
-    <section className="contact home-block" id="contact" ref={rootRef}>
-      <div className="home-block__inner contact__inner">
+    <section className="sys-section contact" id="contact" ref={rootRef}>
+      <div className="sys-section__inner contact__inner">
         <div className="contact__actions enter" data-enter>
           <a
             href="mailto:gabrielgustavoandrade@gmail.com"
-            className="contact__link"
+            className="sys-link"
             aria-label="Send me an email"
           >
             Email me
           </a>
           <a
             href="https://www.linkedin.com/in/gabrielgustavoandrade"
-            className="contact__link"
+            className="sys-link"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Visit my LinkedIn profile"
@@ -26,7 +26,7 @@ export function Contact() {
           </a>
           <a
             href="https://github.com/gabrielgustavoandrade"
-            className="contact__link"
+            className="sys-link"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Visit my GitHub profile"

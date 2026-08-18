@@ -37,9 +37,15 @@ export function Hero() {
     >
       <div className="hero__sticky">
         <nav className="hero__nav" aria-label="Primary">
-          <a href="#work">Work</a>
-          <a href="#about">About</a>
-          <a href="#build-log">Lab</a>
+          <a className="sys-link" href="#work">
+            Work
+          </a>
+          <a className="sys-link" href="#about">
+            About
+          </a>
+          <a className="sys-link" href="#build-log">
+            Lab
+          </a>
         </nav>
 
         <div className="hero__copy" ref={copyRef}>
@@ -52,7 +58,7 @@ export function Hero() {
             One-line lede slot. Wait for Gabriel's line.
             Do not invent a slogan.
           */}
-          <p className="hero__kicker" ref={kickerRef}>
+          <p className="sys-kicker hero__kicker" ref={kickerRef}>
             Software Engineer | Agent systems — traces, latency, cost, evals
           </p>
         </div>

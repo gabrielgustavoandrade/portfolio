@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react';
 import { useEnterList } from '../hooks/useEnterList';
+import { SectionHeader } from './system/SectionHeader';
 import './About.css';
 
 const paragraphs = [
@@ -12,16 +13,14 @@ export function About() {
   const rootRef = useEnterList();
 
   return (
-    <section className="about home-block" id="about" ref={rootRef}>
-      <div className="home-block__inner">
-        <header className="home-block__header enter" data-enter>
-          <h2 className="home-block__title">About Me</h2>
-        </header>
+    <section className="sys-section" id="about" ref={rootRef}>
+      <div className="sys-section__inner">
+        <SectionHeader index="04" title="About Me" />
         <div className="about__content">
           {paragraphs.map((text, index) => (
             <p
               key={text}
-              className="about__paragraph enter"
+              className="sys-body about__paragraph enter"
               data-enter
               style={{ '--enter-delay': `${index * 45}ms` } as CSSProperties}
             >

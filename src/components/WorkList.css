@@ -1,78 +1,34 @@
 .work-list__grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(16px, 2.4vw, 32px);
+  gap: var(--sys-gap);
 }
 
 .work-card {
   display: flex;
   flex-direction: column;
   min-width: 0;
-  gap: 12px;
+  gap: var(--sys-space-2);
 }
 
-.work-card__still {
-  display: grid;
+.work-card .sys-card {
   place-items: end start;
-  aspect-ratio: 5 / 4;
-  padding: 22px;
-  border-radius: 18px;
-  overflow: hidden;
-  text-decoration: none;
-  color: inherit;
-  background: #0c0c0c;
-  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.work-card__still--live {
+.work-card .sys-card--live {
   place-items: center;
-  overflow: visible;
-}
-
-.work-card__still-text {
-  margin: 0;
-  max-width: 22rem;
-  font-family: var(--font-family-display);
-  font-size: 0.95rem;
-  line-height: 1.35;
-  letter-spacing: -0.01em;
-  color: var(--cream);
-}
-
-.work-card__summary {
-  margin: 0;
-  font-size: 0.92rem;
-  line-height: 1.5;
-  color: var(--cream-muted);
 }
 
 .work-card__links {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
-}
-
-.work-card__link-item {
-  font-family: var(--font-family-display);
-  font-size: 13px;
-  letter-spacing: 0.04em;
-  color: var(--cream-muted);
-  text-decoration: none;
-}
-
-.work-card__link-item:hover,
-.work-card__still:hover .work-card__still-text {
-  color: #fff;
+  gap: var(--sys-space-3);
 }
 
 @media (max-width: 720px) {
   .work-list__grid {
     display: flex;
     flex-direction: column;
-    gap: 28px;
-  }
-
-  .work-card__still {
-    aspect-ratio: 4 / 3;
+    gap: var(--sys-space-4);
   }
 }
