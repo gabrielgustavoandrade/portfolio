@@ -99,6 +99,10 @@ describe('HomePage', () => {
     ).toBeNull();
     expect(document.querySelector('.performance-toggle__button')).toBeNull();
     expect(screen.queryByText(/how i built this/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/plasma/i)).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('link', { name: /plasma/i }),
+    ).not.toBeInTheDocument();
   });
 
   it('jumps to the beat 2 end pose when reduced motion is preferred', () => {
