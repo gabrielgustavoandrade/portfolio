@@ -18,6 +18,42 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    slug: 'interactive-ai',
+    title: 'InteractiveAI',
+    subtitle:
+      'Enterprise platform for building, evaluating, and deploying AI agents',
+    summary:
+      'Senior Fullstack Engineer, Madrid, Mar 2026 – present. Full-stack features and internal tools with end-to-end ownership on an early-stage product.',
+    overview:
+      'Senior Fullstack Engineer at InteractiveAI (Mar 2026 – present, Madrid). The company builds an enterprise platform for building, evaluating, and deploying AI agents. The work is full-stack features and internal tools, with end-to-end ownership, on an early-stage product.',
+    challenges: [
+      'Shipping full-stack features and internal tools while the product is still early.',
+      'Owning work end-to-end across the application and platform layers.',
+    ],
+    solutions: [
+      'Building with Next.js, TypeScript, Node.js, and Python (FastAPI).',
+      'REST APIs, Docker, Kubernetes, GCP, and Terraform.',
+      'PostgreSQL and ClickHouse.',
+    ],
+    impact:
+      'Current role. Senior Fullstack Engineer, Madrid, March 2026 – present.',
+    stack: [
+      'Next.js',
+      'TypeScript',
+      'Node.js',
+      'Python',
+      'FastAPI',
+      'REST APIs',
+      'Docker',
+      'Kubernetes',
+      'GCP',
+      'Terraform',
+      'PostgreSQL',
+      'ClickHouse',
+    ],
+  },
+
+  {
     slug: 'mms-customize',
     title: 'M&Ms – Design Your Own',
     subtitle:

@@ -77,6 +77,12 @@ describe('HomePage', () => {
       screen.getByRole('heading', { name: /selected work/i }),
     ).toBeInTheDocument();
     expect(
+      screen.getByRole('link', { name: /01\s+interactiveai/i }),
+    ).toHaveAttribute('href', '/work/interactive-ai');
+    expect(
+      screen.getByRole('link', { name: /02\s+m&ms/i }),
+    ).toBeInTheDocument();
+    expect(
       screen.getByRole('heading', { name: /open source/i }),
     ).toBeInTheDocument();
     expect(
