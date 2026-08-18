@@ -1,25 +1,8 @@
 import { forwardRef } from 'react';
 import { heroWorkCards } from '../data/heroWork';
+import { LiveSmartDateInput } from './LiveSmartDateInput';
 import { TransitionLink } from './TransitionLink';
 import './HeroWorkRail.css';
-
-function CalendarMark() {
-  return (
-    <svg
-      className="hero-rail__icon"
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      aria-hidden="true"
-    >
-      <rect x="3" y="5" width="18" height="16" rx="2" />
-      <path d="M3 10h18M8 3v4M16 3v4" />
-    </svg>
-  );
-}
 
 function CardStill({ id }: { id: (typeof heroWorkCards)[number]['id'] }) {
   if (id === 'earth') {
@@ -35,15 +18,8 @@ function CardStill({ id }: { id: (typeof heroWorkCards)[number]['id'] }) {
 
   if (id === 'smart-date-input') {
     return (
-      <div
-        className="hero-rail__still hero-rail__still--input"
-        aria-hidden="true"
-      >
-        <div className="hero-rail__field">
-          <span className="hero-rail__field-text">Next Friday at 9am</span>
-          <span className="hero-rail__caret" />
-          <CalendarMark />
-        </div>
+      <div className="hero-rail__still hero-rail__still--input">
+        <LiveSmartDateInput />
       </div>
     );
   }
@@ -60,13 +36,10 @@ export const HeroWorkRail = forwardRef<HTMLUListElement>(
     return (
       <ul className="hero-rail" ref={ref}>
         {heroWorkCards.map((card) => {
-          const body = (
-            <>
-              <p className="hero-rail__label">
-                <span>{card.index}</span> {card.title}
-              </p>
-              <CardStill id={card.id} />
-            </>
+          const label = (
+            <p className="hero-rail__label">
+              <span>{card.index}</span> {card.title}
+            </p>
           );
 
           return (
@@ -76,17 +49,31 @@ export const HeroWorkRail = forwardRef<HTMLUListElement>(
                 card.kind === 'placeholder'
                   ? ' hero-rail__item--placeholder'
                   : ''
+              }${
+                card.id === 'smart-date-input' ? ' hero-rail__item--live' : ''
               }`}
             >
               {card.kind === 'placeholder' ? (
-                body
+                <>
+                  {label}
+                  <CardStill id={card.id} />
+                </>
+              ) : card.id === 'smart-date-input' ? (
+                <>
+                  <TransitionLink to={card.href} className="hero-rail__link">
+                    {label}
+                  </TransitionLink>
+                  <CardStill id={card.id} />
+                </>
               ) : card.href.startsWith('#') ? (
                 <a href={card.href} className="hero-rail__link">
-                  {body}
+                  {label}
+                  <CardStill id={card.id} />
                 </a>
               ) : (
                 <TransitionLink to={card.href} className="hero-rail__link">
-                  {body}
+                  {label}
+                  <CardStill id={card.id} />
                 </TransitionLink>
               )}
             </li>

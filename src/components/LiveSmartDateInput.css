@@ -1,0 +1,139 @@
+.live-sdi {
+  width: min(100%, 320px);
+  font-family: var(--font-family-display);
+  color: var(--cream, #f2eee6);
+}
+
+.live-sdi__label {
+  display: block;
+}
+
+.live-sdi > .relative,
+.live-sdi .relative {
+  position: relative;
+}
+
+.live-sdi .flex {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.live-sdi .flex-1 {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Hide the package calendar trigger — the text input is the showcase. */
+.live-sdi .flex > .relative:last-child {
+  display: none;
+}
+
+.live-sdi input {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(242, 238, 230, 0.16);
+  background: rgba(8, 8, 8, 0.86);
+  color: #f2eee6;
+  font-family: var(--font-family-display);
+  font-size: 14px;
+  letter-spacing: -0.01em;
+}
+
+.live-sdi input::placeholder {
+  color: rgba(242, 238, 230, 0.42);
+}
+
+.live-sdi input:focus,
+.live-sdi input:focus-visible {
+  outline: 1px solid rgba(242, 238, 230, 0.45);
+  outline-offset: 2px;
+  border-color: rgba(242, 238, 230, 0.38);
+  box-shadow: none;
+}
+
+.live-sdi input.border-green-300 {
+  border-color: rgba(242, 238, 230, 0.38);
+}
+
+.live-sdi .absolute.right-2 {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  pointer-events: none;
+  color: rgba(242, 238, 230, 0.62);
+  font-size: 11px;
+}
+
+.live-sdi .absolute.z-50 {
+  position: absolute;
+  inset-inline: 0;
+  top: calc(100% + 6px);
+  z-index: 8;
+  max-height: 220px;
+  overflow: auto;
+  border-radius: 12px;
+  border: 1px solid rgba(242, 238, 230, 0.16);
+  background: #0c0c0c;
+  color: #f2eee6;
+  box-shadow: none;
+}
+
+.live-sdi .absolute.z-50 > .px-3,
+.live-sdi .absolute.z-50 > div {
+  padding: 10px 12px;
+  font-size: 13px;
+  border-left: 1px solid transparent;
+  cursor: pointer;
+}
+
+.live-sdi .absolute.z-50 > .border-t {
+  border-top: 1px solid rgba(242, 238, 230, 0.12);
+  background: #0a0a0a;
+  color: rgba(242, 238, 230, 0.5);
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  cursor: default;
+}
+
+.live-sdi .hover\:bg-gray-50:hover,
+.live-sdi .bg-blue-50,
+.live-sdi .absolute.z-50 > div:hover {
+  background: rgba(242, 238, 230, 0.06);
+}
+
+.live-sdi .text-gray-500,
+.live-sdi .text-gray-600,
+.live-sdi .text-blue-600,
+.live-sdi .text-purple-600,
+.live-sdi .text-green-600,
+.live-sdi .text-yellow-600,
+.live-sdi .text-orange-600,
+.live-sdi .text-red-600 {
+  color: rgba(242, 238, 230, 0.56);
+}
+
+.live-sdi .font-medium {
+  font-weight: 500;
+  color: #f2eee6;
+}
+
+.live-sdi__readout {
+  margin: 10px 0 0;
+  font-size: 12px;
+  letter-spacing: 0.03em;
+  color: rgba(242, 238, 230, 0.56);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .live-sdi input {
+    transition: none;
+  }
+}

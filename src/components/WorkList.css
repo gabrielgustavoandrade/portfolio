@@ -24,6 +24,11 @@
   border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
+.work-card__still--live {
+  place-items: center;
+  overflow: visible;
+}
+
 .work-card__still-text {
   margin: 0;
   max-width: 22rem;

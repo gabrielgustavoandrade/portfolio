@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react';
 import type { Project } from '../data/projects';
 import { useEnterList } from '../hooks/useEnterList';
+import { LiveSmartDateInput } from './LiveSmartDateInput';
 import { TransitionLink } from './TransitionLink';
 import './WorkList.css';
 
@@ -23,9 +24,18 @@ function WorkCard({ project, index }: { project: Project; index: number }) {
       <p className="rail-label">
         <span>{ordinal}</span> {project.title}
       </p>
-      <TransitionLink to={`/work/${project.slug}`} className="work-card__still">
-        <p className="work-card__still-text">{project.subtitle}</p>
-      </TransitionLink>
+      {project.slug === 'smart-date-input' ? (
+        <div className="work-card__still work-card__still--live">
+          <LiveSmartDateInput />
+        </div>
+      ) : (
+        <TransitionLink
+          to={`/work/${project.slug}`}
+          className="work-card__still"
+        >
+          <p className="work-card__still-text">{project.subtitle}</p>
+        </TransitionLink>
+      )}
       <p className="work-card__summary">{project.summary}</p>
       {project.links && project.links.length > 0 && (
         <div className="work-card__links">

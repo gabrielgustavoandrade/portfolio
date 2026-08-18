@@ -57,6 +57,9 @@ describe('HomePage', () => {
       screen.getByRole('link', { name: /02\s+smart-date-input/i }),
     ).toHaveAttribute('href', '/work/smart-date-input');
     expect(
+      screen.getAllByRole('textbox', { name: /try smart-date-input/i }).length,
+    ).toBeGreaterThan(0);
+    expect(
       screen.getByText((_, node) => {
         return (
           node?.classList.contains('hero-rail__label') === true &&

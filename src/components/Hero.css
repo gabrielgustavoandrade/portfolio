@@ -126,6 +126,12 @@
   pointer-events: auto;
 }
 
+.hero--rail-live .hero__sticky,
+.hero--reduced .hero__sticky,
+.hero--released .hero__sticky {
+  overflow: visible;
+}
+
 @media (max-width: 720px) {
   .hero {
     height: 175vh;
