@@ -1,13 +1,13 @@
-import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import { About } from "../components/About";
-import { BlogList } from "../components/BlogList";
-import { Contact } from "../components/Contact";
-import { Footer } from "../components/Footer";
-import { Hero } from "../components/Hero";
-import { WorkList } from "../components/WorkList";
-import { posts } from "../data/posts";
-import { openSourceProjects, projects } from "../data/projects";
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import { About } from '../components/About';
+import { BlogList } from '../components/BlogList';
+import { Contact } from '../components/Contact';
+import { Footer } from '../components/Footer';
+import { Hero } from '../components/Hero';
+import { WorkList } from '../components/WorkList';
+import { posts } from '../data/posts';
+import { openSourceProjects, projects } from '../data/projects';
 
 export function HomePage() {
   const { hash } = useLocation();
@@ -17,31 +17,28 @@ export function HomePage() {
 
     const id = hash.slice(1);
     const frame = window.requestAnimationFrame(() => {
-      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+      document.getElementById(id)?.scrollIntoView({
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+          ? 'auto'
+          : 'smooth',
+      });
     });
 
     return () => window.cancelAnimationFrame(frame);
   }, [hash]);
 
-  const handleWorkClick = () => {
-    document.getElementById("work")?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  const handleContactClick = () => {
-    document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
-  };
-
   return (
-    <>
+    <div className="home">
       <a href="#main-content" className="skip-link">
         Skip to main content
       </a>
-      <Hero onWorkClick={handleWorkClick} onContactClick={handleContactClick} />
-      <main id="main-content" role="main">
+      <Hero />
+      <main id="main-content">
         <WorkList projects={projects} />
         <WorkList
           projects={openSourceProjects}
           id="open-source"
+          index="02"
           title="Open Source"
           subtitle="Side projects and tools I built and published."
         />
@@ -50,6 +47,6 @@ export function HomePage() {
         <Contact />
       </main>
       <Footer />
-    </>
+    </div>
   );
 }

@@ -1,6 +1,10 @@
+import type { CSSProperties } from 'react';
 import { useState } from 'react';
 import type { Post } from '../data/posts';
+import { useEnterList } from '../hooks/useEnterList';
 import { BlogPost } from './BlogPost';
+import { RailLabel } from './system/RailLabel';
+import { SectionHeader } from './system/SectionHeader';
 import './BlogList.css';
 
 interface BlogListProps {
@@ -9,67 +13,62 @@ interface BlogListProps {
 
 export function BlogList({ posts }: BlogListProps) {
   const [expandedPostId, setExpandedPostId] = useState<string | null>(null);
-
-  const handlePostClick = (postId: string) => {
-    setExpandedPostId(expandedPostId === postId ? null : postId);
-  };
+  const rootRef = useEnterList();
 
   return (
-    <section className="blog-list" id="build-log">
-      <div className="blog-list__container">
-        <div className="blog-list__header">
-          <h2 className="blog-list__title">Build Log</h2>
-          <p className="blog-list__subtitle">
+    <section className="sys-section" id="build-log" ref={rootRef}>
+      <div className="sys-section__inner">
+        <SectionHeader index="03" title="Build Log">
+          <p className="sys-kicker">
             Technical deep dives into engineering decisions, performance
             optimizations, and implementation details.
           </p>
-        </div>
+        </SectionHeader>
 
-        <div className="blog-list__grid">
-          {posts.map((post, index) => (
-            <article
-              key={post.id}
-              className={`blog-card ${expandedPostId === post.id ? 'blog-card--expanded' : ''}`}
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <button
-                type="button"
-                className="blog-card__header"
-                onClick={() => handlePostClick(post.id)}
-                aria-expanded={expandedPostId === post.id}
-                aria-controls={`blog-content-${post.id}`}
+        <div className="sys-grid">
+          {posts.map((post, index) => {
+            const expanded = expandedPostId === post.id;
+            const ordinal = String(index + 1).padStart(2, '0');
+
+            return (
+              <article
+                key={post.id}
+                className={`work-card enter${expanded ? ' blog-card--expanded' : ''}`}
+                data-enter
+                style={{ '--enter-delay': `${index * 45}ms` } as CSSProperties}
               >
-                <div className="blog-card__meta">
-                  <time className="blog-card__date">
-                    {new Date(post.date).toLocaleDateString('en-US', {
-                      month: 'short',
-                      day: 'numeric',
-                      year: 'numeric',
-                    })}
-                  </time>
-                  <span className="blog-card__read-time">{post.readTime}</span>
-                </div>
-                <h3 className="blog-card__title">{post.title}</h3>
-                <p className="blog-card__description">{post.description}</p>
-                <div className="blog-card__tags">
-                  {post.tags.map((tag) => (
-                    <span key={tag} className="blog-card__tag">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-                <span className="blog-card__expand-icon">
-                  {expandedPostId === post.id ? '−' : '+'}
-                </span>
-              </button>
+                <button
+                  type="button"
+                  className="sys-card-block blog-card__header"
+                  onClick={() => setExpandedPostId(expanded ? null : post.id)}
+                  aria-expanded={expanded}
+                  aria-controls={`blog-content-${post.id}`}
+                >
+                  <RailLabel index={ordinal}>{post.title}</RailLabel>
+                  <div className="blog-card__meta">
+                    <time className="sys-meta" dateTime={post.date}>
+                      {new Date(post.date).toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
+                      })}
+                    </time>
+                    <span className="sys-meta">{post.readTime}</span>
+                  </div>
+                  <p className="sys-kicker">{post.description}</p>
+                </button>
 
-              {expandedPostId === post.id && (
-                <div className="blog-card__content" id={`blog-content-${post.id}`}>
-                  <BlogPost post={post} />
-                </div>
-              )}
-            </article>
-          ))}
+                {expanded && (
+                  <div
+                    className="blog-card__content"
+                    id={`blog-content-${post.id}`}
+                  >
+                    <BlogPost post={post} />
+                  </div>
+                )}
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>

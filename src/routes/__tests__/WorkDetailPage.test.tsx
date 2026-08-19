@@ -42,7 +42,7 @@ describe('WorkDetailPage', () => {
       screen.getByRole('heading', { name: /m&ms – design your own/i }),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(/Personalized e-commerce product configurator/i),
+      screen.getByText(/Multi-brand composable commerce configurator/i),
     ).toBeInTheDocument();
   });
 

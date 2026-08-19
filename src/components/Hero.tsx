@@ -1,94 +1,82 @@
-import { useEffect, useState } from "react";
-import { useMagneticHover } from "../hooks/useMagneticHover";
-import "./Hero.css";
-import { EarthCanvas } from "./earth/EarthCanvas";
-import { HandwrittenNote } from "./HandwrittenNote";
-import { HeroStarfield } from "./HeroStarfield";
-import { RevealText } from "./RevealText";
+import { useRef } from 'react';
+import { useHeroMotion } from '../hooks/useHeroMotion';
+import { useIsNarrowViewport } from '../hooks/useIsNarrowViewport';
+import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
+import { EarthCanvas } from './earth/EarthCanvas';
+import { HeroDustCanvas } from './earth/HeroDustCanvas';
+import { HeroWorkRail } from './HeroWorkRail';
+import './Hero.css';
 
-interface HeroProps {
-  onWorkClick: () => void;
-  onContactClick: () => void;
-}
-
-export function Hero({ onWorkClick, onContactClick }: HeroProps) {
-  const [showScrollCue, setShowScrollCue] = useState(false);
-  const primaryButtonRef = useMagneticHover<HTMLButtonElement>({
-    strength: 0.2,
-    maxDistance: 60,
+export function Hero() {
+  const pinRef = useRef<HTMLElement>(null);
+  const globeRef = useRef<HTMLDivElement>(null);
+  const copyRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const kickerRef = useRef<HTMLParagraphElement>(null);
+  const railRef = useRef<HTMLUListElement>(null);
+  const paceRef = useRef<'full' | 'idle'>('full');
+  const reducedMotion = usePrefersReducedMotion();
+  const narrow = useIsNarrowViewport();
+  const { phase, railLive } = useHeroMotion({
+    reducedMotion,
+    staticLayout: narrow,
+    pinRef,
+    globeRef,
+    copyRef,
+    titleRef,
+    kickerRef,
+    railRef,
+    paceRef,
   });
-  const secondaryButtonRef = useMagneticHover<HTMLButtonElement>({
-    strength: 0.2,
-    maxDistance: 60,
-  });
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowScrollCue(true);
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, []);
 
   return (
-    <section className="hero">
-      <HeroStarfield />
-      <div className="hero__layout">
-        <div className="hero__content">
-          <RevealText as="h1" className="hero__title" stagger={true} delay={0}>
-            Gabriel Andrade
-          </RevealText>
-          <p className="hero__subtitle">
+    <section
+      ref={pinRef}
+      className={`hero${narrow ? ' hero--mobile' : ''}${
+        reducedMotion && !narrow ? ' hero--reduced' : ''
+      }${railLive && !narrow ? ' hero--rail-live' : ''}${
+        !narrow && phase === 'pin' ? ' hero--pinned' : ''
+      }${!narrow && phase === 'end' ? ' hero--released' : ''}`}
+      aria-label="Introduction"
+    >
+      <div className="hero__sticky">
+        <nav className="hero__nav" aria-label="Primary">
+          <a className="sys-link" href="#work">
+            Work
+          </a>
+          <a className="sys-link" href="#about">
+            About
+          </a>
+          <a className="sys-link" href="#build-log">
+            Lab
+          </a>
+        </nav>
+
+        <div className="hero__copy" ref={copyRef}>
+          <div className="hero__title-clip">
+            <h1 className="hero__title" ref={titleRef}>
+              Gabriel Andrade
+            </h1>
+          </div>
+          {/*
+            One-line lede slot. Wait for Gabriel's line.
+            Do not invent a slogan.
+          */}
+          <p className="sys-kicker hero__kicker" ref={kickerRef}>
             Software Engineer | Agent systems — traces, latency, cost, evals
           </p>
-          <p className="hero__tagline">
-            Seven years designing and delivering scalable applications across
-            consumer and commerce platforms. Full-stack engineer focused on
-            performance, maintainability, and measurable impact.
-          </p>
-
-          <div className="hero__cta">
-            <button
-              ref={primaryButtonRef}
-              type="button"
-              className="button button--primary"
-              onClick={onWorkClick}
-              aria-label="Navigate to selected work section"
-            >
-              See my work
-            </button>
-            <button
-              ref={secondaryButtonRef}
-              type="button"
-              className="button button--secondary"
-              onClick={onContactClick}
-              aria-label="Navigate to contact section"
-            >
-              Contact
-            </button>
-          </div>
         </div>
 
-        <div className="hero__visual" aria-hidden="true">
-          <EarthCanvas />
-          <HandwrittenNote text="You can spin it!" />
+        {!reducedMotion ? (
+          <HeroDustCanvas paceRef={paceRef} compact={narrow} />
+        ) : null}
+
+        <div className="hero__globe" ref={globeRef} aria-hidden="true">
+          <EarthCanvas paceRef={paceRef} />
         </div>
+
+        <HeroWorkRail ref={railRef} />
       </div>
-
-      {showScrollCue && (
-        <div className="hero__scroll-cue" aria-hidden="true">
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            aria-hidden="true"
-          >
-            <polyline points="6 9 12 15 18 9" />
-          </svg>
-        </div>
-      )}
     </section>
   );
 }

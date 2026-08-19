@@ -1,0 +1,167 @@
+.live-sdi {
+  width: min(100%, 280px);
+  font-family: var(--sys-font);
+  color: var(--sys-cream);
+}
+
+.live-sdi,
+.live-sdi input,
+.live-sdi button,
+.live-sdi div,
+.live-sdi span,
+.live-sdi p {
+  font-family: var(--sys-font);
+}
+
+.live-sdi > .relative,
+.live-sdi .relative {
+  position: relative;
+}
+
+.live-sdi .flex {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.live-sdi .flex-1 {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Hide the package calendar trigger — the text input is the showcase. */
+.live-sdi .flex > .relative:last-child {
+  display: none;
+}
+
+.live-sdi input {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  padding: 0 var(--sys-space-3);
+  border-radius: var(--sys-radius);
+  border: var(--sys-hairline);
+  background: #161616 !important;
+  color: var(--sys-cream) !important;
+  caret-color: var(--sys-cream);
+  font-family: var(--sys-font) !important;
+  font-size: var(--sys-type-kicker) !important;
+  letter-spacing: -0.01em;
+  box-shadow: none !important;
+  transition:
+    border-color var(--sys-ms-hover) var(--sys-ease),
+    color var(--sys-ms-hover) var(--sys-ease);
+}
+
+.live-sdi input::placeholder {
+  color: var(--sys-muted) !important;
+  opacity: 1;
+}
+
+.live-sdi input:focus,
+.live-sdi input:focus-visible {
+  outline: 1px solid var(--sys-cream);
+  outline-offset: 2px;
+  border-color: var(--sys-cream);
+  box-shadow: none;
+}
+
+.live-sdi input.border-green-300,
+.live-sdi input.border-red-300,
+.live-sdi input.border-gray-300 {
+  border-color: var(--sys-line);
+}
+
+.live-sdi input:focus.border-green-300,
+.live-sdi input:focus-visible.border-green-300 {
+  border-color: var(--sys-cream);
+}
+
+.live-sdi .absolute.right-2 {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  pointer-events: none;
+  color: var(--sys-muted);
+  font-size: var(--sys-type-meta);
+}
+
+.live-sdi .absolute.z-50,
+.live-sdi .bg-white {
+  position: absolute;
+  inset-inline: 0;
+  top: auto;
+  bottom: calc(100% + var(--sys-space-1));
+  z-index: 8;
+  max-height: 220px;
+  overflow: auto;
+  border-radius: var(--sys-radius);
+  border: var(--sys-hairline);
+  background: #161616 !important;
+  color: var(--sys-cream) !important;
+  box-shadow: none;
+}
+
+.live-sdi .absolute.z-50 > .px-3,
+.live-sdi .absolute.z-50 > div {
+  padding: var(--sys-space-2);
+  font-family: var(--sys-font) !important;
+  font-size: var(--sys-type-kicker) !important;
+  line-height: var(--sys-lead-kicker);
+  letter-spacing: 0;
+  border-left: 1px solid transparent;
+  background: #161616 !important;
+  color: var(--sys-cream) !important;
+  cursor: pointer;
+}
+
+.live-sdi .absolute.z-50 > .border-t {
+  border-top: var(--sys-hairline);
+  background: var(--sys-ink);
+  color: var(--sys-muted);
+  cursor: default;
+}
+
+.live-sdi .hover\:bg-gray-50:hover,
+.live-sdi .bg-blue-50,
+.live-sdi .absolute.z-50 > div:hover {
+  background: #222;
+}
+
+.live-sdi .text-gray-500,
+.live-sdi .text-gray-600,
+.live-sdi .text-gray-700,
+.live-sdi .text-gray-800,
+.live-sdi .text-gray-900,
+.live-sdi .text-blue-600,
+.live-sdi .text-purple-600,
+.live-sdi .text-green-600,
+.live-sdi .text-yellow-600,
+.live-sdi .text-orange-600,
+.live-sdi .text-red-600 {
+  color: var(--sys-muted);
+}
+
+.live-sdi .font-medium,
+.live-sdi .font-semibold {
+  font-weight: 500;
+  color: var(--sys-cream);
+}
+
+.live-sdi__readout {
+  margin: var(--sys-space-2) 0 0;
+  font-family: var(--sys-font);
+  font-size: var(--sys-type-meta);
+  letter-spacing: var(--sys-track-meta);
+  color: var(--sys-cream);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .live-sdi input {
+    transition: none;
+  }
+}

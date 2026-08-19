@@ -1,13 +1,13 @@
-import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { About } from "../components/About";
-import { Contact } from "../components/Contact";
-import { Footer } from "../components/Footer";
-import { WorkDetail } from "../components/WorkDetail";
-import { allProjects } from "../data/projects";
+import { useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { About } from '../components/About';
+import { Contact } from '../components/Contact';
+import { Footer } from '../components/Footer';
+import { WorkDetail } from '../components/WorkDetail';
+import { allProjects } from '../data/projects';
 
-const LAST_FOCUSED_CARD_KEY = "work:last-focused-slug";
-const SCROLL_KEY = "portfolio:scroll-position";
+const LAST_FOCUSED_CARD_KEY = 'work:last-focused-slug';
+const SCROLL_KEY = 'portfolio:scroll-position';
 
 export function WorkDetailPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -24,13 +24,13 @@ export function WorkDetailPage() {
 
   if (!project) {
     // Redirect to home if project not found
-    navigate("/");
+    navigate('/');
     return null;
   }
 
   const handleClose = () => {
     sessionStorage.setItem(LAST_FOCUSED_CARD_KEY, project.slug);
-    navigate("/");
+    navigate('/');
 
     // Restore scroll position immediately after navigation
     const savedScroll = sessionStorage.getItem(SCROLL_KEY);

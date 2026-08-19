@@ -3,6 +3,7 @@ import { ScrollProgress } from './components/ScrollProgress';
 import { HomePage } from './routes/HomePage';
 import { WorkDetailPage } from './routes/WorkDetailPage';
 import './App.css';
+import './styles/homeSystem.css';
 
 function App() {
   return (

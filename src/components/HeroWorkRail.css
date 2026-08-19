@@ -1,0 +1,80 @@
+.hero-rail {
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  inset-inline: var(--sys-inset);
+  top: auto;
+  bottom: var(--sys-space-5);
+  z-index: 4;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--sys-gap);
+  transform: translate3d(28px, 84vh, 0);
+  pointer-events: none;
+  will-change: transform;
+}
+
+.hero-rail__item {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  list-style: none;
+  gap: var(--sys-space-2);
+  will-change: transform;
+}
+
+.hero-rail__item .sys-card-block {
+  flex: 1;
+}
+
+.hero-rail__still--earth {
+  place-items: center;
+}
+
+.hero-rail__earth-sphere {
+  width: min(68%, 200px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background-color: #03040a;
+  background-image: url("/textures/earth/lo/earthlights.jpg");
+  background-position: 42% 48%;
+  background-size: 180% auto;
+  background-repeat: no-repeat;
+  box-shadow: inset -20px 0 32px rgba(0, 0, 0, 0.92);
+  filter: brightness(1.05) saturate(0.55);
+}
+
+.hero-rail__still--hole {
+  place-items: center;
+}
+
+@media (max-width: 720px) {
+  .hero-rail {
+    position: relative;
+    inset: auto;
+    top: auto;
+    bottom: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--sys-space-4);
+    padding: var(--sys-space-4) var(--sys-inset) var(--sys-space-5);
+    overflow: visible;
+    transform: none;
+    pointer-events: auto;
+  }
+
+  .hero-rail__item {
+    flex: none;
+    width: 100%;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-rail,
+  .hero-rail__item {
+    transform: none;
+    pointer-events: auto;
+    will-change: auto;
+  }
+}
