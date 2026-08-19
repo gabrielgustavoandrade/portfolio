@@ -161,7 +161,10 @@ export function EarthCanvas({
           includeStreak: true,
         });
     if (atmosphere) {
-      atmosphere.setViewSize(sizes.width, sizes.height);
+      atmosphere.setViewSize(
+        sizes.width * renderer.getPixelRatio(),
+        sizes.height * renderer.getPixelRatio(),
+      );
       scene.add(atmosphere.group);
     }
 
@@ -207,7 +210,10 @@ export function EarthCanvas({
       camera.aspect = clientWidth / clientHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(clientWidth, clientHeight);
-      atmosphere?.setViewSize(clientWidth, clientHeight);
+      atmosphere?.setViewSize(
+        clientWidth * renderer.getPixelRatio(),
+        clientHeight * renderer.getPixelRatio(),
+      );
     };
 
     window.addEventListener('resize', handleResize);

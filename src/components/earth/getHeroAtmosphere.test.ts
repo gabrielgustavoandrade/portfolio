@@ -33,7 +33,8 @@ describe('getHeroAtmosphere', () => {
     expect(color.getHex()).toBe(DUST_COLOR);
     expect(color.b).toBeGreaterThanOrEqual(color.r);
     expect(color.g).toBeGreaterThan(0.8);
-    expect(material.vertexShader).toContain('smoothstep(0.5, 0.78, radial)');
+    expect(material.fragmentShader).toContain('gl_FragCoord');
+    expect(material.fragmentShader).toContain('smoothstep(0.54, 0.86, field)');
 
     let beside = 0;
     for (let i = 0; i < positions.count; i += 1) {
@@ -74,9 +75,10 @@ describe('getHeroAtmosphere', () => {
     });
     const streak = atmosphere.group.children[1] as THREE.Points;
     expect(streak).toBeInstanceOf(THREE.Points);
-    const material = streak.material as THREE.PointsMaterial;
+    const material = streak.material as THREE.ShaderMaterial;
+    const color = material.uniforms.uColor.value as THREE.Color;
     expect(material.toneMapped).toBe(false);
-    expect(material.color.b).toBeGreaterThanOrEqual(material.color.r);
+    expect(color.b).toBeGreaterThanOrEqual(color.r);
 
     atmosphere.update(0.7, true);
     expect(streak.visible).toBe(true);
