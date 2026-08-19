@@ -46,7 +46,7 @@
   width: min(94vw, 1120px);
   transform: translate3d(-50%, 0, 0);
   text-align: center;
-  z-index: 1;
+  z-index: 4;
   pointer-events: none;
   will-change: transform;
 }
@@ -88,22 +88,22 @@
 
 .hero__canvas {
   position: absolute;
-  inset: 0;
+  inset: -24%;
   overflow: visible;
   pointer-events: auto;
   -webkit-mask-image: radial-gradient(
     circle closest-side at 50% 50%,
     #000 0%,
-    #000 78%,
-    rgb(0 0 0 / 0.55) 88%,
-    transparent 100%
+    #000 62%,
+    rgb(0 0 0 / 0.5) 78%,
+    transparent 96%
   );
   mask-image: radial-gradient(
     circle closest-side at 50% 50%,
     #000 0%,
-    #000 78%,
-    rgb(0 0 0 / 0.55) 88%,
-    transparent 100%
+    #000 62%,
+    rgb(0 0 0 / 0.5) 78%,
+    transparent 96%
   );
 }
 

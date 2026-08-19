@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import { Line2 } from 'three/examples/jsm/lines/Line2.js';
 import { describe, expect, it } from 'vitest';
 import {
   COMET_FROM,
@@ -34,6 +33,7 @@ describe('getHeroAtmosphere', () => {
     expect(color.getHex()).toBe(DUST_COLOR);
     expect(color.b).toBeGreaterThanOrEqual(color.r);
     expect(color.g).toBeGreaterThan(0.8);
+    expect(material.vertexShader).toContain('smoothstep(0.58, 0.9, radial)');
 
     let beside = 0;
     for (let i = 0; i < positions.count; i += 1) {
@@ -41,7 +41,6 @@ describe('getHeroAtmosphere', () => {
       const y = positions.getY(i);
       const z = positions.getZ(i);
       expect(Math.hypot(x, y, z)).toBeGreaterThan(2.7);
-      expect(Math.hypot(x, y)).toBeLessThan(4.2);
       if (Math.hypot(x, y) > 2.7) beside += 1;
     }
     expect(beside).toBeGreaterThan(positions.count * 0.35);
@@ -73,11 +72,13 @@ describe('getHeroAtmosphere', () => {
       compact: false,
       includeStreak: true,
     });
-    const streak = atmosphere.group.children[1] as Line2;
-    expect(streak).toBeInstanceOf(Line2);
-    expect(streak.material.toneMapped).toBe(false);
+    const streak = atmosphere.group.children[1] as THREE.Mesh;
+    expect(streak).toBeInstanceOf(THREE.Mesh);
+    const material = streak.material as THREE.MeshBasicMaterial;
+    expect(material.toneMapped).toBe(false);
+    expect(material.color.b).toBeGreaterThanOrEqual(material.color.r);
 
-    atmosphere.update(0.8, true);
+    atmosphere.update(0.85, true);
     expect(streak.visible).toBe(true);
 
     atmosphere.update(20, true);

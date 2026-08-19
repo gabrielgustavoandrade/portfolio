@@ -17,7 +17,7 @@ const EARTH_GEOMETRY_DETAIL = 12;
 const CAMERA_FOV = 75;
 const CAMERA_NEAR = 0.1;
 const CAMERA_FAR = 1000;
-const CAMERA_POSITION_Z = 5;
+const CAMERA_POSITION_Z = 7.77;
 
 // Material configuration
 const NORMAL_SCALE = 0.65;
@@ -82,6 +82,10 @@ export function EarthCanvas({
     renderer.setSize(sizes.width, sizes.height);
     renderer.domElement.style.width = '100%';
     renderer.domElement.style.height = '100%';
+    const canvasFade =
+      'radial-gradient(circle closest-side at 50% 50%, #000 0%, #000 62%, rgb(0 0 0 / 0.5) 78%, transparent 96%)';
+    renderer.domElement.style.maskImage = canvasFade;
+    renderer.domElement.style.webkitMaskImage = canvasFade;
     renderer.setClearColor(0x000000, 0);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
