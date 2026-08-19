@@ -10,8 +10,8 @@ export const COMET_WAIT_FIRST = 0.55;
 export const COMET_WAIT_MIN = 22;
 export const COMET_WAIT_MAX = 38;
 export const COMET_FLIGHT = 3.4;
-export const COMET_FROM = new THREE.Vector3(-8.2, 4.6, -6);
-export const COMET_TO = new THREE.Vector3(8.4, 3.2, -9);
+export const COMET_FROM = new THREE.Vector3(-9.2, 2.85, -5);
+export const COMET_TO = new THREE.Vector3(9.4, 2.15, -8);
 
 const DUST_DRIFT = 0.00011;
 const COMET_POINTS = 36;

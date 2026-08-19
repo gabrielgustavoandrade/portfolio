@@ -71,9 +71,8 @@ export function Hero() {
           <HeroDustCanvas paceRef={paceRef} compact={narrow} />
         ) : null}
 
-        <div className="hero__globe" ref={globeRef} aria-hidden="true">
-          <EarthCanvas paceRef={paceRef} />
-        </div>
+        <EarthCanvas paceRef={paceRef} globeRef={globeRef} />
+        <div className="hero__globe" ref={globeRef} aria-hidden="true" />
 
         <HeroWorkRail ref={railRef} />
       </div>
