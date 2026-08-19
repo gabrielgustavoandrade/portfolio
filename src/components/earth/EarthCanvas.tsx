@@ -29,10 +29,10 @@ const ROTATE_SPEED = 0.5;
 const MAX_PIXEL_RATIO_HI = 2;
 const MAX_PIXEL_RATIO_LO = 1.5;
 
-/** Radians per second. ~8 minutes per full Earth turn; clouds a little faster. */
+/** Radians per second. ~4 minutes per full Earth turn; clouds a little faster. */
 const ROTATION_SPEED = {
-  earth: (Math.PI * 2) / 480,
-  clouds: (Math.PI * 2) / 420,
+  earth: (Math.PI * 2) / 240,
+  clouds: (Math.PI * 2) / 210,
 } as const;
 
 export function EarthCanvas({
