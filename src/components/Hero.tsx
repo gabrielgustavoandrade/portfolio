@@ -67,7 +67,7 @@ export function Hero() {
         </div>
 
         <div className="hero__globe" ref={globeRef} aria-hidden="true">
-          <EarthCanvas paceRef={paceRef} />
+          <EarthCanvas paceRef={paceRef} reducedMotion={reducedMotion} />
         </div>
 
         <HeroWorkRail ref={railRef} />

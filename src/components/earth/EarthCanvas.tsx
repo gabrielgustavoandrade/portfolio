@@ -2,6 +2,7 @@ import { type MutableRefObject, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { getFresnelMaterial } from './getFresnelMaterial';
+import { getHeroAtmosphere } from './getHeroAtmosphere';
 import {
   configureEarthTexture,
   pickEarthTextureTier,
@@ -42,8 +43,10 @@ const ROTATION_SPEED = {
 
 export function EarthCanvas({
   paceRef,
+  reducedMotion = false,
 }: {
   paceRef?: MutableRefObject<'full' | 'idle'>;
+  reducedMotion?: boolean;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const paceBag = useRef(paceRef);
@@ -146,6 +149,17 @@ export function EarthCanvas({
     const sunLight = new THREE.DirectionalLight(0xffffff, LIGHT_INTENSITY);
     scene.add(sunLight);
 
+    const compact = tier === 'lo';
+    const atmosphere = reducedMotion
+      ? null
+      : getHeroAtmosphere({
+          compact,
+          includeStreak: !compact,
+        });
+    if (atmosphere) {
+      scene.add(atmosphere.group);
+    }
+
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = DAMPING_FACTOR;
@@ -155,8 +169,11 @@ export function EarthCanvas({
 
     let animationFrame: number;
     let frame = 0;
-    const animate = () => {
+    let lastNow = performance.now();
+    const animate = (now: number) => {
       animationFrame = requestAnimationFrame(animate);
+      const dt = Math.min(0.05, (now - lastNow) / 1000);
+      lastNow = now;
       const idle = paceBag.current?.current === 'idle';
       controls.enabled = !idle;
       controls.update();
@@ -165,6 +182,7 @@ export function EarthCanvas({
       lightsMesh.rotation.y += ROTATION_SPEED.earth;
       cloudsMesh.rotation.y += ROTATION_SPEED.clouds;
       glowMesh.rotation.y += ROTATION_SPEED.earth;
+      atmosphere?.update(dt, !idle);
 
       frame += 1;
       if (idle && frame % 3 !== 0) {
@@ -176,7 +194,7 @@ export function EarthCanvas({
       sunLight.position.copy(lightOffset);
       renderer.render(scene, camera);
     };
-    animate();
+    animate(lastNow);
 
     const handleResize = () => {
       if (!containerRef.current) return;
@@ -204,8 +222,9 @@ export function EarthCanvas({
       normalMap.dispose();
       nightMap.dispose();
       cloudMap.dispose();
+      atmosphere?.dispose();
     };
-  }, []);
+  }, [reducedMotion]);
 
   return <div ref={containerRef} className="hero__canvas" aria-hidden="true" />;
 }
