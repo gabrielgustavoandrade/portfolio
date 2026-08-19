@@ -1,22 +1,24 @@
 import * as THREE from 'three';
 
-export const DUST_HI = 3600;
-export const DUST_LO = 1400;
-export const DUST_COLOR = 0xe8eef6;
-export const DUST_OPACITY = 0.78;
-export const DUST_SIZE = 2.6;
+export const DUST_HI = 420;
+export const DUST_LO = 160;
+export const DUST_COLOR = 0xe8eef2;
+export const DUST_OPACITY = 0.8;
+export const DUST_SIZE = 2.4;
 
-export const COMET_WAIT_FIRST = 0.4;
+export const COMET_WAIT_FIRST = 0.55;
 export const COMET_WAIT_MIN = 22;
 export const COMET_WAIT_MAX = 38;
-export const COMET_FLIGHT = 3.2;
-export const COMET_FROM = new THREE.Vector3(-3.4, 3.62, -0.9);
-export const COMET_TO = new THREE.Vector3(3.4, 3.48, -1.6);
+export const COMET_FLIGHT = 3.4;
+export const COMET_FROM = new THREE.Vector3(-12.5, 5.4, -7);
+export const COMET_TO = new THREE.Vector3(11.5, 3.8, -11);
 
-const EARTH_RADIUS = 2.592;
-const DUST_DRIFT = 0.00016;
-const COMET_POINTS = 80;
-const COMET_COLOR = 0xeef3f9;
+const DUST_DRIFT = 0.00011;
+const COMET_POINTS = 36;
+const COMET_COLOR = 0xe8eef2;
+const SPREAD_X = 18;
+const SPREAD_Y = 12;
+const SPREAD_Z = 16;
 
 export type HeroAtmosphere = {
   group: THREE.Group;
@@ -34,51 +36,49 @@ function smoothstep(edge0: number, edge1: number, x: number) {
   return t * t * (3 - 2 * t);
 }
 
-function createSoftMaterial(
-  color: number,
-  opacity: number,
-  size: number,
-): THREE.ShaderMaterial {
+function createCircleMaterial(color: number, opacity: number, size: number) {
   return new THREE.ShaderMaterial({
     uniforms: {
       uColor: { value: new THREE.Color(color) },
       uOpacity: { value: opacity },
       uSize: { value: size },
-      uResolution: { value: new THREE.Vector2(1280, 720) },
+      uField: { value: 1 },
     },
     vertexShader: `
       attribute float aAlpha;
       uniform float uSize;
       varying float vAlpha;
+      varying float vEdge;
       void main() {
         vAlpha = aAlpha;
         vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+        vec4 clip = projectionMatrix * mvPosition;
+        vec2 ndc = clip.xy / max(clip.w, 0.0001);
+        float edgeX = 1.0 - smoothstep(0.8, 0.97, abs(ndc.x));
+        float edgeY = 1.0 - smoothstep(0.8, 0.97, abs(ndc.y));
+        vEdge = edgeX * edgeY;
         gl_PointSize = uSize;
-        gl_Position = projectionMatrix * mvPosition;
+        gl_Position = clip;
       }
     `,
     fragmentShader: `
       uniform vec3 uColor;
       uniform float uOpacity;
-      uniform vec2 uResolution;
+      uniform float uField;
       varying float vAlpha;
+      varying float vEdge;
       void main() {
-        vec2 center = uResolution * 0.5;
-        float halfMin = 0.5 * min(uResolution.x, uResolution.y);
-        float field = distance(gl_FragCoord.xy, center) / max(halfMin, 1.0);
-        float edge = 1.0 - smoothstep(0.46, 0.82, field);
-        if (edge < 0.02) discard;
-        vec2 p = gl_PointCoord * 2.0 - 1.0;
-        float d = length(p);
-        if (d > 1.0) discard;
-        float soft = 1.0 - smoothstep(0.08, 1.0, d);
-        gl_FragColor = vec4(uColor, uOpacity * vAlpha * edge * soft);
+        vec2 uv = gl_PointCoord.xy;
+        float d = length(uv - vec2(0.5));
+        float circle = smoothstep(0.5, 0.4, d) * 0.8;
+        if (circle < 0.01 || vEdge < 0.01) discard;
+        gl_FragColor = vec4(uColor, uOpacity * uField * vAlpha * vEdge * circle);
       }
     `,
     transparent: true,
     blending: THREE.AdditiveBlending,
     depthWrite: false,
-    depthTest: true,
+    depthTest: false,
     toneMapped: false,
   });
 }
@@ -86,39 +86,32 @@ function createSoftMaterial(
 function createDust(count: number) {
   const positions = new Float32Array(count * 3);
   const alphas = new Float32Array(count);
-  let written = 0;
 
-  while (written < count) {
-    const radius = 3.2 + Math.random() * 2.35;
-    const theta = Math.random() * Math.PI * 2;
-    const phi = Math.acos(2 * Math.random() - 1);
-    const x = radius * Math.sin(phi) * Math.cos(theta);
-    const y = radius * Math.sin(phi) * Math.sin(theta) * 0.86;
-    let z = radius * Math.cos(phi);
+  for (let i = 0; i < count; i += 1) {
+    let x = 0;
+    let y = 0;
+    let z = 0;
+    let len = 0;
+    do {
+      x = Math.random() * 2 - 1;
+      y = Math.random() * 2 - 1;
+      z = Math.random() * 2 - 1;
+      len = x * x + y * y + z * z;
+    } while (len > 1 || len === 0);
 
-    if (z > 0.65) {
-      z = -Math.abs(z) * 0.6 - 0.8;
-    }
-
-    const xy = Math.hypot(x, y);
-    const inEarth = Math.hypot(x, y, z) < EARTH_RADIUS + 0.42;
-    const onFace = z > 0.35 && xy < EARTH_RADIUS + 0.24;
-    if (inEarth || onFace || xy > 5.05) continue;
-
-    positions[written * 3] = x;
-    positions[written * 3 + 1] = y;
-    positions[written * 3 + 2] = z;
-    alphas[written] = 0.32 + 0.68 * smoothstep(4.85, 3.15, xy);
-    written += 1;
+    const radius = Math.cbrt(Math.random());
+    positions[i * 3] = x * radius * SPREAD_X;
+    positions[i * 3 + 1] = y * radius * SPREAD_Y;
+    positions[i * 3 + 2] = -Math.abs(z * radius * SPREAD_Z) - 2.4;
+    alphas[i] = 0.35 + Math.random() * 0.65;
   }
 
   const geometry = new THREE.BufferGeometry();
   geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
   geometry.setAttribute('aAlpha', new THREE.BufferAttribute(alphas, 1));
 
-  const material = createSoftMaterial(DUST_COLOR, DUST_OPACITY, DUST_SIZE);
+  const material = createCircleMaterial(DUST_COLOR, DUST_OPACITY, DUST_SIZE);
   const points = new THREE.Points(geometry, material);
-  points.renderOrder = -1;
   points.frustumCulled = false;
   return { points, geometry, material };
 }
@@ -135,10 +128,8 @@ function createComet() {
   geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
   geometry.setAttribute('aAlpha', new THREE.BufferAttribute(alphas, 1));
 
-  const material = createSoftMaterial(COMET_COLOR, 0.96, 4.2);
-  material.depthTest = false;
+  const material = createCircleMaterial(COMET_COLOR, 0.92, 3.1);
   const points = new THREE.Points(geometry, material);
-  points.renderOrder = 2;
   points.frustumCulled = false;
   points.visible = false;
   return { points, geometry, material, positions };
@@ -163,39 +154,44 @@ export function getHeroAtmosphere({
   let wait = COMET_WAIT_FIRST;
   let flight = 0;
   let flying = false;
+  let field = 1;
   const scratch = new THREE.Vector3();
 
   const update = (dt: number, active: boolean) => {
-    group.visible = active;
-    if (!active) {
+    const target = active ? 1 : 0;
+    field += (target - field) * (1 - Math.exp(-dt / 0.35));
+    dust.material.uniforms.uField.value = field;
+    if (field < 0.02) {
+      group.visible = false;
       if (comet) comet.points.visible = false;
       return;
     }
+    group.visible = true;
 
     dust.points.rotation.y += DUST_DRIFT;
-    dust.points.rotation.x += DUST_DRIFT * 0.14;
+    dust.points.rotation.x += DUST_DRIFT * 0.12;
 
     if (!comet) return;
 
     if (!flying) {
       wait -= dt;
       comet.points.visible = false;
-      if (wait > 0) return;
+      if (wait > 0 || !active) return;
       flying = true;
-      flight = COMET_FLIGHT * 0.22;
+      flight = 0;
       wait = randomInRange(COMET_WAIT_MIN, COMET_WAIT_MAX);
     }
 
     flight += dt;
     const t = Math.min(1, flight / COMET_FLIGHT);
-    const fadeIn = smoothstep(0, 0.05, t);
-    const fadeOut = 1 - smoothstep(0.86, 1, t);
-    comet.material.uniforms.uOpacity.value = 0.95 * fadeIn * fadeOut;
+    const fadeIn = smoothstep(0, 0.06, t);
+    const fadeOut = 1 - smoothstep(0.84, 1, t);
+    comet.material.uniforms.uOpacity.value = 0.92 * fadeIn * fadeOut;
+    comet.material.uniforms.uField.value = field;
     comet.points.visible = t > 0 && t < 1;
 
     for (let i = 0; i < COMET_POINTS; i += 1) {
-      const trail = t - i * 0.0042;
-      const u = THREE.MathUtils.clamp(trail, 0, 1);
+      const u = THREE.MathUtils.clamp(t - i * 0.008, 0, 1);
       scratch.lerpVectors(COMET_FROM, COMET_TO, u);
       comet.positions[i * 3] = scratch.x;
       comet.positions[i * 3 + 1] = scratch.y;
@@ -209,11 +205,7 @@ export function getHeroAtmosphere({
     }
   };
 
-  const setViewSize = (width: number, height: number) => {
-    const next = new THREE.Vector2(Math.max(1, width), Math.max(1, height));
-    dust.material.uniforms.uResolution.value.copy(next);
-    comet?.material.uniforms.uResolution.value.copy(next);
-  };
+  const setViewSize = () => undefined;
 
   const dispose = () => {
     dust.geometry.dispose();

@@ -2,7 +2,6 @@ import { type MutableRefObject, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { getFresnelMaterial } from './getFresnelMaterial';
-import { getHeroAtmosphere } from './getHeroAtmosphere';
 import {
   configureEarthTexture,
   pickEarthTextureTier,
@@ -17,7 +16,7 @@ const EARTH_GEOMETRY_DETAIL = 12;
 const CAMERA_FOV = 75;
 const CAMERA_NEAR = 0.1;
 const CAMERA_FAR = 1000;
-const CAMERA_POSITION_Z = 7.77;
+const CAMERA_POSITION_Z = 5;
 
 // Material configuration
 const NORMAL_SCALE = 0.65;
@@ -43,10 +42,8 @@ const ROTATION_SPEED = {
 
 export function EarthCanvas({
   paceRef,
-  reducedMotion = false,
 }: {
   paceRef?: MutableRefObject<'full' | 'idle'>;
-  reducedMotion?: boolean;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const paceBag = useRef(paceRef);
@@ -82,11 +79,7 @@ export function EarthCanvas({
     renderer.setSize(sizes.width, sizes.height);
     renderer.domElement.style.width = '100%';
     renderer.domElement.style.height = '100%';
-    const canvasFade =
-      'radial-gradient(circle closest-side at 50% 50%, #000 0%, #000 62%, rgb(0 0 0 / 0.5) 78%, transparent 96%)';
-    renderer.domElement.style.maskImage = canvasFade;
-    renderer.domElement.style.webkitMaskImage = canvasFade;
-    renderer.setClearColor(0x050505, 1);
+    renderer.setClearColor(0x000000, 0);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.05;
@@ -153,21 +146,6 @@ export function EarthCanvas({
     const sunLight = new THREE.DirectionalLight(0xffffff, LIGHT_INTENSITY);
     scene.add(sunLight);
 
-    const compact = tier === 'lo';
-    const atmosphere = reducedMotion
-      ? null
-      : getHeroAtmosphere({
-          compact,
-          includeStreak: true,
-        });
-    if (atmosphere) {
-      atmosphere.setViewSize(
-        sizes.width * renderer.getPixelRatio(),
-        sizes.height * renderer.getPixelRatio(),
-      );
-      scene.add(atmosphere.group);
-    }
-
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = DAMPING_FACTOR;
@@ -177,11 +155,8 @@ export function EarthCanvas({
 
     let animationFrame: number;
     let frame = 0;
-    let lastNow = performance.now();
-    const animate = (now: number) => {
+    const animate = () => {
       animationFrame = requestAnimationFrame(animate);
-      const dt = Math.min(0.05, (now - lastNow) / 1000);
-      lastNow = now;
       const idle = paceBag.current?.current === 'idle';
       controls.enabled = !idle;
       controls.update();
@@ -190,7 +165,6 @@ export function EarthCanvas({
       lightsMesh.rotation.y += ROTATION_SPEED.earth;
       cloudsMesh.rotation.y += ROTATION_SPEED.clouds;
       glowMesh.rotation.y += ROTATION_SPEED.earth;
-      atmosphere?.update(dt, !idle);
 
       frame += 1;
       if (idle && frame % 3 !== 0) {
@@ -202,7 +176,7 @@ export function EarthCanvas({
       sunLight.position.copy(lightOffset);
       renderer.render(scene, camera);
     };
-    animate(lastNow);
+    animate();
 
     const handleResize = () => {
       if (!containerRef.current) return;
@@ -210,10 +184,6 @@ export function EarthCanvas({
       camera.aspect = clientWidth / clientHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(clientWidth, clientHeight);
-      atmosphere?.setViewSize(
-        clientWidth * renderer.getPixelRatio(),
-        clientHeight * renderer.getPixelRatio(),
-      );
     };
 
     window.addEventListener('resize', handleResize);
@@ -234,9 +204,8 @@ export function EarthCanvas({
       normalMap.dispose();
       nightMap.dispose();
       cloudMap.dispose();
-      atmosphere?.dispose();
     };
-  }, [reducedMotion]);
+  }, []);
 
   return <div ref={containerRef} className="hero__canvas" aria-hidden="true" />;
 }

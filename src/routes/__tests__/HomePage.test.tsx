@@ -7,6 +7,10 @@ vi.mock('../../components/earth/EarthCanvas', () => ({
   EarthCanvas: () => <div data-testid="earth-canvas" />,
 }));
 
+vi.mock('../../components/earth/HeroDustCanvas', () => ({
+  HeroDustCanvas: () => <div data-testid="hero-dust" />,
+}));
+
 vi.mock('../../components/HeroStarfield', () => ({
   HeroStarfield: () => <div data-testid="hero-starfield" />,
 }));

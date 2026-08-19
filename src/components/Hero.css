@@ -72,12 +72,18 @@
   will-change: transform, opacity;
 }
 
+.hero__dust {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
 .hero__globe {
   position: absolute;
   top: 0;
   left: 0;
   z-index: 2;
-  overflow: visible;
   transform-origin: center center;
   will-change: transform;
 }
@@ -88,23 +94,8 @@
 
 .hero__canvas {
   position: absolute;
-  inset: -24%;
-  overflow: visible;
+  inset: 0;
   pointer-events: auto;
-  -webkit-mask-image: radial-gradient(
-    circle closest-side at 50% 50%,
-    #000 0%,
-    #000 62%,
-    rgb(0 0 0 / 0.5) 78%,
-    transparent 96%
-  );
-  mask-image: radial-gradient(
-    circle closest-side at 50% 50%,
-    #000 0%,
-    #000 62%,
-    rgb(0 0 0 / 0.5) 78%,
-    transparent 96%
-  );
 }
 
 .hero--rail-live .hero-rail,

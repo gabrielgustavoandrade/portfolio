@@ -3,6 +3,7 @@ import { useHeroMotion } from '../hooks/useHeroMotion';
 import { useIsNarrowViewport } from '../hooks/useIsNarrowViewport';
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
 import { EarthCanvas } from './earth/EarthCanvas';
+import { HeroDustCanvas } from './earth/HeroDustCanvas';
 import { HeroWorkRail } from './HeroWorkRail';
 import './Hero.css';
 
@@ -66,8 +67,12 @@ export function Hero() {
           </p>
         </div>
 
+        {!reducedMotion ? (
+          <HeroDustCanvas paceRef={paceRef} compact={narrow} />
+        ) : null}
+
         <div className="hero__globe" ref={globeRef} aria-hidden="true">
-          <EarthCanvas paceRef={paceRef} reducedMotion={reducedMotion} />
+          <EarthCanvas paceRef={paceRef} />
         </div>
 
         <HeroWorkRail ref={railRef} />
