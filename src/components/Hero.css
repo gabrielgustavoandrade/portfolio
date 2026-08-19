@@ -92,6 +92,8 @@
   top: 0;
   left: 0;
   z-index: 3;
+  width: min(78vw, 64vh, 760px);
+  height: min(78vw, 64vh, 760px);
   transform-origin: center center;
   will-change: transform;
 }

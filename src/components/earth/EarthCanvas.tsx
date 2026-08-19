@@ -51,9 +51,9 @@ function fitEarthToHit(pose: THREE.Group, host: DOMRect, hit: DOMRect) {
 
   pose.position.set(ndcX * halfW, ndcY * viewHalfH, 0);
 
-  const targetPx = hit.width * EARTH_FILL;
-  const currentPx = (EARTH_RADIUS / viewHalfH) * (host.height / 2);
-  pose.scale.setScalar(targetPx / Math.max(currentPx, 0.0001));
+  const targetDiameter = hit.width * EARTH_FILL;
+  const currentDiameter = ((EARTH_RADIUS * 2) / viewHalfH) * (host.height / 2);
+  pose.scale.setScalar(targetDiameter / Math.max(currentDiameter, 0.0001));
 }
 
 export function EarthCanvas({
