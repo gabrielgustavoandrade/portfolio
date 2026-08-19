@@ -34,7 +34,7 @@ describe('getHeroAtmosphere', () => {
     expect(color.b).toBeGreaterThanOrEqual(color.r);
     expect(color.g).toBeGreaterThan(0.8);
     expect(material.fragmentShader).toContain('gl_FragCoord');
-    expect(material.fragmentShader).toContain('smoothstep(0.54, 0.86, field)');
+    expect(material.fragmentShader).toContain('smoothstep(0.48, 0.74, field)');
 
     let beside = 0;
     for (let i = 0; i < positions.count; i += 1) {
