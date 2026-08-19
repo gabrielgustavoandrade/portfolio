@@ -67,7 +67,11 @@ export function EarthCanvas({
     camera.position.z = CAMERA_POSITION_Z;
 
     const tier = pickEarthTextureTier();
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    const renderer = new THREE.WebGLRenderer({
+      antialias: true,
+      alpha: true,
+      premultipliedAlpha: false,
+    });
     const maxAnisotropy = renderer.capabilities.getMaxAnisotropy();
     const anisotropy = Math.min(tier === 'hi' ? 8 : 4, maxAnisotropy);
     renderer.setPixelRatio(

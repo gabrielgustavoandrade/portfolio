@@ -1,17 +1,17 @@
 import * as THREE from 'three';
 
-export const DUST_HI = 420;
-export const DUST_LO = 160;
+export const DUST_HI = 480;
+export const DUST_LO = 200;
 export const DUST_COLOR = 0xe8eef2;
-export const DUST_OPACITY = 0.8;
-export const DUST_SIZE = 2.4;
+export const DUST_OPACITY = 0.72;
+export const DUST_SIZE = 7;
 
 export const COMET_WAIT_FIRST = 0.55;
 export const COMET_WAIT_MIN = 22;
 export const COMET_WAIT_MAX = 38;
 export const COMET_FLIGHT = 3.4;
-export const COMET_FROM = new THREE.Vector3(-12.5, 5.4, -7);
-export const COMET_TO = new THREE.Vector3(11.5, 3.8, -11);
+export const COMET_FROM = new THREE.Vector3(-8.2, 4.6, -6);
+export const COMET_TO = new THREE.Vector3(8.4, 3.2, -9);
 
 const DUST_DRIFT = 0.00011;
 const COMET_POINTS = 36;
@@ -57,7 +57,7 @@ function createCircleMaterial(color: number, opacity: number, size: number) {
         float edgeX = 1.0 - smoothstep(0.8, 0.97, abs(ndc.x));
         float edgeY = 1.0 - smoothstep(0.8, 0.97, abs(ndc.y));
         vEdge = edgeX * edgeY;
-        gl_PointSize = uSize;
+        gl_PointSize = uSize * (12.0 / max(length(mvPosition.xyz), 6.0));
         gl_Position = clip;
       }
     `,
@@ -88,22 +88,16 @@ function createDust(count: number) {
   const alphas = new Float32Array(count);
 
   for (let i = 0; i < count; i += 1) {
-    let x = 0;
-    let y = 0;
-    let z = 0;
-    let len = 0;
-    do {
-      x = Math.random() * 2 - 1;
-      y = Math.random() * 2 - 1;
-      z = Math.random() * 2 - 1;
-      len = x * x + y * y + z * z;
-    } while (len > 1 || len === 0);
-
-    const radius = Math.cbrt(Math.random());
-    positions[i * 3] = x * radius * SPREAD_X;
-    positions[i * 3 + 1] = y * radius * SPREAD_Y;
-    positions[i * 3 + 2] = -Math.abs(z * radius * SPREAD_Z) - 2.4;
-    alphas[i] = 0.35 + Math.random() * 0.65;
+    const x = (Math.random() * 2 - 1) * SPREAD_X;
+    let y = (Math.random() * 2 - 1) * SPREAD_Y;
+    if (Math.random() < 0.38) {
+      y = Math.abs(y) * 0.45 + 2.2;
+    }
+    const z = -2.2 - Math.random() * SPREAD_Z;
+    positions[i * 3] = x;
+    positions[i * 3 + 1] = y;
+    positions[i * 3 + 2] = z;
+    alphas[i] = 0.28 + Math.random() * 0.72;
   }
 
   const geometry = new THREE.BufferGeometry();
@@ -128,7 +122,7 @@ function createComet() {
   geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
   geometry.setAttribute('aAlpha', new THREE.BufferAttribute(alphas, 1));
 
-  const material = createCircleMaterial(COMET_COLOR, 0.92, 3.1);
+  const material = createCircleMaterial(COMET_COLOR, 0.94, 5.5);
   const points = new THREE.Points(geometry, material);
   points.frustumCulled = false;
   points.visible = false;
@@ -178,7 +172,7 @@ export function getHeroAtmosphere({
       comet.points.visible = false;
       if (wait > 0 || !active) return;
       flying = true;
-      flight = 0;
+      flight = COMET_FLIGHT * 0.18;
       wait = randomInRange(COMET_WAIT_MIN, COMET_WAIT_MAX);
     }
 
