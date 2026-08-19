@@ -15,7 +15,7 @@ export const COMET_TO = new THREE.Vector3(3.4, 3.48, -1.6);
 
 const EARTH_RADIUS = 2.592;
 const DUST_DRIFT = 0.00016;
-const COMET_POINTS = 56;
+const COMET_POINTS = 80;
 const COMET_COLOR = 0xeef3f9;
 
 export type HeroAtmosphere = {
@@ -66,7 +66,7 @@ function createSoftMaterial(
         vec2 center = uResolution * 0.5;
         float halfMin = 0.5 * min(uResolution.x, uResolution.y);
         float field = distance(gl_FragCoord.xy, center) / max(halfMin, 1.0);
-        float edge = 1.0 - smoothstep(0.48, 0.74, field);
+        float edge = 1.0 - smoothstep(0.46, 0.82, field);
         if (edge < 0.02) discard;
         vec2 p = gl_PointCoord * 2.0 - 1.0;
         float d = length(p);
@@ -135,7 +135,7 @@ function createComet() {
   geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
   geometry.setAttribute('aAlpha', new THREE.BufferAttribute(alphas, 1));
 
-  const material = createSoftMaterial(COMET_COLOR, 0.96, 4.8);
+  const material = createSoftMaterial(COMET_COLOR, 0.96, 4.2);
   material.depthTest = false;
   const points = new THREE.Points(geometry, material);
   points.renderOrder = 2;
@@ -194,7 +194,7 @@ export function getHeroAtmosphere({
     comet.points.visible = t > 0 && t < 1;
 
     for (let i = 0; i < COMET_POINTS; i += 1) {
-      const trail = t - i * 0.0074;
+      const trail = t - i * 0.0042;
       const u = THREE.MathUtils.clamp(trail, 0, 1);
       scratch.lerpVectors(COMET_FROM, COMET_TO, u);
       comet.positions[i * 3] = scratch.x;
