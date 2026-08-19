@@ -86,7 +86,7 @@ export function EarthCanvas({
       'radial-gradient(circle closest-side at 50% 50%, #000 0%, #000 62%, rgb(0 0 0 / 0.5) 78%, transparent 96%)';
     renderer.domElement.style.maskImage = canvasFade;
     renderer.domElement.style.webkitMaskImage = canvasFade;
-    renderer.setClearColor(0x000000, 0);
+    renderer.setClearColor(0x050505, 1);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.05;
