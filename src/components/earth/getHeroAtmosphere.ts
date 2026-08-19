@@ -84,7 +84,7 @@ function createDust(count: number) {
         world.y += sin(t * aRandom.y + 6.28 * aRandom.x) * mix(0.1, 1.5, aRandom.w);
         world.z += sin(t * aRandom.w + 6.28 * aRandom.y) * mix(0.1, 1.5, aRandom.z);
         vec4 mvPosition = viewMatrix * world;
-        gl_PointSize = (uBaseSize * (1.0 + (aRandom.x - 0.5))) / max(length(mvPosition.xyz), 0.001);
+        gl_PointSize = max(3.2, (uBaseSize * (1.0 + (aRandom.x - 0.5))) / max(length(mvPosition.xyz), 0.001));
         gl_Position = projectionMatrix * mvPosition;
         vAlpha = 0.55 + 0.45 * aRandom.y;
       }
@@ -184,7 +184,7 @@ export function getHeroAtmosphere({
       line.visible = false;
       if (wait > 0 || !active) return;
       flying = true;
-      flight = 0;
+      flight = COMET_FLIGHT * 0.2;
       wait = randomInRange(COMET_WAIT_MIN, COMET_WAIT_MAX);
     }
 
@@ -201,7 +201,7 @@ export function getHeroAtmosphere({
     linePositions[4] = head.y;
     linePositions[5] = head.z;
     lineGeometry.attributes.position.needsUpdate = true;
-    lineMaterial.opacity = 0.28 * fadeIn * fadeOut * field;
+    lineMaterial.opacity = 0.4 * fadeIn * fadeOut * field;
     line.visible = t > 0 && t < 1;
 
     if (flight >= COMET_FLIGHT) {
