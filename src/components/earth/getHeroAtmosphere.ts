@@ -86,7 +86,7 @@ function createDust(count: number) {
         float sized =
           (uBaseSize * (1.0 + 0.35 * (aRandom.x - 0.5))) /
           max(length(mvPosition.xyz), 8.0);
-        gl_PointSize = clamp(sized, 2.4, 7.5);
+        gl_PointSize = clamp(sized, 1.0, 2.8);
         gl_Position = projectionMatrix * mvPosition;
         vAlpha = 0.55 + 0.45 * aRandom.y;
       }

@@ -29,9 +29,10 @@ const ROTATE_SPEED = 0.5;
 const MAX_PIXEL_RATIO_HI = 2;
 const MAX_PIXEL_RATIO_LO = 1.5;
 
+/** Radians per second. ~8 minutes per full Earth turn; clouds a little faster. */
 const ROTATION_SPEED = {
-  earth: 0.002,
-  clouds: 0.0023,
+  earth: (Math.PI * 2) / 480,
+  clouds: (Math.PI * 2) / 420,
 } as const;
 
 export function EarthCanvas({
@@ -154,16 +155,19 @@ export function EarthCanvas({
 
     let animationFrame: number;
     let frame = 0;
-    const animate = () => {
+    let lastNow = performance.now();
+    const animate = (now: number) => {
       animationFrame = requestAnimationFrame(animate);
+      const dt = Math.min(0.05, (now - lastNow) / 1000);
+      lastNow = now;
       const idle = paceBag.current?.current === 'idle';
       controls.enabled = !idle;
       controls.update();
 
-      earthMesh.rotation.y += ROTATION_SPEED.earth;
-      lightsMesh.rotation.y += ROTATION_SPEED.earth;
-      cloudsMesh.rotation.y += ROTATION_SPEED.clouds;
-      glowMesh.rotation.y += ROTATION_SPEED.earth;
+      earthMesh.rotation.y += ROTATION_SPEED.earth * dt;
+      lightsMesh.rotation.y += ROTATION_SPEED.earth * dt;
+      cloudsMesh.rotation.y += ROTATION_SPEED.clouds * dt;
+      glowMesh.rotation.y += ROTATION_SPEED.earth * dt;
 
       frame += 1;
       if (idle && frame % 3 !== 0) {
@@ -175,7 +179,7 @@ export function EarthCanvas({
       sunLight.position.copy(lightOffset);
       renderer.render(scene, camera);
     };
-    animate();
+    animate(lastNow);
 
     const handleResize = () => {
       if (!containerRef.current) return;

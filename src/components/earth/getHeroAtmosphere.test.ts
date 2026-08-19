@@ -31,6 +31,7 @@ describe('getHeroAtmosphere', () => {
     expect(material.depthWrite).toBe(false);
     expect(material.fragmentShader).toContain('smoothstep(0.5, 0.4, d) * 0.8');
     expect(material.vertexShader).toContain('-abs(pos.z) * 10.0');
+    expect(material.vertexShader).toContain('clamp(sized, 1.0, 2.8)');
     expect(material.vertexShader).not.toContain('particles.rotation');
     expect(color.getHex()).toBe(DUST_COLOR);
 
