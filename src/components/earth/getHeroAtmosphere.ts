@@ -10,8 +10,8 @@ export const COMET_WAIT_FIRST = 0.4;
 export const COMET_WAIT_MIN = 22;
 export const COMET_WAIT_MAX = 38;
 export const COMET_FLIGHT = 3.6;
-export const COMET_FROM = new THREE.Vector3(-3.2, 3.28, -2.5);
-export const COMET_TO = new THREE.Vector3(3.25, 2.92, -3.6);
+export const COMET_FROM = new THREE.Vector3(-3.4, 3.62, -0.9);
+export const COMET_TO = new THREE.Vector3(3.4, 3.48, -1.6);
 
 const EARTH_RADIUS = 2.592;
 const DUST_DRIFT = 0.00016;
@@ -194,7 +194,7 @@ export function getHeroAtmosphere({
     comet.points.visible = t > 0 && t < 1;
 
     for (let i = 0; i < COMET_POINTS; i += 1) {
-      const trail = t - i * 0.0048;
+      const trail = t - i * 0.0062;
       const u = THREE.MathUtils.clamp(trail, 0, 1);
       scratch.lerpVectors(COMET_FROM, COMET_TO, u);
       comet.positions[i * 3] = scratch.x;

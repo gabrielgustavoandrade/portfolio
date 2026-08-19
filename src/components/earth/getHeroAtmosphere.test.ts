@@ -63,9 +63,9 @@ describe('getHeroAtmosphere', () => {
   it('brings one in-frame cool streak on early, not a shower', () => {
     expect(COMET_WAIT_FIRST).toBeLessThanOrEqual(1);
     expect(Math.abs(COMET_FROM.x)).toBeLessThan(3.6);
-    expect(Math.abs(COMET_FROM.y)).toBeLessThan(3.4);
+    expect(Math.abs(COMET_FROM.y)).toBeLessThan(3.8);
     expect(Math.abs(COMET_TO.x)).toBeLessThan(3.6);
-    expect(Math.abs(COMET_TO.y)).toBeLessThan(3.4);
+    expect(Math.abs(COMET_TO.y)).toBeLessThan(3.8);
     expect(COMET_FROM.z).toBeLessThan(0);
     expect(COMET_TO.z).toBeLessThan(0);
 
