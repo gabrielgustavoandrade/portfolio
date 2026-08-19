@@ -1,9 +1,4 @@
-import {
-  type MutableRefObject,
-  type RefObject,
-  useEffect,
-  useRef,
-} from 'react';
+import { type MutableRefObject, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { getFresnelMaterial } from './getFresnelMaterial';
@@ -15,7 +10,6 @@ import {
 const EARTH_RADIUS = 2.592;
 const EARTH_TILT_DEGREES = -23.4;
 const EARTH_GEOMETRY_DETAIL = 12;
-const EARTH_FILL = 0.73;
 
 const CAMERA_FOV = 75;
 const CAMERA_NEAR = 0.1;
@@ -40,34 +34,14 @@ const ROTATION_SPEED = {
   clouds: 0.0023,
 } as const;
 
-function fitEarthToHit(pose: THREE.Group, host: DOMRect, hit: DOMRect) {
-  if (host.width < 2 || host.height < 2 || hit.width < 2) return;
-
-  const ndcX = ((hit.left + hit.width / 2 - host.left) / host.width) * 2 - 1;
-  const ndcY = -(((hit.top + hit.height / 2 - host.top) / host.height) * 2 - 1);
-  const viewHalfH =
-    CAMERA_POSITION_Z * Math.tan(THREE.MathUtils.degToRad(CAMERA_FOV * 0.5));
-  const halfW = viewHalfH * (host.width / host.height);
-
-  pose.position.set(ndcX * halfW, ndcY * viewHalfH, 0);
-
-  const targetDiameter = hit.width * EARTH_FILL;
-  const currentDiameter = ((EARTH_RADIUS * 2) / viewHalfH) * (host.height / 2);
-  pose.scale.setScalar(targetDiameter / Math.max(currentDiameter, 0.0001));
-}
-
 export function EarthCanvas({
   paceRef,
-  globeRef,
 }: {
   paceRef?: MutableRefObject<'full' | 'idle'>;
-  globeRef?: RefObject<HTMLDivElement | null>;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const paceBag = useRef(paceRef);
-  const globeBag = useRef(globeRef);
   paceBag.current = paceRef;
-  globeBag.current = globeRef;
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -103,7 +77,6 @@ export function EarthCanvas({
     renderer.setSize(sizes.width, sizes.height);
     renderer.domElement.style.width = '100%';
     renderer.domElement.style.height = '100%';
-    renderer.domElement.style.pointerEvents = 'none';
     renderer.setClearColor(0x000000, 0);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -117,12 +90,9 @@ export function EarthCanvas({
       return configureEarthTexture(texture, { color, anisotropy });
     };
 
-    const pose = new THREE.Group();
-    scene.add(pose);
-
     const earthGroup = new THREE.Group();
     earthGroup.rotation.z = THREE.MathUtils.degToRad(EARTH_TILT_DEGREES);
-    pose.add(earthGroup);
+    scene.add(earthGroup);
 
     const geometry = new THREE.IcosahedronGeometry(
       EARTH_RADIUS,
@@ -174,29 +144,18 @@ export function EarthCanvas({
     const sunLight = new THREE.DirectionalLight(0xffffff, LIGHT_INTENSITY);
     scene.add(sunLight);
 
-    const hit = globeBag.current?.current ?? renderer.domElement;
-    const controls = new OrbitControls(camera, hit);
+    const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = DAMPING_FACTOR;
     controls.enableZoom = false;
     controls.enablePan = false;
     controls.rotateSpeed = ROTATE_SPEED;
 
-    const cameraOffset = new THREE.Vector3();
-
     let animationFrame: number;
     let frame = 0;
     const animate = () => {
       animationFrame = requestAnimationFrame(animate);
       const idle = paceBag.current?.current === 'idle';
-      const host = containerRef.current?.getBoundingClientRect();
-      const globe = globeBag.current?.current?.getBoundingClientRect();
-      if (host && globe) {
-        cameraOffset.copy(camera.position).sub(controls.target);
-        fitEarthToHit(pose, host, globe);
-        controls.target.copy(pose.position);
-        camera.position.copy(pose.position).add(cameraOffset);
-      }
       controls.enabled = !idle;
       controls.update();
 
@@ -246,5 +205,5 @@ export function EarthCanvas({
     };
   }, []);
 
-  return <div ref={containerRef} className="hero__earth" aria-hidden="true" />;
+  return <div ref={containerRef} className="hero__canvas" aria-hidden="true" />;
 }
