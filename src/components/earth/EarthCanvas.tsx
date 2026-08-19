@@ -157,6 +157,7 @@ export function EarthCanvas({
           includeStreak: true,
         });
     if (atmosphere) {
+      atmosphere.setViewSize(sizes.width, sizes.height);
       scene.add(atmosphere.group);
     }
 
@@ -202,6 +203,7 @@ export function EarthCanvas({
       camera.aspect = clientWidth / clientHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(clientWidth, clientHeight);
+      atmosphere?.setViewSize(clientWidth, clientHeight);
     };
 
     window.addEventListener('resize', handleResize);
