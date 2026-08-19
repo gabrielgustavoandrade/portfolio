@@ -30,7 +30,8 @@ describe('getHeroAtmosphere', () => {
     expect(material.blending).toBe(THREE.AdditiveBlending);
     expect(material.depthWrite).toBe(false);
     expect(material.fragmentShader).toContain('smoothstep(0.5, 0.4, d) * 0.8');
-    expect(material.vertexShader).toContain('pos.z *= 10.0');
+    expect(material.vertexShader).toContain('-abs(pos.z) * 10.0');
+    expect(material.vertexShader).not.toContain('particles.rotation');
     expect(color.getHex()).toBe(DUST_COLOR);
 
     for (let i = 0; i < positions.count; i += 1) {
@@ -38,6 +39,14 @@ describe('getHeroAtmosphere', () => {
         Math.hypot(positions.getX(i), positions.getY(i), positions.getZ(i)),
       ).toBeLessThanOrEqual(1.0001);
     }
+
+    atmosphere.update(2, true);
+    expect(dust.rotation.x).toBe(0);
+    expect(dust.rotation.y).toBe(0);
+    expect(dust.rotation.z).toBe(0);
+    expect(atmosphere.group.rotation.x).toBe(0);
+    expect(atmosphere.group.rotation.y).toBe(0);
+    expect(atmosphere.group.rotation.z).toBe(0);
 
     atmosphere.dispose();
   });

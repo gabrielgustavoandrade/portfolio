@@ -77,14 +77,16 @@ function createDust(count: number) {
       varying float vAlpha;
       void main() {
         vec3 pos = position * uSpread;
-        pos.z *= 10.0;
+        pos.z = -abs(pos.z) * 10.0 - 4.0;
         vec4 world = modelMatrix * vec4(pos, 1.0);
         float t = uTime;
-        world.x += sin(t * aRandom.z + 6.28 * aRandom.w) * mix(0.1, 1.5, aRandom.x);
-        world.y += sin(t * aRandom.y + 6.28 * aRandom.x) * mix(0.1, 1.5, aRandom.w);
-        world.z += sin(t * aRandom.w + 6.28 * aRandom.y) * mix(0.1, 1.5, aRandom.z);
+        world.x += sin(t * aRandom.z + 6.28 * aRandom.w) * mix(0.02, 0.07, aRandom.x);
+        world.y += sin(t * aRandom.y + 6.28 * aRandom.x) * mix(0.02, 0.07, aRandom.w);
         vec4 mvPosition = viewMatrix * world;
-        gl_PointSize = max(3.2, (uBaseSize * (1.0 + (aRandom.x - 0.5))) / max(length(mvPosition.xyz), 0.001));
+        float sized =
+          (uBaseSize * (1.0 + 0.35 * (aRandom.x - 0.5))) /
+          max(length(mvPosition.xyz), 8.0);
+        gl_PointSize = clamp(sized, 2.4, 7.5);
         gl_Position = projectionMatrix * mvPosition;
         vAlpha = 0.55 + 0.45 * aRandom.y;
       }
@@ -171,11 +173,12 @@ export function getHeroAtmosphere({
     }
     group.visible = true;
 
-    elapsed += dt * 1000 * DUST_SPEED;
-    dust.material.uniforms.uTime.value = elapsed * 0.001;
-    dust.points.rotation.x = Math.sin(elapsed * 0.0002) * 0.1;
-    dust.points.rotation.y = Math.cos(elapsed * 0.0005) * 0.15;
-    dust.points.rotation.z += 0.01 * DUST_SPEED;
+    if (active) {
+      elapsed += dt * 1000 * DUST_SPEED;
+      dust.material.uniforms.uTime.value = elapsed * 0.001;
+    }
+    dust.points.rotation.set(0, 0, 0);
+    group.rotation.set(0, 0, 0);
 
     if (!includeStreak) return;
 

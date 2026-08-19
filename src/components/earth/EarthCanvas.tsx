@@ -149,6 +149,7 @@ export function EarthCanvas({
     controls.dampingFactor = DAMPING_FACTOR;
     controls.enableZoom = false;
     controls.enablePan = false;
+    controls.autoRotate = false;
     controls.rotateSpeed = ROTATE_SPEED;
 
     let animationFrame: number;
