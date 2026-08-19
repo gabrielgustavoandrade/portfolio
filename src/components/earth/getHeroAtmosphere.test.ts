@@ -54,7 +54,7 @@ describe('getHeroAtmosphere', () => {
     });
     const dust = atmosphere.group.children[0] as THREE.Points;
     expect(dust.geometry.getAttribute('position').count).toBe(DUST_LO);
-    expect(atmosphere.group.children.length).toBe(2);
+    expect(atmosphere.group.children.length).toBe(3);
     atmosphere.dispose();
   });
 

@@ -141,8 +141,26 @@ export function getHeroAtmosphere({
   group.add(dust.points);
 
   const comet = includeStreak ? createComet() : null;
+  const linePositions = new Float32Array(6);
+  const lineGeometry = new THREE.BufferGeometry();
+  lineGeometry.setAttribute(
+    'position',
+    new THREE.BufferAttribute(linePositions, 3),
+  );
+  const lineMaterial = new THREE.LineBasicMaterial({
+    color: COMET_COLOR,
+    transparent: true,
+    opacity: 0.7,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+    toneMapped: false,
+  });
+  const line = new THREE.Line(lineGeometry, lineMaterial);
+  line.visible = false;
+  line.frustumCulled = false;
   if (comet) {
     group.add(comet.points);
+    group.add(line);
   }
 
   let wait = COMET_WAIT_FIRST;
@@ -157,7 +175,10 @@ export function getHeroAtmosphere({
     dust.material.uniforms.uField.value = field;
     if (field < 0.02) {
       group.visible = false;
-      if (comet) comet.points.visible = false;
+      if (comet) {
+        comet.points.visible = false;
+        line.visible = false;
+      }
       return;
     }
     group.visible = true;
@@ -170,6 +191,7 @@ export function getHeroAtmosphere({
     if (!flying) {
       wait -= dt;
       comet.points.visible = false;
+      line.visible = false;
       if (wait > 0 || !active) return;
       flying = true;
       flight = COMET_FLIGHT * 0.18;
@@ -183,6 +205,8 @@ export function getHeroAtmosphere({
     comet.material.uniforms.uOpacity.value = 0.92 * fadeIn * fadeOut;
     comet.material.uniforms.uField.value = field;
     comet.points.visible = t > 0 && t < 1;
+    line.visible = comet.points.visible;
+    lineMaterial.opacity = 0.62 * fadeIn * fadeOut * field;
 
     for (let i = 0; i < COMET_POINTS; i += 1) {
       const u = THREE.MathUtils.clamp(t - i * 0.008, 0, 1);
@@ -192,10 +216,19 @@ export function getHeroAtmosphere({
       comet.positions[i * 3 + 2] = scratch.z;
     }
     comet.geometry.attributes.position.needsUpdate = true;
+    linePositions[0] = comet.positions[0];
+    linePositions[1] = comet.positions[1];
+    linePositions[2] = comet.positions[2];
+    const tail = (COMET_POINTS - 1) * 3;
+    linePositions[3] = comet.positions[tail];
+    linePositions[4] = comet.positions[tail + 1];
+    linePositions[5] = comet.positions[tail + 2];
+    lineGeometry.attributes.position.needsUpdate = true;
 
     if (flight >= COMET_FLIGHT) {
       flying = false;
       comet.points.visible = false;
+      line.visible = false;
     }
   };
 
@@ -206,6 +239,8 @@ export function getHeroAtmosphere({
     dust.material.dispose();
     comet?.geometry.dispose();
     comet?.material.dispose();
+    lineGeometry.dispose();
+    lineMaterial.dispose();
   };
 
   return { group, update, setViewSize, dispose };
