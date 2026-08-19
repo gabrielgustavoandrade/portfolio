@@ -1,17 +1,20 @@
 import * as THREE from 'three';
 import { easeMotion } from '../../utils/heroMotion';
 
-const DUST_HI = 2400;
-const DUST_LO = 800;
-const DUST_COLOR = 0xd6dee8;
-const DUST_OPACITY = 0.22;
-const DUST_SIZE = 0.65;
-const DUST_DRIFT = 0.00012;
+export const DUST_HI = 3600;
+export const DUST_LO = 1400;
 
-const COMET_POINTS = 18;
-const COMET_WAIT_MIN = 18;
-const COMET_WAIT_MAX = 32;
-const COMET_FLIGHT = 11;
+const EARTH_RADIUS = 2.592;
+const DUST_COLOR = 0xe8eef6;
+const DUST_OPACITY = 0.72;
+const DUST_SIZE = 2.35;
+const DUST_DRIFT = 0.00018;
+
+const COMET_POINTS = 28;
+const COMET_WAIT_FIRST = 1.6;
+const COMET_WAIT_MIN = 14;
+const COMET_WAIT_MAX = 26;
+const COMET_FLIGHT = 7.5;
 
 export type HeroAtmosphere = {
   group: THREE.Group;
@@ -25,20 +28,29 @@ function randomInRange(min: number, max: number) {
 
 function createDust(count: number) {
   const positions = new Float32Array(count * 3);
+  let written = 0;
 
-  for (let i = 0; i < count; i += 1) {
-    const radius = 3.1 + Math.random() * 3.4;
+  while (written < count) {
+    const radius = 3.35 + Math.random() * 3.9;
     const theta = Math.random() * Math.PI * 2;
     const phi = Math.acos(2 * Math.random() - 1);
     const x = radius * Math.sin(phi) * Math.cos(theta);
-    const y = radius * Math.sin(phi) * Math.sin(theta) * 0.7;
+    const y = radius * Math.sin(phi) * Math.sin(theta) * 0.78;
     let z = radius * Math.cos(phi);
-    if (z > -1.2) {
-      z = -1.4 - Math.abs(z) * 0.55;
+
+    if (z > 1.15) {
+      z = -Math.abs(z) * 0.45 - 0.8;
     }
-    positions[i * 3] = x;
-    positions[i * 3 + 1] = y;
-    positions[i * 3 + 2] = z;
+
+    const radial = Math.hypot(x, y);
+    const inEarth = Math.hypot(x, y, z) < EARTH_RADIUS + 0.35;
+    const onFace = z > 0.6 && radial < EARTH_RADIUS + 0.15;
+    if (inEarth || onFace) continue;
+
+    positions[written * 3] = x;
+    positions[written * 3 + 1] = y;
+    positions[written * 3 + 2] = z;
+    written += 1;
   }
 
   const geometry = new THREE.BufferGeometry();
@@ -53,10 +65,12 @@ function createDust(count: number) {
     blending: THREE.AdditiveBlending,
     depthWrite: false,
     depthTest: true,
+    toneMapped: false,
   });
 
   const points = new THREE.Points(geometry, material);
   points.renderOrder = -1;
+  points.frustumCulled = false;
   return { points, geometry, material };
 }
 
@@ -66,18 +80,20 @@ function createComet() {
   geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 
   const material = new THREE.PointsMaterial({
-    color: DUST_COLOR,
-    size: 0.8,
+    color: 0xf2f6fb,
+    size: 2.8,
     sizeAttenuation: false,
     transparent: true,
-    opacity: 0.16,
+    opacity: 0.82,
     blending: THREE.AdditiveBlending,
     depthWrite: false,
     depthTest: true,
+    toneMapped: false,
   });
 
   const points = new THREE.Points(geometry, material);
   points.renderOrder = -1;
+  points.frustumCulled = false;
   points.visible = false;
   return { points, geometry, material, positions };
 }
@@ -98,11 +114,11 @@ export function getHeroAtmosphere({
     group.add(comet.points);
   }
 
-  let wait = randomInRange(COMET_WAIT_MIN, COMET_WAIT_MAX);
+  let wait = COMET_WAIT_FIRST;
   let flight = 0;
   let flying = false;
-  const from = new THREE.Vector3(-13, 3.4, -11);
-  const to = new THREE.Vector3(12, -2.6, -13);
+  const from = new THREE.Vector3(-8.5, 4.6, -3.4);
+  const to = new THREE.Vector3(8.2, -3.8, -5.2);
   const scratch = new THREE.Vector3();
 
   const update = (dt: number, active: boolean) => {
@@ -113,7 +129,7 @@ export function getHeroAtmosphere({
     }
 
     dust.points.rotation.y += DUST_DRIFT;
-    dust.points.rotation.x += DUST_DRIFT * 0.18;
+    dust.points.rotation.x += DUST_DRIFT * 0.16;
 
     if (!comet) return;
 
@@ -131,7 +147,7 @@ export function getHeroAtmosphere({
     comet.points.visible = t > 0 && t < 1;
 
     for (let i = 0; i < COMET_POINTS; i += 1) {
-      const trail = t - i * 0.012;
+      const trail = t - i * 0.018;
       const u = Math.max(0, trail);
       scratch.lerpVectors(from, to, u);
       comet.positions[i * 3] = scratch.x;

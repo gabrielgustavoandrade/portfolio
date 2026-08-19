@@ -154,7 +154,7 @@ export function EarthCanvas({
       ? null
       : getHeroAtmosphere({
           compact,
-          includeStreak: !compact,
+          includeStreak: true,
         });
     if (atmosphere) {
       scene.add(atmosphere.group);
