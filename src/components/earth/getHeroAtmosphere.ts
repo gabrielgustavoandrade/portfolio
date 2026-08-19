@@ -1,29 +1,25 @@
 import * as THREE from 'three';
 
-export const DUST_HI = 480;
-export const DUST_LO = 200;
-export const DUST_COLOR = 0xe8eef2;
-export const DUST_OPACITY = 0.72;
-export const DUST_SIZE = 7;
+export const DUST_HI = 200;
+export const DUST_LO = 110;
+export const DUST_COLOR = 0xffffff;
+export const DUST_SPREAD = 10;
+export const DUST_BASE_SIZE = 100;
+export const DUST_SPEED = 0.1;
 
-export const COMET_WAIT_FIRST = 0.55;
+export const COMET_WAIT_FIRST = 0.6;
 export const COMET_WAIT_MIN = 22;
 export const COMET_WAIT_MAX = 38;
-export const COMET_FLIGHT = 3.4;
-export const COMET_FROM = new THREE.Vector3(-9.2, 2.85, -5);
-export const COMET_TO = new THREE.Vector3(9.4, 2.15, -8);
+export const COMET_FLIGHT = 4.2;
+export const COMET_FROM = new THREE.Vector3(-3.1, 1.85, -6);
+export const COMET_TO = new THREE.Vector3(2.4, -1.15, -18);
 
-const DUST_DRIFT = 0.00011;
-const COMET_POINTS = 36;
-const COMET_COLOR = 0xe8eef2;
-const SPREAD_X = 18;
-const SPREAD_Y = 12;
-const SPREAD_Z = 16;
+const COMET_COLOR = 0xffffff;
 
 export type HeroAtmosphere = {
   group: THREE.Group;
   update: (dt: number, active: boolean) => void;
-  setViewSize: (width: number, height: number) => void;
+  setViewSize: (width: number, height: number, pixelRatio?: number) => void;
   dispose: () => void;
 };
 
@@ -36,43 +32,73 @@ function smoothstep(edge0: number, edge1: number, x: number) {
   return t * t * (3 - 2 * t);
 }
 
-function createCircleMaterial(color: number, opacity: number, size: number) {
-  return new THREE.ShaderMaterial({
+function createDust(count: number) {
+  const positions = new Float32Array(count * 3);
+  const randoms = new Float32Array(count * 4);
+
+  for (let i = 0; i < count; i += 1) {
+    let x = 0;
+    let y = 0;
+    let z = 0;
+    let len = 0;
+    do {
+      x = Math.random() * 2 - 1;
+      y = Math.random() * 2 - 1;
+      z = Math.random() * 2 - 1;
+      len = x * x + y * y + z * z;
+    } while (len > 1 || len === 0);
+    const radius = Math.cbrt(Math.random());
+    positions[i * 3] = x * radius;
+    positions[i * 3 + 1] = y * radius;
+    positions[i * 3 + 2] = z * radius;
+    randoms[i * 4] = Math.random();
+    randoms[i * 4 + 1] = Math.random();
+    randoms[i * 4 + 2] = Math.random();
+    randoms[i * 4 + 3] = Math.random();
+  }
+
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  geometry.setAttribute('aRandom', new THREE.BufferAttribute(randoms, 4));
+
+  const material = new THREE.ShaderMaterial({
     uniforms: {
-      uColor: { value: new THREE.Color(color) },
-      uOpacity: { value: opacity },
-      uSize: { value: size },
+      uColor: { value: new THREE.Color(DUST_COLOR) },
+      uTime: { value: 0 },
+      uSpread: { value: DUST_SPREAD },
+      uBaseSize: { value: DUST_BASE_SIZE },
       uField: { value: 1 },
     },
     vertexShader: `
-      attribute float aAlpha;
-      uniform float uSize;
+      attribute vec4 aRandom;
+      uniform float uTime;
+      uniform float uSpread;
+      uniform float uBaseSize;
       varying float vAlpha;
-      varying float vEdge;
       void main() {
-        vAlpha = aAlpha;
-        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-        vec4 clip = projectionMatrix * mvPosition;
-        vec2 ndc = clip.xy / max(clip.w, 0.0001);
-        float edgeX = 1.0 - smoothstep(0.8, 0.97, abs(ndc.x));
-        float edgeY = 1.0 - smoothstep(0.8, 0.97, abs(ndc.y));
-        vEdge = edgeX * edgeY;
-        gl_PointSize = uSize * (12.0 / max(length(mvPosition.xyz), 6.0));
-        gl_Position = clip;
+        vec3 pos = position * uSpread;
+        pos.z *= 10.0;
+        vec4 world = modelMatrix * vec4(pos, 1.0);
+        float t = uTime;
+        world.x += sin(t * aRandom.z + 6.28 * aRandom.w) * mix(0.1, 1.5, aRandom.x);
+        world.y += sin(t * aRandom.y + 6.28 * aRandom.x) * mix(0.1, 1.5, aRandom.w);
+        world.z += sin(t * aRandom.w + 6.28 * aRandom.y) * mix(0.1, 1.5, aRandom.z);
+        vec4 mvPosition = viewMatrix * world;
+        gl_PointSize = (uBaseSize * (1.0 + (aRandom.x - 0.5))) / max(length(mvPosition.xyz), 0.001);
+        gl_Position = projectionMatrix * mvPosition;
+        vAlpha = 0.55 + 0.45 * aRandom.y;
       }
     `,
     fragmentShader: `
       uniform vec3 uColor;
-      uniform float uOpacity;
       uniform float uField;
       varying float vAlpha;
-      varying float vEdge;
       void main() {
         vec2 uv = gl_PointCoord.xy;
         float d = length(uv - vec2(0.5));
         float circle = smoothstep(0.5, 0.4, d) * 0.8;
-        if (circle < 0.01 || vEdge < 0.01) discard;
-        gl_FragColor = vec4(uColor, uOpacity * uField * vAlpha * vEdge * circle);
+        if (circle < 0.01) discard;
+        gl_FragColor = vec4(uColor, uField * vAlpha * circle);
       }
     `,
     transparent: true,
@@ -81,52 +107,10 @@ function createCircleMaterial(color: number, opacity: number, size: number) {
     depthTest: false,
     toneMapped: false,
   });
-}
 
-function createDust(count: number) {
-  const positions = new Float32Array(count * 3);
-  const alphas = new Float32Array(count);
-
-  for (let i = 0; i < count; i += 1) {
-    const x = (Math.random() * 2 - 1) * SPREAD_X;
-    let y = (Math.random() * 2 - 1) * SPREAD_Y;
-    if (Math.random() < 0.38) {
-      y = Math.abs(y) * 0.45 + 2.2;
-    }
-    const z = -2.2 - Math.random() * SPREAD_Z;
-    positions[i * 3] = x;
-    positions[i * 3 + 1] = y;
-    positions[i * 3 + 2] = z;
-    alphas[i] = 0.28 + Math.random() * 0.72;
-  }
-
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-  geometry.setAttribute('aAlpha', new THREE.BufferAttribute(alphas, 1));
-
-  const material = createCircleMaterial(DUST_COLOR, DUST_OPACITY, DUST_SIZE);
   const points = new THREE.Points(geometry, material);
   points.frustumCulled = false;
   return { points, geometry, material };
-}
-
-function createComet() {
-  const positions = new Float32Array(COMET_POINTS * 3);
-  const alphas = new Float32Array(COMET_POINTS);
-  for (let i = 0; i < COMET_POINTS; i += 1) {
-    const fade = 1 - i / (COMET_POINTS - 1);
-    alphas[i] = fade * fade;
-  }
-
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-  geometry.setAttribute('aAlpha', new THREE.BufferAttribute(alphas, 1));
-
-  const material = createCircleMaterial(COMET_COLOR, 0.94, 5.5);
-  const points = new THREE.Points(geometry, material);
-  points.frustumCulled = false;
-  points.visible = false;
-  return { points, geometry, material, positions };
 }
 
 export function getHeroAtmosphere({
@@ -140,8 +124,14 @@ export function getHeroAtmosphere({
   const dust = createDust(compact ? DUST_LO : DUST_HI);
   group.add(dust.points);
 
-  const comet = includeStreak ? createComet() : null;
-  const linePositions = new Float32Array(6);
+  const linePositions = new Float32Array([
+    COMET_FROM.x,
+    COMET_FROM.y,
+    COMET_FROM.z,
+    COMET_TO.x,
+    COMET_TO.y,
+    COMET_TO.z,
+  ]);
   const lineGeometry = new THREE.BufferGeometry();
   lineGeometry.setAttribute(
     'position',
@@ -150,7 +140,7 @@ export function getHeroAtmosphere({
   const lineMaterial = new THREE.LineBasicMaterial({
     color: COMET_COLOR,
     transparent: true,
-    opacity: 0.7,
+    opacity: 0,
     blending: THREE.AdditiveBlending,
     depthWrite: false,
     toneMapped: false,
@@ -158,8 +148,7 @@ export function getHeroAtmosphere({
   const line = new THREE.Line(lineGeometry, lineMaterial);
   line.visible = false;
   line.frustumCulled = false;
-  if (comet) {
-    group.add(comet.points);
+  if (includeStreak) {
     group.add(line);
   }
 
@@ -167,7 +156,9 @@ export function getHeroAtmosphere({
   let flight = 0;
   let flying = false;
   let field = 1;
-  const scratch = new THREE.Vector3();
+  let elapsed = 0;
+  const head = new THREE.Vector3();
+  const tail = new THREE.Vector3();
 
   const update = (dt: number, active: boolean) => {
     const target = active ? 1 : 0;
@@ -175,70 +166,57 @@ export function getHeroAtmosphere({
     dust.material.uniforms.uField.value = field;
     if (field < 0.02) {
       group.visible = false;
-      if (comet) {
-        comet.points.visible = false;
-        line.visible = false;
-      }
+      line.visible = false;
       return;
     }
     group.visible = true;
 
-    dust.points.rotation.y += DUST_DRIFT;
-    dust.points.rotation.x += DUST_DRIFT * 0.12;
+    elapsed += dt * 1000 * DUST_SPEED;
+    dust.material.uniforms.uTime.value = elapsed * 0.001;
+    dust.points.rotation.x = Math.sin(elapsed * 0.0002) * 0.1;
+    dust.points.rotation.y = Math.cos(elapsed * 0.0005) * 0.15;
+    dust.points.rotation.z += 0.01 * DUST_SPEED;
 
-    if (!comet) return;
+    if (!includeStreak) return;
 
     if (!flying) {
       wait -= dt;
-      comet.points.visible = false;
       line.visible = false;
       if (wait > 0 || !active) return;
       flying = true;
-      flight = COMET_FLIGHT * 0.18;
+      flight = 0;
       wait = randomInRange(COMET_WAIT_MIN, COMET_WAIT_MAX);
     }
 
     flight += dt;
     const t = Math.min(1, flight / COMET_FLIGHT);
-    const fadeIn = smoothstep(0, 0.06, t);
-    const fadeOut = 1 - smoothstep(0.84, 1, t);
-    comet.material.uniforms.uOpacity.value = 0.92 * fadeIn * fadeOut;
-    comet.material.uniforms.uField.value = field;
-    comet.points.visible = t > 0 && t < 1;
-    line.visible = comet.points.visible;
-    lineMaterial.opacity = 0.62 * fadeIn * fadeOut * field;
-
-    for (let i = 0; i < COMET_POINTS; i += 1) {
-      const u = THREE.MathUtils.clamp(t - i * 0.008, 0, 1);
-      scratch.lerpVectors(COMET_FROM, COMET_TO, u);
-      comet.positions[i * 3] = scratch.x;
-      comet.positions[i * 3 + 1] = scratch.y;
-      comet.positions[i * 3 + 2] = scratch.z;
-    }
-    comet.geometry.attributes.position.needsUpdate = true;
-    linePositions[0] = comet.positions[0];
-    linePositions[1] = comet.positions[1];
-    linePositions[2] = comet.positions[2];
-    const tail = (COMET_POINTS - 1) * 3;
-    linePositions[3] = comet.positions[tail];
-    linePositions[4] = comet.positions[tail + 1];
-    linePositions[5] = comet.positions[tail + 2];
+    const fadeIn = smoothstep(0, 0.08, t);
+    const fadeOut = 1 - smoothstep(0.78, 1, t);
+    head.lerpVectors(COMET_FROM, COMET_TO, t);
+    tail.lerpVectors(COMET_FROM, COMET_TO, Math.max(0, t - 0.22));
+    linePositions[0] = tail.x;
+    linePositions[1] = tail.y;
+    linePositions[2] = tail.z;
+    linePositions[3] = head.x;
+    linePositions[4] = head.y;
+    linePositions[5] = head.z;
     lineGeometry.attributes.position.needsUpdate = true;
+    lineMaterial.opacity = 0.28 * fadeIn * fadeOut * field;
+    line.visible = t > 0 && t < 1;
 
     if (flight >= COMET_FLIGHT) {
       flying = false;
-      comet.points.visible = false;
       line.visible = false;
     }
   };
 
-  const setViewSize = () => undefined;
+  const setViewSize = (_width: number, _height: number, pixelRatio = 1) => {
+    dust.material.uniforms.uBaseSize.value = DUST_BASE_SIZE * pixelRatio;
+  };
 
   const dispose = () => {
     dust.geometry.dispose();
     dust.material.dispose();
-    comet?.geometry.dispose();
-    comet?.material.dispose();
     lineGeometry.dispose();
     lineMaterial.dispose();
   };

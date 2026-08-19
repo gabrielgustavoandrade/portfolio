@@ -4,14 +4,16 @@ import {
   COMET_FROM,
   COMET_TO,
   COMET_WAIT_FIRST,
+  DUST_BASE_SIZE,
   DUST_COLOR,
   DUST_HI,
   DUST_LO,
+  DUST_SPREAD,
   getHeroAtmosphere,
 } from './getHeroAtmosphere';
 
 describe('getHeroAtmosphere', () => {
-  it('keeps a sparse circular field in a large volume', () => {
+  it('uses the React Bits sparse circular field, not a globe halo', () => {
     const atmosphere = getHeroAtmosphere({
       compact: false,
       includeStreak: true,
@@ -22,60 +24,52 @@ describe('getHeroAtmosphere', () => {
     const color = material.uniforms.uColor.value as THREE.Color;
 
     expect(positions.count).toBe(DUST_HI);
-    expect(positions.count).toBeGreaterThanOrEqual(200);
-    expect(positions.count).toBeLessThanOrEqual(600);
+    expect(positions.count).toBe(200);
+    expect(material.uniforms.uSpread.value).toBe(DUST_SPREAD);
+    expect(material.uniforms.uBaseSize.value).toBe(DUST_BASE_SIZE);
     expect(material.blending).toBe(THREE.AdditiveBlending);
     expect(material.depthWrite).toBe(false);
-    expect(material.toneMapped).toBe(false);
-    expect(material.fragmentShader).toContain('gl_PointCoord');
     expect(material.fragmentShader).toContain('smoothstep(0.5, 0.4, d) * 0.8');
+    expect(material.vertexShader).toContain('pos.z *= 10.0');
     expect(color.getHex()).toBe(DUST_COLOR);
-    expect(color.b).toBeGreaterThanOrEqual(color.r);
 
-    let far = 0;
-    let behind = 0;
     for (let i = 0; i < positions.count; i += 1) {
-      const x = positions.getX(i);
-      const y = positions.getY(i);
-      const z = positions.getZ(i);
-      if (Math.hypot(x, y) > 6) far += 1;
-      if (z < -2) behind += 1;
+      expect(
+        Math.hypot(positions.getX(i), positions.getY(i), positions.getZ(i)),
+      ).toBeLessThanOrEqual(1.0001);
     }
-    expect(far).toBeGreaterThan(positions.count * 0.25);
-    expect(behind).toBe(positions.count);
 
     atmosphere.dispose();
   });
 
-  it('keeps a cheaper visible set on compact viewports', () => {
+  it('keeps a cheaper set on compact viewports', () => {
     const atmosphere = getHeroAtmosphere({
       compact: true,
       includeStreak: true,
     });
     const dust = atmosphere.group.children[0] as THREE.Points;
     expect(dust.geometry.getAttribute('position').count).toBe(DUST_LO);
-    expect(atmosphere.group.children.length).toBe(3);
+    expect(atmosphere.group.children.length).toBe(2);
     atmosphere.dispose();
   });
 
-  it('brings one far cool streak on early, not a shower', () => {
+  it('brings one faint diagonal, not a shower', () => {
     expect(COMET_WAIT_FIRST).toBeLessThanOrEqual(1);
-    expect(Math.abs(COMET_FROM.x)).toBeGreaterThan(6);
-    expect(Math.abs(COMET_TO.x)).toBeGreaterThan(6);
+    expect(COMET_FROM.x * COMET_TO.x).toBeLessThan(0);
+    expect(COMET_FROM.y - COMET_TO.y).toBeGreaterThan(1);
     expect(COMET_FROM.z).toBeLessThan(0);
-    expect(COMET_TO.z).toBeLessThan(0);
+    expect(COMET_TO.z).toBeLessThan(COMET_FROM.z);
 
     const atmosphere = getHeroAtmosphere({
       compact: false,
       includeStreak: true,
     });
-    const streak = atmosphere.group.children[1] as THREE.Points;
-    const material = streak.material as THREE.ShaderMaterial;
-    const color = material.uniforms.uColor.value as THREE.Color;
-    expect(material.fragmentShader).toContain('gl_PointCoord');
-    expect(color.b).toBeGreaterThanOrEqual(color.r);
+    const streak = atmosphere.group.children[1] as THREE.Line;
+    expect(streak).toBeInstanceOf(THREE.Line);
+    const material = streak.material as THREE.LineBasicMaterial;
+    expect(material.color.b).toBeGreaterThanOrEqual(material.color.r);
 
-    atmosphere.update(0.8, true);
+    atmosphere.update(0.9, true);
     expect(streak.visible).toBe(true);
 
     atmosphere.update(20, true);

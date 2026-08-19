@@ -2,8 +2,8 @@ import { type MutableRefObject, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { getHeroAtmosphere } from './getHeroAtmosphere';
 
-const CAMERA_FOV = 45;
-const CAMERA_Z = 16;
+const CAMERA_FOV = 15;
+const CAMERA_Z = 20;
 
 export function HeroDustCanvas({
   paceRef,
@@ -29,9 +29,9 @@ export function HeroDustCanvas({
       CAMERA_FOV,
       sizes.width / Math.max(1, sizes.height),
       0.1,
-      200,
+      400,
     );
-    camera.position.set(0, 0.8, CAMERA_Z);
+    camera.position.set(0, 0, CAMERA_Z);
 
     const renderer = new THREE.WebGLRenderer({
       antialias: false,
@@ -51,6 +51,7 @@ export function HeroDustCanvas({
       compact,
       includeStreak: true,
     });
+    atmosphere.setViewSize(sizes.width, sizes.height, renderer.getPixelRatio());
     scene.add(atmosphere.group);
 
     let animationFrame = 0;
@@ -71,6 +72,11 @@ export function HeroDustCanvas({
       camera.aspect = clientWidth / Math.max(1, clientHeight);
       camera.updateProjectionMatrix();
       renderer.setSize(clientWidth, clientHeight);
+      atmosphere.setViewSize(
+        clientWidth,
+        clientHeight,
+        renderer.getPixelRatio(),
+      );
     };
     window.addEventListener('resize', handleResize);
 
