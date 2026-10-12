@@ -31,7 +31,15 @@ export function Experience({ reducedMotion }: { reducedMotion: boolean }) {
               {item.clients ? (
                 <p className="experience__clients">{item.clients}</p>
               ) : null}
-              <p className="experience__engagement micro">{item.engagement}</p>
+              <p className="experience__engagement micro">
+                <span>{item.engagement}</span>
+                {item.period ? (
+                  <>
+                    <span aria-hidden="true"> · </span>
+                    <span>{item.period}</span>
+                  </>
+                ) : null}
+              </p>
             </div>
             <ul className="experience__points">
               {item.points.map((point) => (

@@ -1,0 +1,57 @@
+.fourier__facts var {
+  font-style: italic;
+}
+
+.fourier__facts sub {
+  font-size: 0.7em;
+}
+
+.fourier__stage {
+  position: relative;
+  padding: var(--space-16);
+  border-radius: var(--radius-card);
+  border: var(--card-border);
+  background:
+    radial-gradient(70% 60% at 65% 70%, var(--night) 0%, transparent 70%),
+    var(--card-bg);
+}
+
+.fourier__canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1280 / 1120;
+}
+
+.fourier__hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-16);
+  padding: var(--space-8) var(--space-8) 0;
+}
+
+.fourier__count {
+  font-size: var(--text-title);
+  font-weight: 600;
+  letter-spacing: var(--track-tight);
+  font-variant-numeric: tabular-nums;
+}
+
+.fourier__count-unit {
+  font-size: var(--text-sm);
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--mute);
+}
+
+.fourier__replay {
+  height: 36px;
+  padding: 0 var(--space-16);
+  font-size: var(--text-sm);
+}
+
+@media (max-width: 720px) {
+  .fourier__stage {
+    padding: var(--space-8);
+  }
+}

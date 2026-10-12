@@ -78,6 +78,12 @@ beforeAll(() => {
     });
   }
 
+  // jsdom has no canvas backend; components bail out on a null context.
+  Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', {
+    writable: true,
+    value: () => null,
+  });
+
   if (!HTMLElement.prototype.scrollIntoView) {
     Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', {
       value: vi.fn(),

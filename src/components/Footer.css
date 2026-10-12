@@ -6,7 +6,6 @@
   align-items: center;
   gap: var(--space-24);
   padding: 0 var(--inset) var(--space-40);
-  letter-spacing: 0.14em;
 }
 
 .footer__links {

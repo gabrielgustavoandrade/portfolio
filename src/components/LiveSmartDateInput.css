@@ -20,7 +20,7 @@
   background: var(--cream);
   color: var(--sdi-ink);
   font-family: var(--font);
-  box-shadow: 0 40px 120px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--shadow-panel);
 }
 
 .live-sdi__head {
@@ -30,7 +30,7 @@
 }
 
 .live-sdi__label {
-  font-size: 10px;
+  font-size: var(--text-micro);
   font-weight: 500;
   line-height: 1;
   letter-spacing: 0.16em;
@@ -46,7 +46,7 @@
 
 .live-sdi__chip {
   padding: var(--space-8) 12px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   border: 1px solid rgba(5, 6, 10, 0.18);
   background: transparent;
   color: var(--sdi-ink);
@@ -387,7 +387,6 @@
 @media (max-width: 720px) {
   .live-sdi {
     padding: var(--space-16);
-    border-radius: 14px;
     box-shadow: none;
   }
 }

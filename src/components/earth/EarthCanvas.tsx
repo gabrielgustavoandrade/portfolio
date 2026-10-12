@@ -43,16 +43,23 @@ const ROTATION_SPEED = {
 export function EarthCanvas({
   paceRef,
   spin = 1,
+  onReady,
+  className,
 }: {
   paceRef?: MutableRefObject<'full' | 'idle'>;
   /** Rotation multiplier. 0 holds the Earth still (reduced motion). */
   spin?: number;
+  /** Fires once every texture is in and that frame has been drawn. */
+  onReady?: () => void;
+  className?: string;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const paceBag = useRef(paceRef);
   paceBag.current = paceRef;
   const spinRef = useRef(spin);
   spinRef.current = spin;
+  const readyRef = useRef(onReady);
+  readyRef.current = onReady;
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -94,7 +101,14 @@ export function EarthCanvas({
     renderer.toneMappingExposure = 1.05;
     containerRef.current.appendChild(renderer.domElement);
 
-    const loader = new THREE.TextureLoader();
+    // Hold the opening pose until every map is in, so the first lit frame
+    // matches the static poster it replaces.
+    let texturesLoaded = false;
+    let announced = false;
+    const manager = new THREE.LoadingManager(() => {
+      texturesLoaded = true;
+    });
+    const loader = new THREE.TextureLoader(manager);
     loader.setPath(`/textures/earth/${tier}/`);
     const loadMap = (file: string, color: boolean) => {
       const texture = loader.load(file);
@@ -180,7 +194,7 @@ export function EarthCanvas({
       controls.enabled = !idle;
       controls.update();
 
-      const turn = spinRef.current * dt;
+      const turn = texturesLoaded ? spinRef.current * dt : 0;
       earthMesh.rotation.y += ROTATION_SPEED.earth * turn;
       lightsMesh.rotation.y += ROTATION_SPEED.earth * turn;
       cloudsMesh.rotation.y += ROTATION_SPEED.clouds * turn;
@@ -195,6 +209,11 @@ export function EarthCanvas({
       lightOffset.applyQuaternion(camera.quaternion);
       sunLight.position.copy(lightOffset);
       renderer.render(scene, camera);
+
+      if (texturesLoaded && !announced) {
+        announced = true;
+        readyRef.current?.();
+      }
     };
     animate(lastNow);
 
@@ -239,6 +258,10 @@ export function EarthCanvas({
   }, []);
 
   return (
-    <div ref={containerRef} className="earth__canvas" aria-hidden="true" />
+    <div
+      ref={containerRef}
+      className={`earth__canvas${className ? ` ${className}` : ''}`}
+      aria-hidden="true"
+    />
   );
 }

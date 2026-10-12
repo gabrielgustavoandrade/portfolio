@@ -1,6 +1,8 @@
 /*
   Design tokens — night palette, Inter, 8/16/24/40/64/96 spacing.
   Source of truth: Claude Design "Portfolio Stills" + DESIGN.md.
+  Every section pulls type, space, radii and surfaces from here; fluid
+  sizes are clamp()s so desktop and mobile share one scale.
 */
 
 :root {
@@ -14,12 +16,28 @@
   --hairline-strong: rgba(242, 235, 224, 0.24);
   --card-top: #0d0e12;
   --card-bottom: #08090d;
+  --chrome: #0c0f17;
+  --mat: #f4f0ea;
 
   /* Type */
   --font: "Inter", system-ui, -apple-system, sans-serif;
   --track-display: -0.055em;
   --track-title: -0.045em;
   --track-micro: 0.18em;
+  --track-tight: -0.02em;
+
+  /* Type scale (one scale, fluid between 390 and 1440 wide) */
+  --text-micro: clamp(11px, 0.2vw + 10.2px, 12px);
+  --text-sm: 13px;
+  --text-body: clamp(15px, 0.1vw + 14.6px, 16px);
+  --text-lead: clamp(16px, 0.2vw + 15.2px, 18px);
+  --text-title: clamp(17px, 0.3vw + 15.8px, 20px);
+  --text-headline: clamp(19px, 0.5vw + 17px, 24px);
+  --text-h3: clamp(32px, 1.6vw + 25.6px, 44px);
+  --text-h2: clamp(40px, 2.3vw + 31px, 64px);
+  --text-statement: clamp(28px, 2.5vw + 18px, 54px);
+  --text-display: clamp(40px, calc((100vw - 2 * var(--inset)) / 7.4), 136px);
+  --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
 
   /* Space */
   --space-8: 8px;
@@ -29,13 +47,27 @@
   --space-64: 64px;
   --space-96: 96px;
   --inset: clamp(24px, 6.67vw, 96px);
+  /* Section frame: top padding, label → body offset, bottom padding */
+  --section-top: clamp(40px, 2.7vw + 29px, 68px);
+  --section-head-gap: clamp(48px, 7.7vw + 18px, 128px);
+  --section-bottom: clamp(64px, 3vw + 52px, 96px);
 
   /* Radius */
   --radius-card: 16px;
   --radius-frame: 10px;
+  --radius-key: 6px;
+  --radius-pill: 999px;
+
+  /* Surfaces */
+  --card-bg: linear-gradient(180deg, var(--card-top), var(--card-bottom));
+  --card-border: 1px solid var(--hairline);
+  --shadow-frame: 0 12px 32px rgba(0, 0, 0, 0.35);
+  --shadow-panel: 0 40px 120px rgba(0, 0, 0, 0.5);
 
   /* Motion */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  /* anime.js-style expo-out for entrances */
+  --ease-enter: cubic-bezier(0.22, 1, 0.36, 1);
   --hover-ms: 200ms;
 
   color-scheme: dark;
@@ -93,7 +125,7 @@ a:hover {
 
 /* Micro-tracked label used across sections */
 .micro {
-  font-size: 12px;
+  font-size: var(--text-micro);
   font-weight: 500;
   letter-spacing: var(--track-micro);
   text-transform: uppercase;
@@ -118,7 +150,7 @@ a:hover {
   left: var(--space-16);
   z-index: 100;
   padding: var(--space-8) var(--space-16);
-  border-radius: var(--space-8);
+  border-radius: var(--radius-key);
   background: var(--cream);
   color: var(--void);
   font-weight: 500;
@@ -128,9 +160,61 @@ a:hover {
   top: var(--space-16);
 }
 
+/* Shared surfaces */
+.card {
+  border-radius: var(--radius-card);
+  border: var(--card-border);
+  background: var(--card-bg);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  padding: 0 var(--space-24);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--hairline-strong);
+  background: transparent;
+  color: var(--cream);
+  font: 500 14px / 1 var(--font);
+  cursor: pointer;
+  transition:
+    color var(--hover-ms) ease,
+    border-color var(--hover-ms) ease,
+    opacity var(--hover-ms) ease;
+}
+
+.pill:hover {
+  color: var(--dust);
+  border-color: rgba(215, 228, 255, 0.4);
+}
+
+.pill:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.tag {
+  padding: var(--space-8) 14px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--hairline);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
 @media (max-width: 720px) {
   .micro {
-    font-size: 11px;
     letter-spacing: 0.16em;
   }
+}
+
+/* Held until useStaggerReveal plays the entrance. */
+[data-reveal="pending"] {
+  opacity: 0;
+}
+
+[data-reveal] {
+  transform-origin: 50% 60%;
 }

@@ -2,10 +2,26 @@ export interface Experience {
   company: string;
   clients?: string;
   engagement: string;
+  /**
+   * Only dates with a written source (old site content, git history,
+   * brief). Leave undefined rather than estimate.
+   */
+  period?: string;
   points: string[];
 }
 
 export const experience: Experience[] = [
+  {
+    company: 'InteractiveAI',
+    engagement: 'Contract',
+    // Source: src/data/projects.ts at 2881290 ("Mar 2026 – present").
+    period: 'Mar 2026 – present',
+    points: [
+      'React/Next.js app and Python FastAPI services',
+      'Agent observability, agentic workflows, in-product copilot',
+      'Security hardening: closed exposed secrets, fixed fail-open auth',
+    ],
+  },
   {
     company: 'Red Ventures',
     clients: 'SaveOnEnergy · ChooseEnergy · ChooseTexasPower',

@@ -13,17 +13,17 @@ export function CraftProof({ reducedMotion }: { reducedMotion: boolean }) {
     >
       <span className="section__label micro">Craft proof</span>
 
-      <div className="section__body craft__layout">
-        <div className="craft__intro">
-          <div className="craft__copy">
-            <h2 id="craft-title" className="craft__title">
+      <div className="section__body section__split craft__layout">
+        <div className="section__intro craft__intro">
+          <div className="section__copy craft__copy">
+            <h2 id="craft-title" className="section__title">
               smart-date-input
             </h2>
-            <p className="craft__lede">
+            <p className="section__lede">
               React/TypeScript date and time input with natural-language parsing
               and keyboard navigation, published as an npm component.
             </p>
-            <span className="craft__package">
+            <span className="section__note craft__package">
               {SMART_DATE_INPUT_LINKS.packageName}
             </span>
           </div>
@@ -40,6 +40,7 @@ export function CraftProof({ reducedMotion }: { reducedMotion: boolean }) {
 
           <div className="craft__links">
             <a
+              className="pill"
               href={SMART_DATE_INPUT_LINKS.npm}
               target="_blank"
               rel="noreferrer"
@@ -47,6 +48,7 @@ export function CraftProof({ reducedMotion }: { reducedMotion: boolean }) {
               npm ↗
             </a>
             <a
+              className="pill"
               href={SMART_DATE_INPUT_LINKS.github}
               target="_blank"
               rel="noreferrer"
@@ -56,7 +58,7 @@ export function CraftProof({ reducedMotion }: { reducedMotion: boolean }) {
           </div>
         </div>
 
-        <figure className="craft__demo">
+        <figure className="section__figure craft__demo">
           <LiveSmartDateInput
             autoType={!reducedMotion}
             instant={reducedMotion}

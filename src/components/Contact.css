@@ -20,7 +20,6 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-64);
-  margin-top: 164px;
 }
 
 .contact__email {
@@ -43,9 +42,9 @@
   align-items: center;
   padding: var(--space-24) 0;
   border-top: 1px solid var(--hairline);
-  font-size: 24px;
+  font-size: var(--text-title);
   font-weight: 500;
-  letter-spacing: -0.02em;
+  letter-spacing: var(--track-tight);
 }
 
 .contact__links li:last-child a {
@@ -53,7 +52,7 @@
 }
 
 .contact__link-url {
-  font-size: 15px;
+  font-size: var(--text-body);
   font-weight: 400;
   letter-spacing: 0;
   color: var(--mute);
@@ -65,29 +64,23 @@
     transform: scale(0.9);
     transform-origin: left center;
     transition:
-      opacity 700ms var(--ease-out),
-      transform 1000ms var(--ease-out);
+      opacity 700ms var(--ease-enter),
+      transform 1000ms var(--ease-enter);
   }
 
   .contact__links li {
     opacity: 0;
     transform: translateY(16px);
     transition:
-      opacity 600ms var(--ease-out),
-      transform 700ms var(--ease-out);
-    transition-delay: calc(300ms + var(--i, 0) * 60ms);
+      opacity 700ms var(--ease-enter),
+      transform 900ms var(--ease-enter);
+    transition-delay: calc(300ms + var(--i, 0) * 100ms);
   }
 
   .contact__body.is-in .contact__email,
   .contact__body.is-in .contact__links li {
     opacity: 1;
     transform: none;
-  }
-}
-
-@media (max-width: 1100px) {
-  .contact__body {
-    margin-top: var(--space-96);
   }
 }
 
@@ -98,7 +91,6 @@
 
   .contact__body {
     gap: var(--space-40);
-    margin-top: 106px;
   }
 
   .contact__email {
@@ -111,7 +103,6 @@
     justify-content: space-between;
     min-height: 56px;
     padding: 0;
-    font-size: 18px;
   }
 
   .contact__link-url {

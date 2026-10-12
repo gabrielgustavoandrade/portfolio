@@ -7,10 +7,16 @@
 /*
   Shared section frame. Sections stay out of the stacking order
   (no z-index) so the fixed Earth can sit between backgrounds and content.
+
+  Header pattern, every section:
+    .section__label (micro, h2 when the section has no title)
+    .section__body  at --section-head-gap below the label
+  Sections with a title open the body with .section__intro:
+    .section__title (h2) → .section__lede → facts/links.
 */
 .section {
   position: relative;
-  padding: 68px var(--inset) var(--space-96);
+  padding: var(--section-top) var(--inset) var(--section-bottom);
   scroll-margin-top: 0;
 }
 
@@ -23,6 +29,77 @@
 .section__body {
   position: relative;
   z-index: 2;
+  margin-top: var(--section-head-gap);
+}
+
+.section__split {
+  display: grid;
+  grid-template-columns: minmax(0, 520px) minmax(0, 640px);
+  justify-content: space-between;
+  align-items: start;
+  gap: var(--space-64);
+}
+
+.section__intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-40);
+  padding-top: var(--space-24);
+}
+
+.section__copy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+}
+
+.section__title {
+  font-size: var(--text-h2);
+  font-weight: 600;
+  letter-spacing: var(--track-display);
+  line-height: 0.95;
+  text-wrap: balance;
+}
+
+.section__lede {
+  font-size: var(--text-lead);
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+.section__note {
+  font-size: var(--text-sm);
+  color: var(--mute);
+}
+
+/* Hairline-topped fact list used beside demos. */
+.section__facts {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  font-size: var(--text-body);
+  line-height: 1.45;
+}
+
+.section__facts li {
+  padding: var(--space-16) 0;
+  border-top: 1px solid var(--hairline);
+}
+
+.section__facts li:last-child {
+  border-bottom: 1px solid var(--hairline);
+}
+
+.section__figure {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  min-width: 0;
+}
+
+.section__figure figcaption {
+  font-size: var(--text-micro);
+  color: var(--mute);
 }
 
 @media (min-width: 1024px) and (min-height: 700px) {
@@ -33,8 +110,26 @@
   }
 }
 
+@media (max-width: 1100px) {
+  .section__split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .section__intro {
+    padding-top: 0;
+  }
+
+  .section__figure {
+    max-width: 640px;
+  }
+}
+
 @media (max-width: 720px) {
-  .section {
-    padding: 38px var(--inset) var(--space-64);
+  .section__split {
+    gap: var(--space-40);
+  }
+
+  .section__intro {
+    gap: var(--space-24);
   }
 }

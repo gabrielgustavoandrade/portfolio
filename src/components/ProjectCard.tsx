@@ -1,13 +1,7 @@
 import type { CSSProperties } from 'react';
 import type { Project } from '../data/projects';
 
-export function ProjectCard({
-  project,
-  order,
-}: {
-  project: Project;
-  order: number;
-}) {
+export function ProjectCard({ project }: { project: Project }) {
   const { image } = project;
   const imageStyle = {
     '--pos': image.position ?? '50% 50%',
@@ -16,8 +10,7 @@ export function ProjectCard({
 
   return (
     <article
-      className={`work-card${project.lead ? ' work-card--lead' : ''}`}
-      style={{ '--i': order } as CSSProperties}
+      className={`work-card card${project.lead ? ' work-card--lead' : ''}`}
       aria-labelledby={`work-${project.slug}`}
     >
       <div className="work-card__frame">
@@ -61,7 +54,9 @@ export function ProjectCard({
           {project.highlights ? (
             <ul className="work-card__pills" aria-label="Highlights">
               {project.highlights.map((item) => (
-                <li key={item}>{item}</li>
+                <li key={item} className="tag">
+                  {item}
+                </li>
               ))}
             </ul>
           ) : null}

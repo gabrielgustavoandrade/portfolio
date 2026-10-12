@@ -5,6 +5,8 @@ import { Contact } from '../components/Contact';
 import { CraftProof } from '../components/CraftProof';
 import { Experience } from '../components/Experience';
 import { Footer } from '../components/Footer';
+import { Fourier } from '../components/Fourier';
+import { Harness } from '../components/Harness';
 import { Hero } from '../components/Hero';
 import { Work } from '../components/Work';
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
@@ -34,7 +36,9 @@ export function HomePage() {
       <Hero reducedMotion={reducedMotion} />
       <main id="main-content">
         <Work reducedMotion={reducedMotion} />
+        <Harness reducedMotion={reducedMotion} />
         <CraftProof reducedMotion={reducedMotion} />
+        <Fourier reducedMotion={reducedMotion} />
         <Experience reducedMotion={reducedMotion} />
         <About reducedMotion={reducedMotion} />
         <Contact reducedMotion={reducedMotion} />

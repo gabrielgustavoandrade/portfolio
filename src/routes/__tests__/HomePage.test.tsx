@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react';
+import { cleanup, render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { vi } from 'vitest';
 import { HomePage } from '../HomePage';
@@ -50,6 +50,18 @@ const BANNED = [
   /marmoraria/i,
   /langgraph/i,
   /langfuse/i,
+  /lang\s?chain/i,
+  // No location or availability copy.
+  /madrid/i,
+  /goi[âa]nia/i,
+  /based in/i,
+  /\bremote\b/i,
+  /relocat/i,
+  // M&M's stays "via Valtech" with only the approved numbers.
+  /\bmars\b/i,
+  /\bMACH\b/,
+  /amplience/i,
+  /end-to-end/i,
   /joined early/i,
   /25% fewer bugs/i,
   /\$100M/i,
@@ -63,7 +75,7 @@ describe('HomePage', () => {
     earthSpy.mockClear();
   });
 
-  it('renders the hero with name, approved headline and the live Earth', () => {
+  it('renders the hero with name, approved headline and the live Earth', async () => {
     renderHomePage();
 
     expect(
@@ -77,8 +89,13 @@ describe('HomePage', () => {
     expect(
       screen.getByText('React · TypeScript · Next.js · Python'),
     ).toBeInTheDocument();
-    expect(screen.getByTestId('earth-canvas')).toBeInTheDocument();
-    expect(screen.getByTestId('hero-dust')).toBeInTheDocument();
+    // Poster first; the Three.js scene is code-split and mounts after paint.
+    expect(document.querySelector('.earth__poster')).toHaveAttribute(
+      'src',
+      '/earth/poster-1600.webp',
+    );
+    expect(await screen.findByTestId('earth-canvas')).toBeInTheDocument();
+    expect(await screen.findByTestId('hero-dust')).toBeInTheDocument();
     expect(earthSpy).toHaveBeenLastCalledWith(
       expect.objectContaining({ spin: 1 }),
     );
@@ -108,6 +125,7 @@ describe('HomePage', () => {
 
     const [interactive, sdi, mms] = cards;
     expect(within(interactive).getByText('InteractiveAI')).toBeInTheDocument();
+    expect(within(interactive).getByText('Current')).toBeInTheDocument();
     expect(
       within(interactive).getByRole('heading', {
         name: /ai agents in production/i,
@@ -136,9 +154,10 @@ describe('HomePage', () => {
     expect(
       within(mms).getByRole('heading', { name: /500k\+ customizations/i }),
     ).toBeInTheDocument();
-    for (const value of ['−65%', '−50%', '12']) {
-      expect(within(mms).getByText(value)).toBeInTheDocument();
-    }
+    const metrics = within(mms)
+      .getAllByRole('definition')
+      .map((node) => node.textContent);
+    expect(metrics).toEqual(['−65%', '−50%', '12']);
   });
 
   it('embeds the live smart-date-input demo', () => {
@@ -156,12 +175,17 @@ describe('HomePage', () => {
     renderHomePage();
 
     const experience = screen.getByRole('region', { name: /experience/i });
-    for (const company of ['Red Ventures', 'Valtech', 'Pacto']) {
+    for (const company of ['InteractiveAI', 'Red Ventures', 'Valtech', 'Pacto']) {
       expect(
         within(experience).getByRole('heading', { name: company }),
       ).toBeInTheDocument();
     }
-    expect(within(experience).getAllByText('Contract')).toHaveLength(3);
+    expect(within(experience).getAllByText('Contract')).toHaveLength(4);
+    // Only sourced dates (old projects.ts at 2881290); the rest stay undated.
+    expect(within(experience).getAllByText(/\b20\d\d\b/)).toHaveLength(1);
+    expect(
+      within(experience).getByText('Mar 2026 – present'),
+    ).toBeInTheDocument();
     expect(
       within(experience).getByText('Good Eggs: 7,000+ products'),
     ).toBeInTheDocument();
@@ -183,28 +207,77 @@ describe('HomePage', () => {
     ).toHaveAttribute('href', 'https://github.com/gabrielgustavoandrade');
   });
 
-  it('keeps retired copy off the page', () => {
-    renderHomePage();
-
-    const text = document.body.textContent ?? '';
-    for (const pattern of BANNED) {
-      expect(text).not.toMatch(pattern);
+  it('shows the agent harness with a real session replay and no repo link', () => {
+    const restore = mockReducedMotion();
+    try {
+      renderHomePage();
+      const harness = screen.getByRole('region', { name: 'agent-lab' });
+      const transcript = within(harness).getByRole('region', {
+        name: /transcript/i,
+      });
+      expect(transcript).toHaveTextContent(
+        '$ bun src/index.ts session start demo',
+      );
+      expect(transcript).toHaveTextContent('spawned: worker-1 pid=713651');
+      expect(transcript).toHaveTextContent(
+        'evals look honest: naive fails, correct passes.',
+      );
+      expect(transcript.textContent).not.toMatch(/\/tmp\/|\/workspace\/|\/Users\//);
+      for (const link of within(harness).queryAllByRole('link')) {
+        expect(link.getAttribute('href')).not.toMatch(/agent-lab/);
+      }
+    } finally {
+      restore();
     }
-    expect(text).not.toMatch(/agent systems — traces/i);
   });
 
-  it('holds the Earth still and skips scroll animations with reduced motion', () => {
+  it('shows the Fourier capybara section', () => {
+    renderHomePage();
+    const section = screen.getByRole('region', {
+      name: 'A capybara, in circles',
+    });
+    expect(
+      within(section).getByRole('img', { name: /capybara outline/i }),
+    ).toBeInTheDocument();
+  });
+
+  it('keeps retired copy off the page, including the full replay', () => {
+    const check = () => {
+      const text = document.body.textContent ?? '';
+      for (const pattern of BANNED) {
+        expect(text).not.toMatch(pattern);
+      }
+      expect(text).not.toMatch(/agent systems — traces/i);
+    };
+
+    renderHomePage();
+    check();
+    cleanup();
+
+    const restore = mockReducedMotion();
+    try {
+      renderHomePage();
+      check();
+    } finally {
+      restore();
+    }
+  });
+
+  it('holds the Earth still and skips scroll animations with reduced motion', async () => {
     const restore = mockReducedMotion();
     try {
       renderHomePage();
 
       expect(document.querySelector('.hero')).toHaveClass('hero--reduced');
-      expect(screen.getByTestId('earth-canvas')).toBeInTheDocument();
+      expect(await screen.findByTestId('earth-canvas')).toBeInTheDocument();
       expect(earthSpy).toHaveBeenLastCalledWith(
         expect.objectContaining({ spin: 0 }),
       );
       expect(screen.queryByTestId('hero-dust')).toBeNull();
-      expect(document.querySelector('.work__grid')).toHaveClass('is-in');
+      for (const card of document.querySelectorAll('.work-card')) {
+        expect(card).toHaveAttribute('data-reveal', 'in');
+      }
+      expect(screen.queryByRole('button', { name: 'Replay' })).toBeNull();
       expect(document.querySelector('.experience__list')).toHaveClass('is-in');
       expect(document.querySelector('.about__text')).toHaveClass('is-in');
     } finally {

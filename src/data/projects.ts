@@ -44,7 +44,7 @@ export const projects: Project[] = [
   {
     slug: 'interactive-ai',
     index: '01',
-    tag: 'Current · Remote',
+    tag: 'Current',
     name: 'InteractiveAI',
     headline: 'AI agents in production',
     summary:

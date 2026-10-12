@@ -1,15 +1,17 @@
 .experience__list {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--space-40);
-  margin-top: 180px;
 }
 
+/* Subgrid keeps every column's points on the same baseline. */
 .experience__item {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-24);
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span 2;
+  align-content: start;
+  row-gap: var(--space-24);
   padding-top: var(--space-24);
 }
 
@@ -32,27 +34,22 @@
 }
 
 .experience__company {
-  font-size: clamp(32px, 3.4vw, 48px);
+  font-size: var(--text-h3);
   font-weight: 600;
-  letter-spacing: -0.05em;
+  letter-spacing: var(--track-title);
   line-height: 1;
 }
 
 .experience__clients {
-  font-size: 14px;
+  font-size: var(--text-sm);
   color: var(--mute);
-}
-
-.experience__engagement {
-  font-size: 11px;
-  letter-spacing: 0.16em;
 }
 
 .experience__points {
   display: flex;
   flex-direction: column;
   list-style: none;
-  font-size: 16px;
+  font-size: var(--text-body);
   line-height: 1.45;
 }
 
@@ -64,7 +61,7 @@
 @media (prefers-reduced-motion: no-preference) {
   .experience__item::before {
     transform: scaleX(0);
-    transition: transform 600ms var(--ease-out);
+    transition: transform 700ms var(--ease-enter);
   }
 
   .experience__head,
@@ -72,9 +69,9 @@
     opacity: 0;
     transform: translateY(16px);
     transition:
-      opacity 600ms var(--ease-out),
-      transform 700ms var(--ease-out);
-    transition-delay: calc(400ms + var(--i, 0) * 80ms);
+      opacity 700ms var(--ease-enter),
+      transform 900ms var(--ease-enter);
+    transition-delay: calc(300ms + var(--i, 0) * 100ms);
   }
 
   .experience__list.is-in .experience__item::before {
@@ -88,35 +85,27 @@
   }
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 1280px) {
   .experience__list {
-    margin-top: var(--space-96);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: var(--space-64);
   }
 }
 
 @media (max-width: 720px) {
   .experience__list {
     grid-template-columns: minmax(0, 1fr);
-    margin-top: 50px;
+    row-gap: var(--space-40);
   }
 
   .experience__item {
-    gap: var(--space-16);
+    row-gap: var(--space-16);
     padding-top: var(--space-16);
-  }
-
-  .experience__clients {
-    font-size: 13px;
-  }
-
-  .experience__engagement {
-    font-size: 10px;
   }
 
   /* Mobile still: one run of points, dot-separated. */
   .experience__points {
     display: block;
-    font-size: 15px;
     line-height: 1.5;
   }
 
