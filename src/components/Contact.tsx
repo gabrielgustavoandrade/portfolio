@@ -1,39 +1,47 @@
-import { useEnterList } from '../hooks/useEnterList';
+import { type CSSProperties, useRef } from 'react';
+import { contactLinks, EMAIL } from '../data/contact';
+import { useInView } from '../hooks/useInView';
 import './Contact.css';
 
-export function Contact() {
-  const rootRef = useEnterList();
+const [emailUser, emailDomain] = EMAIL.split('@');
+
+export function Contact({ reducedMotion }: { reducedMotion: boolean }) {
+  const bodyRef = useRef<HTMLDivElement>(null);
+  const inView = useInView(bodyRef, { skip: reducedMotion });
 
   return (
-    <section className="sys-section contact" id="contact" ref={rootRef}>
-      <div className="sys-section__inner contact__inner">
-        <div className="contact__actions enter" data-enter>
-          <a
-            href="mailto:gabrielgustavoandrade@gmail.com"
-            className="sys-link"
-            aria-label="Send me an email"
-          >
-            Email me
-          </a>
-          <a
-            href="https://www.linkedin.com/in/gabrielgustavoandrade"
-            className="sys-link"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Visit my LinkedIn profile"
-          >
-            LinkedIn
-          </a>
-          <a
-            href="https://github.com/gabrielgustavoandrade"
-            className="sys-link"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Visit my GitHub profile"
-          >
-            GitHub
-          </a>
-        </div>
+    <section
+      id="contact"
+      className="section contact"
+      aria-labelledby="contact-label"
+    >
+      <div className="contact__backdrop" aria-hidden="true" />
+      <h2 id="contact-label" className="section__label micro">
+        Contact
+      </h2>
+      <div
+        ref={bodyRef}
+        className={`section__body contact__body${inView ? ' is-in' : ''}`}
+      >
+        <a
+          className="contact__email"
+          href={`mailto:${EMAIL}`}
+          aria-label={EMAIL}
+        >
+          <span>{emailUser}</span>
+          <span>@{emailDomain}</span>
+        </a>
+        <ul className="contact__links">
+          {contactLinks.map((link, order) => (
+            <li key={link.url} style={{ '--i': order } as CSSProperties}>
+              <a href={link.url} target="_blank" rel="noreferrer">
+                <span className="contact__link-label">{link.label}</span>
+                <span className="contact__link-url">{link.display}</span>
+                <span aria-hidden="true">↗</span>
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );

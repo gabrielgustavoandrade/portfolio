@@ -11,6 +11,8 @@ describe('LiveSmartDateInput', () => {
     const input = screen.getByRole('textbox', {
       name: /try smart-date-input/i,
     });
+    expect(screen.getByRole('status')).toHaveTextContent('null');
+
     await user.click(input);
     await user.type(input, 'tomorrow 9am');
 
@@ -18,6 +20,20 @@ describe('LiveSmartDateInput', () => {
 
     await user.click(screen.getByText(/at 9:00am/i));
 
-    expect(document.querySelector('.live-sdi__readout')).toBeTruthy();
+    expect(screen.getByRole('status')).toHaveTextContent(/9:00\s?AM/);
+  });
+
+  it('fills a sample instantly when animation is off', async () => {
+    const user = userEvent.setup();
+    render(<LiveSmartDateInput instant />);
+
+    await user.click(screen.getByRole('button', { name: 'tomorrow 7am' }));
+
+    expect(
+      screen.getByRole('textbox', { name: /try smart-date-input/i }),
+    ).toHaveValue('tomorrow 7am');
+    expect(
+      screen.getByRole('button', { name: /open calendar/i }),
+    ).toBeInTheDocument();
   });
 });

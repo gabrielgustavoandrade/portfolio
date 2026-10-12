@@ -1,20 +1,18 @@
 import { type MutableRefObject, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { CAMERA_FOV, CAMERA_POSITION_Z, EARTH_RADIUS } from './earthGeometry';
 import { getFresnelMaterial } from './getFresnelMaterial';
 import {
   configureEarthTexture,
   pickEarthTextureTier,
 } from './loadEarthTextures';
 
-const EARTH_RADIUS = 2.592;
 const EARTH_TILT_DEGREES = -23.4;
 const EARTH_GEOMETRY_DETAIL = 12;
 
-const CAMERA_FOV = 75;
 const CAMERA_NEAR = 0.1;
 const CAMERA_FAR = 1000;
-const CAMERA_POSITION_Z = 5;
 
 const NORMAL_SCALE = 0.65;
 const CLOUDS_OPACITY = 0.72;
@@ -22,7 +20,14 @@ const CLOUDS_SCALE = 1.003;
 const GLOW_SCALE = 1.01;
 
 const LIGHT_INTENSITY = 2.0;
-const LIGHT_OFFSET_X = -5;
+/** Camera-relative sun, behind-left: mostly night disk with a thin lit limb. */
+const LIGHT_OFFSET = new THREE.Vector3(-5, 1.4, -1.6);
+const FILL_COLOR = 0x9fb8ff;
+const FILL_INTENSITY = 0.12;
+/** Cool lift on the city lights so the night side reads. */
+const CITY_LIGHTS_TINT = new THREE.Color().setRGB(1.5, 1.65, 1.95);
+/** Opening longitude: Americas and the Atlantic face the viewer. */
+const INITIAL_LONGITUDE = 2.18;
 
 const DAMPING_FACTOR = 0.05;
 const ROTATE_SPEED = 0.5;
@@ -37,12 +42,17 @@ const ROTATION_SPEED = {
 
 export function EarthCanvas({
   paceRef,
+  spin = 1,
 }: {
   paceRef?: MutableRefObject<'full' | 'idle'>;
+  /** Rotation multiplier. 0 holds the Earth still (reduced motion). */
+  spin?: number;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const paceBag = useRef(paceRef);
   paceBag.current = paceRef;
+  const spinRef = useRef(spin);
+  spinRef.current = spin;
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -118,6 +128,7 @@ export function EarthCanvas({
 
     const lightsMat = new THREE.MeshBasicMaterial({
       map: nightMap,
+      color: CITY_LIGHTS_TINT,
       blending: THREE.AdditiveBlending,
       transparent: true,
       depthWrite: false,
@@ -142,8 +153,13 @@ export function EarthCanvas({
     glowMesh.scale.setScalar(GLOW_SCALE);
     earthGroup.add(glowMesh);
 
+    for (const mesh of [earthMesh, lightsMesh, cloudsMesh, glowMesh]) {
+      mesh.rotation.y = INITIAL_LONGITUDE;
+    }
+
     const sunLight = new THREE.DirectionalLight(0xffffff, LIGHT_INTENSITY);
-    scene.add(sunLight);
+    const fillLight = new THREE.AmbientLight(FILL_COLOR, FILL_INTENSITY);
+    scene.add(sunLight, fillLight);
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
@@ -164,17 +180,18 @@ export function EarthCanvas({
       controls.enabled = !idle;
       controls.update();
 
-      earthMesh.rotation.y += ROTATION_SPEED.earth * dt;
-      lightsMesh.rotation.y += ROTATION_SPEED.earth * dt;
-      cloudsMesh.rotation.y += ROTATION_SPEED.clouds * dt;
-      glowMesh.rotation.y += ROTATION_SPEED.earth * dt;
+      const turn = spinRef.current * dt;
+      earthMesh.rotation.y += ROTATION_SPEED.earth * turn;
+      lightsMesh.rotation.y += ROTATION_SPEED.earth * turn;
+      cloudsMesh.rotation.y += ROTATION_SPEED.clouds * turn;
+      glowMesh.rotation.y += ROTATION_SPEED.earth * turn;
 
       frame += 1;
       if (idle && frame % 3 !== 0) {
         return;
       }
 
-      const lightOffset = new THREE.Vector3(LIGHT_OFFSET_X, 0, 0);
+      const lightOffset = LIGHT_OFFSET.clone();
       lightOffset.applyQuaternion(camera.quaternion);
       sunLight.position.copy(lightOffset);
       renderer.render(scene, camera);
@@ -184,15 +201,26 @@ export function EarthCanvas({
     const handleResize = () => {
       if (!containerRef.current) return;
       const { clientWidth, clientHeight } = containerRef.current;
-      camera.aspect = clientWidth / Math.max(1, clientHeight);
+      if (clientWidth === 0 || clientHeight === 0) return;
+      camera.aspect = clientWidth / clientHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(clientWidth, clientHeight);
     };
 
-    window.addEventListener('resize', handleResize);
+    // The dock resizes the box itself, so watch the element, not the window.
+    const resizeObserver =
+      typeof ResizeObserver === 'undefined'
+        ? null
+        : new ResizeObserver(handleResize);
+    if (resizeObserver) {
+      resizeObserver.observe(containerRef.current);
+    } else {
+      window.addEventListener('resize', handleResize);
+    }
 
     return () => {
       cancelAnimationFrame(animationFrame);
+      resizeObserver?.disconnect();
       window.removeEventListener('resize', handleResize);
       controls.dispose();
       renderer.dispose();
@@ -210,5 +238,7 @@ export function EarthCanvas({
     };
   }, []);
 
-  return <div ref={containerRef} className="hero__canvas" aria-hidden="true" />;
+  return (
+    <div ref={containerRef} className="earth__canvas" aria-hidden="true" />
+  );
 }

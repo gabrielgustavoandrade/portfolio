@@ -1,17 +1,120 @@
-.contact__inner {
-  display: flex;
-  justify-content: center;
+.contact {
+  padding-bottom: var(--space-64);
 }
 
-.contact__actions {
+.contact__backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(
+    90% 70% at 80% 10%,
+    var(--night) 0%,
+    var(--void) 60%
+  );
+  pointer-events: none;
+  /* Fade in from the section above instead of starting on a hard edge. */
+  mask-image: linear-gradient(180deg, transparent, #000 40%);
+}
+
+.contact__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-64);
+  margin-top: 164px;
+}
+
+.contact__email {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--sys-space-4);
+  font-size: clamp(30px, calc((100vw - 2 * var(--inset)) / 17), 72px);
+  font-weight: 600;
+  letter-spacing: -0.05em;
+  line-height: 1.05;
+  color: var(--cream);
+}
+
+.contact__links {
+  list-style: none;
+}
+
+.contact__links a {
+  display: grid;
+  grid-template-columns: 240px 1fr auto;
+  align-items: center;
+  padding: var(--space-24) 0;
+  border-top: 1px solid var(--hairline);
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.contact__links li:last-child a {
+  border-bottom: 1px solid var(--hairline);
+}
+
+.contact__link-url {
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--mute);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .contact__email {
+    opacity: 0;
+    transform: scale(0.9);
+    transform-origin: left center;
+    transition:
+      opacity 700ms var(--ease-out),
+      transform 1000ms var(--ease-out);
+  }
+
+  .contact__links li {
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity 600ms var(--ease-out),
+      transform 700ms var(--ease-out);
+    transition-delay: calc(300ms + var(--i, 0) * 60ms);
+  }
+
+  .contact__body.is-in .contact__email,
+  .contact__body.is-in .contact__links li {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 1100px) {
+  .contact__body {
+    margin-top: var(--space-96);
+  }
 }
 
 @media (max-width: 720px) {
-  .contact__actions {
-    gap: var(--sys-space-3);
+  .contact__backdrop {
+    display: none;
+  }
+
+  .contact__body {
+    gap: var(--space-40);
+    margin-top: 106px;
+  }
+
+  .contact__email {
+    flex-direction: column;
+    font-size: clamp(26px, 7.7vw, 30px);
+  }
+
+  .contact__links a {
+    display: flex;
+    justify-content: space-between;
+    min-height: 56px;
+    padding: 0;
+    font-size: 18px;
+  }
+
+  .contact__link-url {
+    display: none;
   }
 }

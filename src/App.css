@@ -1,16 +1,40 @@
 .app {
-  min-height: 100vh;
-  background-color: var(--color-bg);
   position: relative;
-  overflow-x: hidden;
+  min-height: 100vh;
+  background-color: var(--void);
 }
 
-/* Page transitions */
-::view-transition-old(root) {
-  animation: fade-out 0.25s ease-out;
+/*
+  Shared section frame. Sections stay out of the stacking order
+  (no z-index) so the fixed Earth can sit between backgrounds and content.
+*/
+.section {
+  position: relative;
+  padding: 68px var(--inset) var(--space-96);
+  scroll-margin-top: 0;
 }
 
-::view-transition-new(root) {
-  animation: slideInUp 0.3s ease-out;
+.section__label {
+  display: block;
+  position: relative;
+  z-index: 2;
 }
 
+.section__body {
+  position: relative;
+  z-index: 2;
+}
+
+@media (min-width: 1024px) and (min-height: 700px) {
+  .section--frame {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+}
+
+@media (max-width: 720px) {
+  .section {
+    padding: 38px var(--inset) var(--space-64);
+  }
+}

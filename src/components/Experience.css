@@ -1,0 +1,132 @@
+.experience__list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-40);
+  margin-top: 180px;
+}
+
+.experience__item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+  padding-top: var(--space-24);
+}
+
+/* Top hairline drawn as a pseudo so it can animate its width. */
+.experience__item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--hairline);
+  transform-origin: left center;
+}
+
+.experience__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.experience__company {
+  font-size: clamp(32px, 3.4vw, 48px);
+  font-weight: 600;
+  letter-spacing: -0.05em;
+  line-height: 1;
+}
+
+.experience__clients {
+  font-size: 14px;
+  color: var(--mute);
+}
+
+.experience__engagement {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+}
+
+.experience__points {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+.experience__points li {
+  padding: var(--space-16) 0;
+  border-top: 1px solid var(--hairline);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .experience__item::before {
+    transform: scaleX(0);
+    transition: transform 600ms var(--ease-out);
+  }
+
+  .experience__head,
+  .experience__points {
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity 600ms var(--ease-out),
+      transform 700ms var(--ease-out);
+    transition-delay: calc(400ms + var(--i, 0) * 80ms);
+  }
+
+  .experience__list.is-in .experience__item::before {
+    transform: none;
+  }
+
+  .experience__list.is-in .experience__head,
+  .experience__list.is-in .experience__points {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 1100px) {
+  .experience__list {
+    margin-top: var(--space-96);
+  }
+}
+
+@media (max-width: 720px) {
+  .experience__list {
+    grid-template-columns: minmax(0, 1fr);
+    margin-top: 50px;
+  }
+
+  .experience__item {
+    gap: var(--space-16);
+    padding-top: var(--space-16);
+  }
+
+  .experience__clients {
+    font-size: 13px;
+  }
+
+  .experience__engagement {
+    font-size: 10px;
+  }
+
+  /* Mobile still: one run of points, dot-separated. */
+  .experience__points {
+    display: block;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .experience__points li {
+    display: inline;
+    padding: 0;
+    border-top: 0;
+  }
+
+  .experience__points li + li::before {
+    content: " · ";
+  }
+}

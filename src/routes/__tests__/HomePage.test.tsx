@@ -1,18 +1,19 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { vi } from 'vitest';
 import { HomePage } from '../HomePage';
 
+const earthSpy = vi.fn();
+
 vi.mock('../../components/earth/EarthCanvas', () => ({
-  EarthCanvas: () => <div data-testid="earth-canvas" />,
+  EarthCanvas: (props: { spin?: number }) => {
+    earthSpy(props);
+    return <div data-testid="earth-canvas" />;
+  },
 }));
 
 vi.mock('../../components/earth/HeroDustCanvas', () => ({
   HeroDustCanvas: () => <div data-testid="hero-dust" />,
-}));
-
-vi.mock('../../components/HeroStarfield', () => ({
-  HeroStarfield: () => <div data-testid="hero-starfield" />,
 }));
 
 const renderHomePage = () =>
@@ -25,119 +26,189 @@ const renderHomePage = () =>
     </MemoryRouter>,
   );
 
+const mockReducedMotion = () => {
+  const original = window.matchMedia;
+  window.matchMedia = (query: string): MediaQueryList => ({
+    matches: query.includes('prefers-reduced-motion'),
+    media: query,
+    onchange: null,
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+  });
+  return () => {
+    window.matchMedia = original;
+  };
+};
+
+const BANNED = [
+  /freelanc/i,
+  /node\.?js/i,
+  /plasma/i,
+  /marmoraria/i,
+  /langgraph/i,
+  /langfuse/i,
+  /joined early/i,
+  /25% fewer bugs/i,
+  /\$100M/i,
+  /intentional youtube/i,
+  /us remote/i,
+  /\bcv\b|résumé|resume/i,
+];
+
 describe('HomePage', () => {
-  it('renders beat 1 copy, the live earth canvas, and beat 2 work cards', () => {
+  beforeEach(() => {
+    earthSpy.mockClear();
+  });
+
+  it('renders the hero with name, approved headline and the live Earth', () => {
     renderHomePage();
 
     expect(
-      screen.getByRole('heading', { name: /gabriel andrade/i }),
+      screen.getByRole('heading', { level: 1, name: 'Gabriel Andrade' }),
     ).toBeInTheDocument();
     expect(
-      screen.queryByText(/commerce, built for speed/i),
-    ).not.toBeInTheDocument();
+      screen.getByText(
+        'Senior Full Stack Engineer | AI agents in production | React, TypeScript, Next.js, Python',
+      ),
+    ).toBeInTheDocument();
     expect(
-      screen.getByText(/agent systems — traces, latency, cost, evals/i),
+      screen.getByText('React · TypeScript · Next.js · Python'),
     ).toBeInTheDocument();
     expect(screen.getByTestId('earth-canvas')).toBeInTheDocument();
+    expect(screen.getByTestId('hero-dust')).toBeInTheDocument();
+    expect(earthSpy).toHaveBeenLastCalledWith(
+      expect.objectContaining({ spin: 1 }),
+    );
 
-    expect(screen.getByRole('link', { name: /^work$/i })).toHaveAttribute(
+    const nav = screen.getByRole('navigation', { name: /primary/i });
+    expect(within(nav).getByRole('link', { name: 'Work' })).toHaveAttribute(
       'href',
       '#work',
     );
-    expect(screen.getByRole('link', { name: /^about$/i })).toHaveAttribute(
+    expect(
+      within(nav).getByRole('link', { name: 'Experience' }),
+    ).toHaveAttribute('href', '#experience');
+    expect(within(nav).getByRole('link', { name: 'Contact' })).toHaveAttribute(
       'href',
-      '#about',
+      '#contact',
     );
-    expect(screen.getByRole('link', { name: /^lab$/i })).toHaveAttribute(
-      'href',
-      '#build-log',
-    );
-
-    expect(screen.getByRole('link', { name: /01\s+earth/i })).toHaveAttribute(
-      'href',
-      '#build-log',
-    );
-    expect(
-      screen.getByRole('link', { name: /02\s+smart-date-input/i }),
-    ).toHaveAttribute('href', '/work/smart-date-input');
-    expect(
-      screen.getAllByRole('textbox', { name: /try smart-date-input/i }).length,
-    ).toBeGreaterThan(0);
-    expect(
-      screen.getByText((_, node) => {
-        return (
-          node?.classList.contains('sys-label') === true &&
-          /03/.test(node.textContent ?? '') &&
-          /commerce/i.test(node.textContent ?? '')
-        );
-      }),
-    ).toBeInTheDocument();
-    expect(
-      screen.queryByRole('link', { name: /03\s+commerce/i }),
-    ).not.toBeInTheDocument();
-    expect(screen.getByText(/still to come/i)).toBeInTheDocument();
-
-    expect(
-      screen.getByRole('heading', { name: /selected work/i }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('link', { name: /01\s+interactiveai/i }),
-    ).toHaveAttribute('href', '/work/interactive-ai');
-    expect(
-      screen.getByRole('link', { name: /02\s+m&ms/i }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('heading', { name: /open source/i }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('heading', { name: /build log/i }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('heading', { name: /about me/i }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(/i'm a brazilian software engineer based in madrid/i),
-    ).toBeInTheDocument();
-    expect(document.querySelector('.reveal-text__word')).toBeNull();
-    expect(
-      screen.getByRole('link', { name: /send me an email/i }),
-    ).toBeInTheDocument();
-
-    const workSection = document.querySelector('#work');
-    expect(
-      workSection?.querySelector('.sys-card:not(.sys-card--live)'),
-    ).toBeNull();
-    expect(document.querySelector('.performance-toggle__button')).toBeNull();
-    expect(screen.queryByText(/how i built this/i)).not.toBeInTheDocument();
-    expect(screen.queryByText(/plasma/i)).not.toBeInTheDocument();
-    expect(
-      screen.queryByRole('link', { name: /plasma/i }),
-    ).not.toBeInTheDocument();
   });
 
-  it('jumps to the beat 2 end pose when reduced motion is preferred', () => {
-    const matchMedia = window.matchMedia;
-    window.matchMedia = (query: string): MediaQueryList => ({
-      matches: query.includes('prefers-reduced-motion'),
-      media: query,
-      onchange: null,
-      addListener: vi.fn(),
-      removeListener: vi.fn(),
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-      dispatchEvent: vi.fn(),
-    });
-
+  it('shows three outcome-led project cards with public images', () => {
     renderHomePage();
 
-    expect(document.querySelector('.hero')).toHaveClass('hero--reduced');
-    expect(screen.getByTestId('earth-canvas')).toBeInTheDocument();
-    expect(
-      screen.getByRole('link', { name: /01\s+earth/i }),
-    ).toBeInTheDocument();
-    expect(document.querySelector('.work-card')).toHaveClass('is-in');
-    expect(document.querySelector('.about__paragraph')).toHaveClass('is-in');
+    const work = screen.getByRole('region', {
+      name: /selected systems \/ 2026/i,
+    });
+    const cards = within(work).getAllByRole('article');
+    expect(cards).toHaveLength(3);
 
-    window.matchMedia = matchMedia;
+    const [interactive, sdi, mms] = cards;
+    expect(within(interactive).getByText('InteractiveAI')).toBeInTheDocument();
+    expect(
+      within(interactive).getByRole('heading', {
+        name: /ai agents in production/i,
+      }),
+    ).toBeInTheDocument();
+    expect(within(interactive).queryByRole('definition')).toBeNull();
+    expect(within(interactive).getByRole('img')).toHaveAttribute(
+      'src',
+      '/work/interactiveai-desktop.png',
+    );
+
+    expect(within(sdi).getByRole('img')).toHaveAttribute(
+      'src',
+      '/work/sdi-render-readable.png',
+    );
+    expect(within(sdi).getByRole('link', { name: /npm/i })).toHaveAttribute(
+      'href',
+      'https://www.npmjs.com/package/@gabrielgustavoandrade/smart-date-input',
+    );
+
+    expect(within(mms).getByText(/via valtech/i)).toBeInTheDocument();
+    expect(within(mms).getByRole('img')).toHaveAttribute(
+      'src',
+      '/work/m-ms-desktop.png',
+    );
+    expect(
+      within(mms).getByRole('heading', { name: /500k\+ customizations/i }),
+    ).toBeInTheDocument();
+    for (const value of ['−65%', '−50%', '12']) {
+      expect(within(mms).getByText(value)).toBeInTheDocument();
+    }
+  });
+
+  it('embeds the live smart-date-input demo', () => {
+    renderHomePage();
+
+    expect(
+      screen.getByRole('heading', { level: 2, name: 'smart-date-input' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('textbox', { name: /try smart-date-input/i }),
+    ).toBeInTheDocument();
+  });
+
+  it('lists contract experience and public contact links', () => {
+    renderHomePage();
+
+    const experience = screen.getByRole('region', { name: /experience/i });
+    for (const company of ['Red Ventures', 'Valtech', 'Pacto']) {
+      expect(
+        within(experience).getByRole('heading', { name: company }),
+      ).toBeInTheDocument();
+    }
+    expect(within(experience).getAllByText('Contract')).toHaveLength(3);
+    expect(
+      within(experience).getByText('Good Eggs: 7,000+ products'),
+    ).toBeInTheDocument();
+
+    const contact = screen.getByRole('region', { name: /contact/i });
+    expect(
+      within(contact).getByRole('link', {
+        name: /gabrielgustavoandrade@gmail\.com/i,
+      }),
+    ).toHaveAttribute('href', 'mailto:gabrielgustavoandrade@gmail.com');
+    expect(
+      within(contact).getByRole('link', { name: /linkedin/i }),
+    ).toHaveAttribute(
+      'href',
+      'https://www.linkedin.com/in/gabrielgustavoandrade',
+    );
+    expect(
+      within(contact).getByRole('link', { name: /github/i }),
+    ).toHaveAttribute('href', 'https://github.com/gabrielgustavoandrade');
+  });
+
+  it('keeps retired copy off the page', () => {
+    renderHomePage();
+
+    const text = document.body.textContent ?? '';
+    for (const pattern of BANNED) {
+      expect(text).not.toMatch(pattern);
+    }
+    expect(text).not.toMatch(/agent systems — traces/i);
+  });
+
+  it('holds the Earth still and skips scroll animations with reduced motion', () => {
+    const restore = mockReducedMotion();
+    try {
+      renderHomePage();
+
+      expect(document.querySelector('.hero')).toHaveClass('hero--reduced');
+      expect(screen.getByTestId('earth-canvas')).toBeInTheDocument();
+      expect(earthSpy).toHaveBeenLastCalledWith(
+        expect.objectContaining({ spin: 0 }),
+      );
+      expect(screen.queryByTestId('hero-dust')).toBeNull();
+      expect(document.querySelector('.work__grid')).toHaveClass('is-in');
+      expect(document.querySelector('.experience__list')).toHaveClass('is-in');
+      expect(document.querySelector('.about__text')).toHaveClass('is-in');
+    } finally {
+      restore();
+    }
   });
 });

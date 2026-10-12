@@ -1,167 +1,393 @@
+/*
+  Light specimen panel for the published package. The package emits
+  Tailwind class names without CSS, so the utilities it uses are
+  shimmed here, scoped to .live-sdi.
+*/
+
 .live-sdi {
-  width: min(100%, 280px);
-  font-family: var(--sys-font);
-  color: var(--sys-cream);
-}
+  --sdi-ink: #05060a;
+  --sdi-soft: #4a5060;
+  --sdi-line: rgba(5, 6, 10, 0.14);
+  --sdi-field-line: rgba(5, 6, 10, 0.2);
+  --sdi-focus: #3b82f6;
 
-.live-sdi,
-.live-sdi input,
-.live-sdi button,
-.live-sdi div,
-.live-sdi span,
-.live-sdi p {
-  font-family: var(--sys-font);
-}
-
-.live-sdi > .relative,
-.live-sdi .relative {
   position: relative;
-}
-
-.live-sdi .flex {
   display: flex;
-  align-items: center;
-  gap: 0;
+  flex-direction: column;
+  gap: var(--space-16);
+  padding: var(--space-24);
+  border-radius: var(--radius-card);
+  background: var(--cream);
+  color: var(--sdi-ink);
+  font-family: var(--font);
+  box-shadow: 0 40px 120px rgba(0, 0, 0, 0.5);
 }
 
-.live-sdi .flex-1 {
-  flex: 1;
-  min-width: 0;
-}
-
-/* Hide the package calendar trigger — the text input is the showcase. */
-.live-sdi .flex > .relative:last-child {
-  display: none;
-}
-
-.live-sdi input {
-  display: block;
-  width: 100%;
-  min-height: 48px;
-  padding: 0 var(--sys-space-3);
-  border-radius: var(--sys-radius);
-  border: var(--sys-hairline);
-  background: #161616 !important;
-  color: var(--sys-cream) !important;
-  caret-color: var(--sys-cream);
-  font-family: var(--sys-font) !important;
-  font-size: var(--sys-type-kicker) !important;
-  letter-spacing: -0.01em;
-  box-shadow: none !important;
-  transition:
-    border-color var(--sys-ms-hover) var(--sys-ease),
-    color var(--sys-ms-hover) var(--sys-ease);
-}
-
-.live-sdi input::placeholder {
-  color: var(--sys-muted) !important;
-  opacity: 1;
-}
-
-.live-sdi input:focus,
-.live-sdi input:focus-visible {
-  outline: 1px solid var(--sys-cream);
-  outline-offset: 2px;
-  border-color: var(--sys-cream);
-  box-shadow: none;
-}
-
-.live-sdi input.border-green-300,
-.live-sdi input.border-red-300,
-.live-sdi input.border-gray-300 {
-  border-color: var(--sys-line);
-}
-
-.live-sdi input:focus.border-green-300,
-.live-sdi input:focus-visible.border-green-300 {
-  border-color: var(--sys-cream);
-}
-
-.live-sdi .absolute.right-2 {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
+.live-sdi__head {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 4px;
-  pointer-events: none;
-  color: var(--sys-muted);
-  font-size: var(--sys-type-meta);
 }
 
-.live-sdi .absolute.z-50,
-.live-sdi .bg-white {
-  position: absolute;
-  inset-inline: 0;
-  top: auto;
-  bottom: calc(100% + var(--sys-space-1));
-  z-index: 8;
-  max-height: 220px;
-  overflow: auto;
-  border-radius: var(--sys-radius);
-  border: var(--sys-hairline);
-  background: #161616 !important;
-  color: var(--sys-cream) !important;
-  box-shadow: none;
-}
-
-.live-sdi .absolute.z-50 > .px-3,
-.live-sdi .absolute.z-50 > div {
-  padding: var(--sys-space-2);
-  font-family: var(--sys-font) !important;
-  font-size: var(--sys-type-kicker) !important;
-  line-height: var(--sys-lead-kicker);
-  letter-spacing: 0;
-  border-left: 1px solid transparent;
-  background: #161616 !important;
-  color: var(--sys-cream) !important;
-  cursor: pointer;
-}
-
-.live-sdi .absolute.z-50 > .border-t {
-  border-top: var(--sys-hairline);
-  background: var(--sys-ink);
-  color: var(--sys-muted);
-  cursor: default;
-}
-
-.live-sdi .hover\:bg-gray-50:hover,
-.live-sdi .bg-blue-50,
-.live-sdi .absolute.z-50 > div:hover {
-  background: #222;
-}
-
-.live-sdi .text-gray-500,
-.live-sdi .text-gray-600,
-.live-sdi .text-gray-700,
-.live-sdi .text-gray-800,
-.live-sdi .text-gray-900,
-.live-sdi .text-blue-600,
-.live-sdi .text-purple-600,
-.live-sdi .text-green-600,
-.live-sdi .text-yellow-600,
-.live-sdi .text-orange-600,
-.live-sdi .text-red-600 {
-  color: var(--sys-muted);
-}
-
-.live-sdi .font-medium,
-.live-sdi .font-semibold {
+.live-sdi__label {
+  font-size: 10px;
   font-weight: 500;
-  color: var(--sys-cream);
+  line-height: 1;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--sdi-soft);
+}
+
+.live-sdi__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+}
+
+.live-sdi__chip {
+  padding: var(--space-8) 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(5, 6, 10, 0.18);
+  background: transparent;
+  color: var(--sdi-ink);
+  font: 500 12px / 1 var(--font);
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition:
+    background-color var(--hover-ms) ease,
+    color var(--hover-ms) ease;
+}
+
+.live-sdi__chip:hover {
+  background: var(--sdi-ink);
+  color: var(--cream);
+}
+
+.live-sdi__chip:focus-visible {
+  outline: 2px solid var(--sdi-focus);
+  outline-offset: 2px;
+}
+
+.live-sdi__field {
+  min-height: 150px;
+}
+
+.live-sdi__out {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding-top: var(--space-16);
+  border-top: 1px solid var(--sdi-line);
 }
 
 .live-sdi__readout {
-  margin: var(--sys-space-2) 0 0;
-  font-family: var(--sys-font);
-  font-size: var(--sys-type-meta);
-  letter-spacing: var(--sys-track-meta);
-  color: var(--sys-cream);
+  font: 500 15px / 1.4 var(--font);
+  font-variant-numeric: tabular-nums;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .live-sdi input {
-    transition: none;
+/* Package input */
+.live-sdi .live-sdi__input {
+  height: 44px;
+  padding: 0 64px 0 12px;
+  border: 1px solid var(--sdi-field-line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--sdi-ink);
+  font: 400 15px / 1.4 var(--font);
+  transition:
+    border-color var(--hover-ms) ease,
+    box-shadow var(--hover-ms) ease;
+}
+
+.live-sdi .live-sdi__input::placeholder {
+  color: #7a7f8c;
+}
+
+.live-sdi .live-sdi__input:focus,
+.live-sdi .live-sdi__input:focus-visible {
+  outline: none;
+  border-color: var(--sdi-focus);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.live-sdi .live-sdi__input.border-green-300 {
+  border-color: #86efac;
+}
+
+.live-sdi .live-sdi__input.border-green-300:focus {
+  border-color: var(--sdi-focus);
+}
+
+.live-sdi__field button {
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.live-sdi__field select {
+  font: inherit;
+  color: inherit;
+  background: #fff;
+}
+
+.live-sdi svg {
+  flex: none;
+}
+
+/* Tailwind subset used by the package */
+.live-sdi .relative {
+  position: relative;
+}
+.live-sdi .absolute {
+  position: absolute;
+}
+.live-sdi .flex {
+  display: flex;
+}
+.live-sdi .inline-flex {
+  display: inline-flex;
+}
+.live-sdi .grid {
+  display: grid;
+}
+.live-sdi .grid-cols-7 {
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+.live-sdi .items-center {
+  align-items: center;
+}
+.live-sdi .justify-between {
+  justify-content: space-between;
+}
+.live-sdi .justify-center {
+  justify-content: center;
+}
+.live-sdi .justify-end {
+  justify-content: flex-end;
+}
+.live-sdi .flex-1 {
+  flex: 1 1 0%;
+  min-width: 0;
+}
+.live-sdi .gap-1 {
+  gap: 4px;
+}
+.live-sdi .gap-2 {
+  gap: 8px;
+}
+.live-sdi .w-full {
+  width: 100%;
+}
+.live-sdi .w-auto {
+  width: auto;
+}
+.live-sdi .text-center {
+  text-align: center;
+}
+.live-sdi .h-3 {
+  height: 12px;
+}
+.live-sdi .w-3 {
+  width: 12px;
+}
+.live-sdi .h-4 {
+  height: 16px;
+}
+.live-sdi .w-4 {
+  width: 16px;
+}
+.live-sdi .h-8 {
+  height: 32px;
+}
+.live-sdi .w-8 {
+  width: 32px;
+}
+.live-sdi .h-9 {
+  height: 36px;
+}
+.live-sdi .w-9 {
+  width: 36px;
+}
+.live-sdi .p-0 {
+  padding: 0;
+}
+.live-sdi .p-3 {
+  padding: 12px;
+}
+.live-sdi .px-2 {
+  padding-inline: 8px;
+}
+.live-sdi .px-3 {
+  padding-inline: 12px;
+}
+.live-sdi .py-1 {
+  padding-block: 4px;
+}
+.live-sdi .py-2 {
+  padding-block: 8px;
+}
+.live-sdi .mt-1 {
+  margin-top: 4px;
+}
+.live-sdi .mt-0\.5 {
+  margin-top: 2px;
+}
+.live-sdi .mb-2 {
+  margin-bottom: 8px;
+}
+.live-sdi .text-xs {
+  font-size: 12px;
+  line-height: 16px;
+}
+.live-sdi .text-sm {
+  font-size: 14px;
+  line-height: 20px;
+}
+.live-sdi .font-medium {
+  font-weight: 500;
+}
+.live-sdi .rounded-md {
+  border-radius: 6px;
+}
+.live-sdi .border {
+  border: 1px solid var(--sdi-line);
+}
+.live-sdi .border-t {
+  border-top: 1px solid var(--sdi-line);
+}
+.live-sdi .border-l-2 {
+  border-left: 2px solid transparent;
+}
+.live-sdi .border-l-green-400 {
+  border-left-color: #4ade80;
+}
+.live-sdi .border-l-yellow-400 {
+  border-left-color: #facc15;
+}
+.live-sdi .border-l-orange-400 {
+  border-left-color: #fb923c;
+}
+.live-sdi .border-l-blue-500 {
+  border-left-color: #3b82f6;
+}
+.live-sdi .bg-white {
+  background: #fff;
+}
+.live-sdi .bg-gray-50 {
+  background: #f9fafb;
+}
+.live-sdi .bg-blue-50 {
+  background: #eff6ff;
+}
+.live-sdi .bg-primary {
+  background: var(--sdi-ink);
+  color: var(--cream);
+}
+.live-sdi .hover\:bg-gray-50:hover {
+  background: #f3f4f6;
+}
+.live-sdi .shadow-lg {
+  box-shadow:
+    0 10px 24px rgba(5, 6, 10, 0.12),
+    0 4px 8px rgba(5, 6, 10, 0.06);
+}
+.live-sdi .z-50 {
+  z-index: 50;
+}
+.live-sdi .max-h-80 {
+  max-height: 220px;
+}
+.live-sdi .overflow-auto {
+  overflow: auto;
+}
+.live-sdi .right-0 {
+  right: 0;
+}
+.live-sdi .left-auto {
+  left: auto;
+}
+.live-sdi .left-0 {
+  left: 0;
+}
+.live-sdi .right-2 {
+  right: 8px;
+}
+.live-sdi .top-1\/2 {
+  top: 50%;
+}
+.live-sdi .-translate-y-1\/2 {
+  transform: translateY(-50%);
+}
+.live-sdi .cursor-pointer {
+  cursor: pointer;
+}
+.live-sdi .text-gray-500 {
+  color: #6b7280;
+}
+.live-sdi .text-gray-600 {
+  color: #4b5563;
+}
+.live-sdi .text-green-600 {
+  color: #16a34a;
+}
+.live-sdi .text-yellow-600 {
+  color: #ca8a04;
+}
+.live-sdi .text-orange-600 {
+  color: #ea580c;
+}
+.live-sdi .text-red-600 {
+  color: #dc2626;
+}
+.live-sdi .text-blue-600 {
+  color: #2563eb;
+}
+.live-sdi .text-purple-600 {
+  color: #9333ea;
+}
+.live-sdi .disabled\:opacity-50:disabled {
+  opacity: 0.5;
+}
+
+/* Calendar trigger and day buttons need visible edges on cream. */
+.live-sdi .h-9.w-9 {
+  border: 1px solid var(--sdi-field-line);
+  border-radius: 8px;
+  background: #fff;
+  height: 44px;
+  width: 44px;
+}
+
+.live-sdi .h-9.w-9:hover {
+  background: #f3f4f6;
+}
+
+.live-sdi select.h-9 {
+  height: 36px;
+  border: 1px solid var(--sdi-field-line);
+  border-radius: 6px;
+}
+
+.live-sdi button:focus-visible,
+.live-sdi select:focus-visible {
+  outline: 2px solid var(--sdi-focus);
+  outline-offset: 1px;
+}
+
+.live-sdi .h-9.px-3 {
+  height: 32px;
+  padding-inline: 12px;
+  border-radius: 6px;
+}
+
+@media (max-width: 720px) {
+  .live-sdi {
+    padding: var(--space-16);
+    border-radius: 14px;
+    box-shadow: none;
   }
 }

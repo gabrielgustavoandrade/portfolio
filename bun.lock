@@ -5,7 +5,7 @@
     "": {
       "name": "portfolio-gabriel",
       "dependencies": {
-        "@gabrielgustavoandrade/smart-date-input": "^1.1.6",
+        "@gabrielgustavoandrade/smart-date-input": "^1.1.7",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
         "react-router-dom": "^6.28.0",
@@ -154,7 +154,7 @@
 
     "@esbuild/win32-x64": ["@esbuild/win32-x64@0.25.11", "", { "os": "win32", "cpu": "x64" }, "sha512-D7Hpz6A2L4hzsRpPaCYkQnGOotdUpDzSGRIv9I+1ITdHROSFUWW95ZPZWQmGka1Fg7W3zFJowyn9WGwMJ0+KPA=="],
 
-    "@gabrielgustavoandrade/smart-date-input": ["@gabrielgustavoandrade/smart-date-input@1.1.6", "", { "dependencies": { "date-fns": "^3.0.0", "lucide-react": "^0.263.1" }, "peerDependencies": { "react": ">=16.8.0", "react-dom": ">=16.8.0" } }, "sha512-0dFpqkmHekiRMP0CAXiVA+ZkBUaRrHMsp8jFUhlcSvEG732Ehfb3MVVPms5RjWMZAERcDdUoa/MzBR44+MaQRg=="],
+    "@gabrielgustavoandrade/smart-date-input": ["@gabrielgustavoandrade/smart-date-input@1.1.7", "", { "dependencies": { "date-fns": "^3.0.0", "lucide-react": "^0.263.1" }, "peerDependencies": { "react": ">=16.8.0", "react-dom": ">=16.8.0" } }, "sha512-kfr5fgbWo/TvbHtpVeKno2hWqIaAL9ydBzBkUAm5lBeLU+RZqWZNWdAmtdVcgcBQt/apiVFhEr184xl7eEXH9Q=="],
 
     "@jridgewell/gen-mapping": ["@jridgewell/gen-mapping@0.3.13", "", { "dependencies": { "@jridgewell/sourcemap-codec": "^1.5.0", "@jridgewell/trace-mapping": "^0.3.24" } }, "sha512-2kkt/7niJ6MgEPxF0bYdQ6etZaA+fQvDcLKckhy1yIQOzaoKjBBjSj63/aLVjYE3qhRt5dvM+uUyfCg6UKCBbA=="],
 

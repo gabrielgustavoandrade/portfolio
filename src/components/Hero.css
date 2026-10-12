@@ -1,202 +1,210 @@
+/*
+  Stacking (root context): hero backdrop 0 → dust 0 → Earth 1 → copy 2.
+  Once docked, the Earth mark rises above section content.
+*/
+
 .hero {
-  height: 200vh;
-  background-color: var(--sys-void);
   position: relative;
-}
-
-.hero--reduced {
   height: 100vh;
-}
-
-/* Fixed pin — ancestors use overflow-x: hidden, which breaks position: sticky. */
-.hero__sticky {
-  position: absolute;
-  inset-inline: 0;
-  top: 0;
-  height: 100vh;
+  min-height: 560px;
   overflow: hidden;
-  background-color: var(--sys-void);
 }
 
-.hero--pinned .hero__sticky {
-  position: fixed;
+@supports (height: 100svh) {
+  .hero {
+    height: 100svh;
+  }
+}
+
+.hero__backdrop {
+  position: absolute;
   inset: 0;
-  height: 100vh;
-}
-
-.hero--released .hero__sticky {
-  position: absolute;
-  top: auto;
-  bottom: 0;
-}
-
-.hero__nav {
-  position: absolute;
-  top: var(--sys-space-4);
-  right: var(--sys-inset);
-  z-index: 6;
-  display: flex;
-  gap: var(--sys-space-4);
-}
-
-.hero__copy {
-  position: absolute;
-  left: 50%;
-  top: clamp(72px, 16vh, 148px);
-  width: min(94vw, 1120px);
-  transform: translate3d(-50%, 0, 0);
-  text-align: center;
-  z-index: 4;
-  pointer-events: none;
-  will-change: transform;
-}
-
-.hero__title-clip {
-  overflow: hidden;
-}
-
-.hero__title {
-  margin: 0;
-  font-family: var(--sys-font);
-  font-size: var(--sys-type-hero);
-  font-weight: 700;
-  line-height: var(--sys-lead-hero);
-  letter-spacing: var(--sys-track-hero);
-  color: var(--sys-cream);
-  will-change: transform;
-}
-
-.hero__kicker {
-  margin: var(--sys-space-3) auto 0;
-  max-width: var(--sys-measure-text);
-  will-change: transform, opacity;
+  z-index: 0;
+  background: radial-gradient(
+    110% 90% at 72% 42%,
+    var(--night) 0%,
+    var(--void) 62%
+  );
 }
 
 .hero__dust {
   position: absolute;
   inset: 0;
-  z-index: 1;
+  z-index: 0;
   pointer-events: none;
 }
 
-.hero__globe {
+.hero__nav {
   position: absolute;
+  top: var(--space-40);
+  right: var(--inset);
+  z-index: 3;
+  display: flex;
+  gap: var(--space-40);
+  font-size: 11px;
+  color: var(--cream);
+}
+
+.hero__copy {
+  position: absolute;
+  left: var(--inset);
+  right: var(--inset);
+  top: max(140px, 33.3vh);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-40);
+  pointer-events: none;
+}
+
+.hero__copy a {
+  pointer-events: auto;
+}
+
+.hero__name {
+  font-size: clamp(40px, calc((100vw - 2 * var(--inset)) / 7.4), 136px);
+  font-weight: 600;
+  letter-spacing: var(--track-display);
+  line-height: 0.9;
+  white-space: nowrap;
+  color: var(--cream);
+}
+
+.hero__meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+}
+
+.hero__headline {
+  max-width: 640px;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  color: var(--cream);
+  text-wrap: pretty;
+}
+
+.hero__cue {
+  position: absolute;
+  left: var(--inset);
+  bottom: var(--space-40);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: var(--space-16);
+  font-size: 11px;
+}
+
+.hero__cue-line {
+  width: 40px;
+  height: 1px;
+  background: var(--hairline);
+}
+
+/* Fixed Earth, positioned by useEarthDock. */
+.earth {
+  position: fixed;
   top: 0;
   left: 0;
-  z-index: 2;
-  width: min(78vw, 64vh, 760px);
-  height: min(78vw, 64vh, 760px);
+  z-index: 1;
+  width: 0;
+  height: 0;
   transform-origin: center center;
   will-change: transform;
+  transition: opacity 200ms ease;
 }
 
-.hero__globe--quiet {
+.earth--quiet {
   pointer-events: none;
 }
 
-.hero__canvas {
+.earth--docked {
+  z-index: 5;
+}
+
+.earth--fading {
+  opacity: 0;
+}
+
+.earth__intro,
+.earth__canvas {
   position: absolute;
   inset: 0;
-  pointer-events: auto;
 }
 
-.hero--rail-live .hero-rail,
-.hero--reduced .hero-rail {
-  pointer-events: auto;
+@media (prefers-reduced-motion: no-preference) {
+  .earth__intro {
+    animation: earth-intro 1200ms var(--ease-out) both;
+  }
+
+  .hero__rise {
+    animation: hero-rise 900ms var(--ease-out) both;
+  }
+
+  .hero__meta .hero__rise:first-child {
+    animation-delay: 80ms;
+  }
+
+  .hero__meta .hero__rise:last-child {
+    animation-delay: 160ms;
+  }
 }
 
-.hero--rail-live .hero__copy,
-.hero--reduced .hero__copy,
-.hero--released .hero__copy {
-  visibility: hidden;
+@keyframes earth-intro {
+  from {
+    opacity: 0;
+    transform: scale(0.88);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
-.hero--rail-live .hero__sticky,
-.hero--reduced .hero__sticky,
-.hero--released .hero__sticky {
-  overflow: visible;
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Drag-to-spin is a pointer nicety; on touch it would trap page scroll. */
+@media (pointer: coarse), (max-width: 720px) {
+  .earth {
+    pointer-events: none;
+  }
 }
 
 @media (max-width: 720px) {
-  .hero,
-  .hero.hero--mobile,
-  .hero--reduced,
-  .hero--pinned,
-  .hero--released {
-    height: auto;
-    min-height: 100vh;
+  .hero__backdrop {
+    background: radial-gradient(
+      120% 70% at 50% 85%,
+      var(--night) 0%,
+      var(--void) 65%
+    );
   }
 
-  .hero__sticky,
-  .hero--pinned .hero__sticky,
-  .hero--released .hero__sticky,
-  .hero.hero--mobile .hero__sticky {
-    position: relative;
-    inset: auto;
-    height: auto;
-    min-height: 100vh;
-    overflow: visible;
+  .hero__nav,
+  .hero__cue {
+    display: none;
   }
 
-  .hero__nav {
-    top: var(--sys-space-3);
-    gap: var(--sys-space-3);
+  .hero__copy {
+    top: var(--space-96);
+    gap: var(--space-24);
   }
 
-  .hero__copy,
-  .hero--rail-live .hero__copy,
-  .hero--reduced .hero__copy,
-  .hero--released .hero__copy,
-  .hero.hero--mobile .hero__copy {
-    position: relative;
-    left: auto;
-    top: auto;
-    width: auto;
-    transform: none;
-    visibility: visible;
-    text-align: left;
-    padding: 72px var(--sys-inset) var(--sys-space-3);
-    z-index: 3;
+  .hero__name {
+    line-height: 0.95;
   }
 
-  .hero__title {
-    font-size: clamp(5rem, 24vw, 7.5rem);
-    line-height: 0.86;
-    transform: none;
-    opacity: 1;
-  }
-
-  .hero__kicker {
-    margin-inline: 0;
-    transform: none;
-    opacity: 1;
-  }
-
-  .hero__globe {
-    position: relative;
-    width: min(88vw, 420px);
-    height: min(88vw, 420px);
-    margin-inline: auto;
-    transform: none;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero {
-    height: 100vh;
-  }
-
-  .hero__copy,
-  .hero__title,
-  .hero__kicker,
-  .hero__globe {
-    will-change: auto;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) and (max-width: 720px) {
-  .hero {
-    height: auto;
-    min-height: 100vh;
+  .hero__headline {
+    font-size: 19px;
   }
 }
