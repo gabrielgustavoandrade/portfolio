@@ -101,17 +101,25 @@ describe('HomePage', () => {
     );
 
     const nav = screen.getByRole('navigation', { name: /primary/i });
-    expect(within(nav).getByRole('link', { name: 'Work' })).toHaveAttribute(
-      'href',
-      '#work',
+    const links = within(nav)
+      .getAllByRole('link')
+      .map((link) => [link.textContent, link.getAttribute('href')]);
+    expect(links).toEqual([
+      ['Work', '#work'],
+      ['Harness', '#harness'],
+      ['Craft', '#craft'],
+      ['Experience', '#experience'],
+      ['Contact', '#contact'],
+    ]);
+    // Nav follows page order, and every target exists.
+    const sections = Array.from(document.querySelectorAll('section[id]')).map(
+      (section) => section.id,
     );
-    expect(
-      within(nav).getByRole('link', { name: 'Experience' }),
-    ).toHaveAttribute('href', '#experience');
-    expect(within(nav).getByRole('link', { name: 'Contact' })).toHaveAttribute(
-      'href',
-      '#contact',
+    const positions = links.map(([, href]) =>
+      sections.indexOf(String(href).slice(1)),
     );
+    expect(positions).not.toContain(-1);
+    expect([...positions].sort((a, b) => a - b)).toEqual(positions);
   });
 
   it('shows three outcome-led project cards with public images', () => {
@@ -180,12 +188,17 @@ describe('HomePage', () => {
         within(experience).getByRole('heading', { name: company }),
       ).toBeInTheDocument();
     }
-    expect(within(experience).getAllByText('Contract')).toHaveLength(4);
-    // Only sourced dates (old projects.ts at 2881290); the rest stay undated.
-    expect(within(experience).getAllByText(/\b20\d\d\b/)).toHaveLength(1);
-    expect(
-      within(experience).getByText('Mar 2026 – present'),
-    ).toBeInTheDocument();
+    const engagements = Array.from(
+      experience.querySelectorAll('.experience__engagement'),
+    ).map((node) => node.textContent);
+    // Role-level dates from the CV; no per-client dates inside Valtech.
+    expect(engagements).toEqual([
+      'Contract · Mar 2026 – Present',
+      'Contract · May 2024 – Mar 2026',
+      'Contract · Sep 2021 – May 2024',
+      'Contract · Jul 2019 – Sep 2021',
+    ]);
+    expect(within(experience).getAllByText(/\b20\d\d\b/)).toHaveLength(4);
     expect(
       within(experience).getByText('Good Eggs: 7,000+ products'),
     ).toBeInTheDocument();

@@ -2,11 +2,8 @@ export interface Experience {
   company: string;
   clients?: string;
   engagement: string;
-  /**
-   * Only dates with a written source (old site content, git history,
-   * brief). Leave undefined rather than estimate.
-   */
-  period?: string;
+  /** Role-level dates from the CV; no per-client dates. */
+  period: string;
   points: string[];
 }
 
@@ -14,8 +11,7 @@ export const experience: Experience[] = [
   {
     company: 'InteractiveAI',
     engagement: 'Contract',
-    // Source: src/data/projects.ts at 2881290 ("Mar 2026 – present").
-    period: 'Mar 2026 – present',
+    period: 'Mar 2026 – Present',
     points: [
       'React/Next.js app and Python FastAPI services',
       'Agent observability, agentic workflows, in-product copilot',
@@ -26,6 +22,7 @@ export const experience: Experience[] = [
     company: 'Red Ventures',
     clients: 'SaveOnEnergy · ChooseEnergy · ChooseTexasPower',
     engagement: 'Contract',
+    period: 'May 2024 – Mar 2026',
     points: [
       'Millions of users/month',
       'Strata plan comparison tool',
@@ -36,11 +33,13 @@ export const experience: Experience[] = [
     company: 'Valtech',
     clients: 'Good Eggs · M&M’s Design Your Own (see 03)',
     engagement: 'Contract',
+    period: 'Sep 2021 – May 2024',
     points: ['Good Eggs: 7,000+ products'],
   },
   {
     company: 'Pacto',
     engagement: 'Contract',
+    period: 'Jul 2019 – Sep 2021',
     points: [
       '1,000+ daily users',
       'USD 1M+/day in payments',

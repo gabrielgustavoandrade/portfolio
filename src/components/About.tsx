@@ -22,8 +22,7 @@ export function About({ reducedMotion }: { reducedMotion: boolean }) {
         Brazilian senior full stack engineer. Seven years building scalable
         full-stack applications for consumer platforms, e-commerce and financial
         services; led modernization projects, improved performance in
-        high-traffic systems, mentored developers across distributed teams in
-        the US and Europe.
+        high-traffic systems, mentored developers across distributed teams.
       </p>
     </section>
   );

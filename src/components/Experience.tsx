@@ -32,13 +32,9 @@ export function Experience({ reducedMotion }: { reducedMotion: boolean }) {
                 <p className="experience__clients">{item.clients}</p>
               ) : null}
               <p className="experience__engagement micro">
-                <span>{item.engagement}</span>
-                {item.period ? (
-                  <>
-                    <span aria-hidden="true"> · </span>
-                    <span>{item.period}</span>
-                  </>
-                ) : null}
+                {item.engagement}
+                <span aria-hidden="true"> · </span>
+                {item.period}
               </p>
             </div>
             <ul className="experience__points">

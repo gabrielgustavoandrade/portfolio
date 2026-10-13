@@ -210,7 +210,14 @@
     );
   }
 
-  .hero__nav,
+  .hero__nav {
+    top: var(--space-24);
+    left: var(--inset);
+    justify-content: space-between;
+    gap: var(--space-8);
+    letter-spacing: 0.1em;
+  }
+
   .hero__cue {
     display: none;
   }
@@ -223,5 +230,16 @@
   .hero__name {
     line-height: 0.95;
   }
+}
 
+/* The docked mark would sit on top of copy on narrow screens; fade the
+   Earth out once it leaves the hero instead of docking it. */
+@media (max-width: 768px) {
+  .earth--quiet {
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 200ms ease,
+      visibility 0s linear 200ms;
+  }
 }
