@@ -17,20 +17,20 @@ export function Fourier({ reducedMotion }: { reducedMotion: boolean }) {
     <section
       id="fourier"
       className="section section--frame fourier"
-      aria-labelledby="fourier-title"
+      aria-labelledby="fourier-label"
     >
-      <span className="section__label micro">Craft / math</span>
+      <h2 id="fourier-label" className="section__label micro">
+        Side project
+      </h2>
 
       <div className="section__body section__split fourier__layout">
         <div className="section__intro">
           <div className="section__copy">
-            <h2 id="fourier-title" className="section__title">
-              A capybara, in circles
-            </h2>
+            <h3 className="section__title">Fourier series drawing</h3>
             <p className="section__lede">
-              A hand-placed outline expanded as a real Fourier series. Each axis
-              is a chain of rotating circles; their tips trace the shape, and it
-              sharpens as the circles per axis grow.
+              An outline drawn with a Fourier series. Each axis is a chain of
+              rotating circles, and the shape gets more accurate as terms are
+              added.
             </p>
           </div>
 
@@ -52,8 +52,7 @@ export function Fourier({ reducedMotion }: { reducedMotion: boolean }) {
         <figure className="section__figure fourier__figure">
           <FourierCanvas reducedMotion={reducedMotion} seek={seek} />
           <figcaption>
-            Canvas 2D, computed in your browser: 1,000 samples, 100 terms per
-            axis.
+            Canvas 2D. 1,000 samples, up to 100 terms per axis.
           </figcaption>
         </figure>
       </div>

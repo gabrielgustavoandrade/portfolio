@@ -42,10 +42,10 @@ export function ProjectCard({ project }: { project: Project }) {
           <span>{project.index}</span>
           <span>{project.tag}</span>
         </div>
-        <p className="work-card__name">{project.name}</p>
         <h3 className="work-card__title" id={`work-${project.slug}`}>
-          {project.headline}
+          {project.name}
         </h3>
+        <p className="work-card__descriptor">{project.descriptor}</p>
         {project.summary ? (
           <p className="work-card__summary">{project.summary}</p>
         ) : null}

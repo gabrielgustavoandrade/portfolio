@@ -5,16 +5,16 @@ export interface TerminalStep {
 
 export const HARNESS = {
   name: 'agent-lab',
-  lede: 'My agent harness: the program a model lives in, plus an exam that scores its work against hidden evals. It also hosts a local multi-agent session room: start a room, spawn lead and worker peers as separate processes, and message them over a SQLite bus.',
+  lede: 'A harness for running coding agents and scoring their output against hidden evals. It also runs local multi-agent sessions: a lead and worker processes that exchange messages over a SQLite bus.',
   facts: [
     'Workspace tools stay inside the workdir; commands go through an argv allowlist, not a shell',
-    'Hidden evals keep it honest: the naive candidate must fail, the correct one must pass',
+    'Each task has hidden checks: a naive solution must fail and a correct one must pass',
     'Each peer is its own process on a SQLite (WAL) bus, with a JSON trace per run',
     'TypeScript on Bun, with an Ink chat TUI',
   ],
   note: 'Private repository.',
   caption:
-    'Replay of a real offline run (no model key, so peers answer locally). Temp paths shortened.',
+    'Recorded offline run without a model key; peers reply locally. Temp paths shortened.',
 } as const;
 
 /**

@@ -69,20 +69,21 @@
   color: var(--cream);
 }
 
-.hero__meta {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-24);
-}
-
 .hero__headline {
-  max-width: 640px;
-  font-size: var(--text-headline);
+  font-size: var(--text-lead);
   font-weight: 400;
   line-height: 1.4;
   letter-spacing: -0.01em;
   color: var(--cream);
-  text-wrap: pretty;
+}
+
+/* Each headline segment gets its own line, so a pipe never dangles. */
+.hero__segment {
+  display: block;
+}
+
+.hero__sep {
+  display: none;
 }
 
 .hero__cue {
@@ -163,12 +164,8 @@
     animation: hero-rise 900ms var(--ease-out) both;
   }
 
-  .hero__meta .hero__rise:first-child {
+  .hero__headline.hero__rise {
     animation-delay: 80ms;
-  }
-
-  .hero__meta .hero__rise:last-child {
-    animation-delay: 160ms;
   }
 }
 
@@ -214,8 +211,13 @@
     top: var(--space-24);
     left: var(--inset);
     justify-content: space-between;
-    gap: var(--space-8);
+    gap: var(--space-16);
     letter-spacing: 0.1em;
+  }
+
+  /* Four items fit a 390px row; the harness is one scroll past Work. */
+  .hero__nav-wide {
+    display: none;
   }
 
   .hero__cue {

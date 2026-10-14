@@ -23,14 +23,17 @@ export function Contact({ reducedMotion }: { reducedMotion: boolean }) {
         ref={bodyRef}
         className={`section__body contact__body${inView ? ' is-in' : ''}`}
       >
-        <a
-          className="contact__email"
-          href={`mailto:${EMAIL}`}
-          aria-label={EMAIL}
-        >
-          <span>{emailUser}</span>
-          <span>@{emailDomain}</span>
-        </a>
+        <div className="contact__lead">
+          <p className="section__lede">Email is the best way to reach me.</p>
+          <a
+            className="contact__email"
+            href={`mailto:${EMAIL}`}
+            aria-label={EMAIL}
+          >
+            <span>{emailUser}</span>
+            <span>@{emailDomain}</span>
+          </a>
+        </div>
         <ul className="contact__links">
           {contactLinks.map((link, order) => (
             <li key={link.url} style={{ '--i': order } as CSSProperties}>

@@ -1,9 +1,7 @@
 .about__text {
-  max-width: 1140px;
-  font-size: var(--text-statement);
-  font-weight: 500;
-  letter-spacing: -0.035em;
-  line-height: 1.12;
+  max-width: 720px;
+  font-size: var(--text-lead);
+  line-height: 1.55;
   text-wrap: pretty;
 }
 
@@ -20,12 +18,5 @@
   .about__text.is-in {
     opacity: 1;
     transform: none;
-  }
-}
-
-@media (max-width: 720px) {
-  .about__text {
-    letter-spacing: -0.03em;
-    line-height: 1.18;
   }
 }

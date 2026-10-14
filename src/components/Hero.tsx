@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef, useState } from 'react';
+import { Fragment, lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { useEarthDock } from '../hooks/useEarthDock';
 import { MOBILE_MAX_WIDTH } from '../utils/earthDock';
 import './Hero.css';
@@ -22,6 +22,12 @@ export const EARTH_POSTER = {
   srcSet: '/earth/poster-800.webp 800w, /earth/poster-1600.webp 1600w',
   sizes: '(max-width: 720px) 184vw, 1030px',
 } as const;
+
+const HEADLINE = [
+  'Senior Full Stack Engineer',
+  'AI agents in production',
+  'React, TypeScript, Next.js, Python',
+] as const;
 
 const SCENE_IDLE_TIMEOUT_MS = 1200;
 /** Matches the `.earth__canvas` opacity transition in Hero.css. */
@@ -85,28 +91,30 @@ export function Hero({ reducedMotion }: { reducedMotion: boolean }) {
 
         <nav className="hero__nav micro" aria-label="Primary">
           <a href="#work">Work</a>
-          <a href="#harness">Harness</a>
-          <a href="#craft">Craft</a>
+          <a className="hero__nav-wide" href="#harness">
+            Harness
+          </a>
+          <a href="#projects">Projects</a>
           <a href="#experience">Experience</a>
           <a href="#contact">Contact</a>
         </nav>
 
         <div className="hero__copy">
           <h1 className="hero__name hero__rise">Gabriel Andrade</h1>
-          <div className="hero__meta">
-            <p className="hero__headline hero__rise">
-              Senior Full Stack Engineer | AI agents in production | React,
-              TypeScript, Next.js, Python
-            </p>
-            <p className="hero__stack micro hero__rise">
-              React · TypeScript · Next.js · Python
-            </p>
-          </div>
+          {/* One segment per line; the pipes stay in the text for copy/paste. */}
+          <p className="hero__headline hero__rise">
+            {HEADLINE.map((segment, index) => (
+              <Fragment key={segment}>
+                {index > 0 ? <span className="hero__sep"> | </span> : null}
+                <span className="hero__segment">{segment}</span>
+              </Fragment>
+            ))}
+          </p>
         </div>
 
         <a className="hero__cue micro" href="#work">
           <span className="hero__cue-line" aria-hidden="true" />
-          <span>Selected systems ↓</span>
+          <span>Work ↓</span>
         </a>
       </header>
 

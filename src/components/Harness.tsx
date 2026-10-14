@@ -18,16 +18,16 @@ export function Harness({ reducedMotion }: { reducedMotion: boolean }) {
     <section
       id="harness"
       className="section section--frame harness"
-      aria-labelledby="harness-title"
+      aria-labelledby="harness-label"
     >
-      <span className="section__label micro">Agent harness</span>
+      <h2 id="harness-label" className="section__label micro">
+        Agent harness
+      </h2>
 
       <div className="section__body section__split harness__layout">
         <div className="section__intro">
           <div className="section__copy">
-            <h2 id="harness-title" className="section__title">
-              {HARNESS.name}
-            </h2>
+            <h3 className="section__title">{HARNESS.name}</h3>
             <p className="section__lede">{HARNESS.lede}</p>
             <span className="section__note">{HARNESS.note}</span>
           </div>

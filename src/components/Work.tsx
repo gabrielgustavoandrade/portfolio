@@ -19,7 +19,7 @@ export function Work({ reducedMotion }: { reducedMotion: boolean }) {
       aria-labelledby="work-label"
     >
       <h2 id="work-label" className="section__label micro">
-        Selected systems / 2026
+        Work
       </h2>
       <div ref={gridRef} className="section__body work__grid">
         {projects.map((project) => (

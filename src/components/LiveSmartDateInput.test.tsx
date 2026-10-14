@@ -11,6 +11,8 @@ describe('LiveSmartDateInput', () => {
     const input = screen.getByRole('textbox', {
       name: /try smart-date-input/i,
     });
+    expect(input).toHaveAttribute('placeholder', 'e.g. next friday 3pm');
+    expect(screen.getByText('Value from onChange')).toBeInTheDocument();
     expect(screen.getByRole('status')).toHaveTextContent('null');
 
     await user.click(input);

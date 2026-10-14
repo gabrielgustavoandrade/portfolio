@@ -135,13 +135,15 @@ export function LiveSmartDateInput({
           onChange={setValue}
           showTime
           hourFormat="12"
-          placeholder="Try “next friday 3pm”"
+          placeholder="e.g. next friday 3pm"
           className="live-sdi__input"
         />
       </div>
 
       <div className="live-sdi__out">
-        <span className="live-sdi__label">onChange value</span>
+        <span className="live-sdi__label live-sdi__label--plain">
+          Value from onChange
+        </span>
         <output className="live-sdi__readout" aria-live="polite">
           {value === null ? 'null' : `${value}  →  ${formatValue(value)}`}
         </output>

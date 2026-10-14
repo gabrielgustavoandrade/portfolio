@@ -34,7 +34,7 @@
 }
 
 .experience__company {
-  font-size: var(--text-h3);
+  font-size: var(--text-heading);
   font-weight: 600;
   letter-spacing: var(--track-title);
   line-height: 1;
@@ -103,19 +103,7 @@
     padding-top: var(--space-16);
   }
 
-  /* Mobile still: one run of points, dot-separated. */
-  .experience__points {
-    display: block;
-    line-height: 1.5;
-  }
-
   .experience__points li {
-    display: inline;
-    padding: 0;
-    border-top: 0;
-  }
-
-  .experience__points li + li::before {
-    content: " · ";
+    padding: var(--space-8) 0;
   }
 }

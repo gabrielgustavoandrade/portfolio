@@ -7,18 +7,18 @@ const KEYS = ['↑', '↓', 'Enter', 'Tab'];
 export function CraftProof({ reducedMotion }: { reducedMotion: boolean }) {
   return (
     <section
-      id="craft"
+      id="projects"
       className="section section--frame craft"
-      aria-labelledby="craft-title"
+      aria-labelledby="craft-label"
     >
-      <span className="section__label micro">Craft proof</span>
+      <h2 id="craft-label" className="section__label micro">
+        Open source
+      </h2>
 
       <div className="section__body section__split craft__layout">
         <div className="section__intro craft__intro">
           <div className="section__copy craft__copy">
-            <h2 id="craft-title" className="section__title">
-              smart-date-input
-            </h2>
+            <h3 className="section__title">smart-date-input</h3>
             <p className="section__lede">
               React/TypeScript date and time input with natural-language parsing
               and keyboard navigation, published as an npm component.
@@ -63,10 +63,7 @@ export function CraftProof({ reducedMotion }: { reducedMotion: boolean }) {
             autoType={!reducedMotion}
             instant={reducedMotion}
           />
-          <figcaption>
-            Rendered by the published package. Output above is the component’s
-            own.
-          </figcaption>
+          <figcaption>Running the published npm package.</figcaption>
         </figure>
       </div>
     </section>

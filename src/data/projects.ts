@@ -25,7 +25,8 @@ export interface Project {
   index: string;
   tag: string;
   name: string;
-  headline: string;
+  /** One-line descriptor shown under the name. */
+  descriptor: string;
   summary?: string;
   highlights?: string[];
   metrics?: ProjectMetric[];
@@ -46,14 +47,9 @@ export const projects: Project[] = [
     index: '01',
     tag: 'Current',
     name: 'InteractiveAI',
-    headline: 'AI agents in production',
-    summary:
-      'React/Next.js app and Python FastAPI services for running agents in production.',
-    highlights: [
-      'Agent observability',
-      'Agentic workflows',
-      'In-product copilot',
-    ],
+    descriptor: 'Agent platform: React/Next.js and Python',
+    summary: 'React/Next.js app and Python FastAPI services.',
+    highlights: ['Agent observability', 'AI workflows', 'In-product copilot'],
     image: {
       src: '/work/interactiveai-desktop',
       alt: 'InteractiveAI platform, public site',
@@ -70,8 +66,8 @@ export const projects: Project[] = [
     index: '02',
     tag: 'Open source',
     name: 'smart-date-input',
-    headline: 'Natural-language date input, on npm',
-    summary: 'React/TypeScript, keyboard navigation.',
+    descriptor: 'Date and time input with natural-language parsing',
+    summary: 'React and TypeScript component with keyboard navigation.',
     links: [
       { label: 'npm', url: SMART_DATE_INPUT_LINKS.npm },
       { label: 'GitHub', url: SMART_DATE_INPUT_LINKS.github },
@@ -89,7 +85,7 @@ export const projects: Project[] = [
     index: '03',
     tag: 'via Valtech',
     name: 'M&M’s Design Your Own',
-    headline: '500K+ customizations / month',
+    descriptor: '500K+ customizations / month',
     metrics: [
       { value: '−65%', label: 'image payload' },
       { value: '−50%', label: 'API calls' },

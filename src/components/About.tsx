@@ -19,10 +19,10 @@ export function About({ reducedMotion }: { reducedMotion: boolean }) {
         ref={textRef}
         className={`section__body about__text${inView ? ' is-in' : ''}`}
       >
-        Brazilian senior full stack engineer. Seven years building scalable
-        full-stack applications for consumer platforms, e-commerce and financial
-        services; led modernization projects, improved performance in
-        high-traffic systems, mentored developers across distributed teams.
+        Senior full stack engineer with seven years of experience in consumer
+        platforms, e-commerce and financial services. I've led modernization
+        projects, improved performance on high-traffic systems and mentored
+        developers.
       </p>
     </section>
   );

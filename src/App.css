@@ -9,10 +9,10 @@
   (no z-index) so the fixed Earth can sit between backgrounds and content.
 
   Header pattern, every section:
-    .section__label (micro, h2 when the section has no title)
+    .section__label (micro h2, names the section)
     .section__body  at --section-head-gap below the label
-  Sections with a title open the body with .section__intro:
-    .section__title (h2) → .section__lede → facts/links.
+  Sections built around one project open the body with .section__intro:
+    .section__title (h3) → .section__lede → facts/links.
 */
 .section {
   position: relative;
@@ -54,7 +54,7 @@
 }
 
 .section__title {
-  font-size: var(--text-h2);
+  font-size: var(--text-heading);
   font-weight: 600;
   letter-spacing: var(--track-display);
   line-height: 0.95;
@@ -98,7 +98,7 @@
 }
 
 .section__figure figcaption {
-  font-size: var(--text-micro);
+  font-size: var(--text-sm);
   color: var(--mute);
 }
 

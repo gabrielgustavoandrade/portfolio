@@ -14,8 +14,8 @@ export const experience: Experience[] = [
     period: 'Mar 2026 – Present',
     points: [
       'React/Next.js app and Python FastAPI services',
-      'Agent observability, agentic workflows, in-product copilot',
-      'Security hardening: closed exposed secrets, fixed fail-open auth',
+      'Agent observability, AI workflows, in-product copilot',
+      'Security hardening of auth and secrets handling',
     ],
   },
   {
@@ -31,7 +31,7 @@ export const experience: Experience[] = [
   },
   {
     company: 'Valtech',
-    clients: 'Good Eggs · M&M’s Design Your Own (see 03)',
+    clients: 'Good Eggs · M&M’s Design Your Own',
     engagement: 'Contract',
     period: 'Sep 2021 – May 2024',
     points: ['Good Eggs: 7,000+ products'],

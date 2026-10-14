@@ -56,6 +56,7 @@ const BANNED = [
   /goi[âa]nia/i,
   /based in/i,
   /\bremote\b/i,
+  /brazil/i,
   /relocat/i,
   // M&M's stays "via Valtech" with only the approved numbers.
   /\bmars\b/i,
@@ -81,14 +82,26 @@ describe('HomePage', () => {
     expect(
       screen.getByRole('heading', { level: 1, name: 'Gabriel Andrade' }),
     ).toBeInTheDocument();
+    // Exact approved headline, one segment per line with no dangling pipe.
+    const headline = document.querySelector('.hero__headline');
+    expect(headline).toHaveTextContent(
+      'Senior Full Stack Engineer | AI agents in production | React, TypeScript, Next.js, Python',
+      { normalizeWhitespace: false },
+    );
     expect(
-      screen.getByText(
-        'Senior Full Stack Engineer | AI agents in production | React, TypeScript, Next.js, Python',
+      Array.from(
+        headline?.querySelectorAll('.hero__segment') ?? [],
+        (node) => node.textContent,
       ),
-    ).toBeInTheDocument();
+    ).toEqual([
+      'Senior Full Stack Engineer',
+      'AI agents in production',
+      'React, TypeScript, Next.js, Python',
+    ]);
+    // The stack is in the headline; no second stack line under it.
     expect(
-      screen.getByText('React · TypeScript · Next.js · Python'),
-    ).toBeInTheDocument();
+      screen.queryByText('React · TypeScript · Next.js · Python'),
+    ).toBeNull();
     // Poster first; the Three.js scene is code-split and mounts after paint.
     expect(document.querySelector('.earth__poster')).toHaveAttribute(
       'src',
@@ -107,7 +120,7 @@ describe('HomePage', () => {
     expect(links).toEqual([
       ['Work', '#work'],
       ['Harness', '#harness'],
-      ['Craft', '#craft'],
+      ['Projects', '#projects'],
       ['Experience', '#experience'],
       ['Contact', '#contact'],
     ]);
@@ -125,20 +138,22 @@ describe('HomePage', () => {
   it('shows three outcome-led project cards with public images', () => {
     renderHomePage();
 
-    const work = screen.getByRole('region', {
-      name: /selected systems \/ 2026/i,
-    });
+    const work = screen.getByRole('region', { name: 'Work' });
     const cards = within(work).getAllByRole('article');
     expect(cards).toHaveLength(3);
 
     const [interactive, sdi, mms] = cards;
-    expect(within(interactive).getByText('InteractiveAI')).toBeInTheDocument();
+    // The project name is the card title; the slogan is a descriptor.
+    expect(
+      cards.map(
+        (card) => within(card).getByRole('heading', { level: 3 }).textContent,
+      ),
+    ).toEqual(['InteractiveAI', 'smart-date-input', 'M&M’s Design Your Own']);
     expect(within(interactive).getByText('Current')).toBeInTheDocument();
     expect(
-      within(interactive).getByRole('heading', {
-        name: /ai agents in production/i,
-      }),
+      within(interactive).getByText('Agent platform: React/Next.js and Python'),
     ).toBeInTheDocument();
+    expect(work.textContent).not.toMatch(/in production/i);
     expect(within(interactive).queryByRole('definition')).toBeNull();
     expect(within(interactive).getByRole('img')).toHaveAttribute(
       'src',
@@ -160,7 +175,7 @@ describe('HomePage', () => {
       '/work/m-ms-desktop.png',
     );
     expect(
-      within(mms).getByRole('heading', { name: /500k\+ customizations/i }),
+      within(mms).getByText('500K+ customizations / month'),
     ).toBeInTheDocument();
     const metrics = within(mms)
       .getAllByRole('definition')
@@ -171,8 +186,13 @@ describe('HomePage', () => {
   it('embeds the live smart-date-input demo', () => {
     renderHomePage();
 
+    const section = screen.getByRole('region', { name: 'Open source' });
+    expect(section).toHaveAttribute('id', 'projects');
     expect(
-      screen.getByRole('heading', { level: 2, name: 'smart-date-input' }),
+      within(section).getByRole('heading', {
+        level: 3,
+        name: 'smart-date-input',
+      }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole('textbox', { name: /try smart-date-input/i }),
@@ -183,7 +203,12 @@ describe('HomePage', () => {
     renderHomePage();
 
     const experience = screen.getByRole('region', { name: /experience/i });
-    for (const company of ['InteractiveAI', 'Red Ventures', 'Valtech', 'Pacto']) {
+    for (const company of [
+      'InteractiveAI',
+      'Red Ventures',
+      'Valtech',
+      'Pacto',
+    ]) {
       expect(
         within(experience).getByRole('heading', { name: company }),
       ).toBeInTheDocument();
@@ -201,6 +226,14 @@ describe('HomePage', () => {
     expect(within(experience).getAllByText(/\b20\d\d\b/)).toHaveLength(4);
     expect(
       within(experience).getByText('Good Eggs: 7,000+ products'),
+    ).toBeInTheDocument();
+    expect(experience.textContent).not.toMatch(/see 03/i);
+    // Points stay a real list on every viewport.
+    expect(within(experience).getAllByRole('list')).toHaveLength(4);
+    expect(
+      within(experience).getByText(
+        'Security hardening of auth and secrets handling',
+      ),
     ).toBeInTheDocument();
 
     const contact = screen.getByRole('region', { name: /contact/i });
@@ -224,7 +257,10 @@ describe('HomePage', () => {
     const restore = mockReducedMotion();
     try {
       renderHomePage();
-      const harness = screen.getByRole('region', { name: 'agent-lab' });
+      const harness = screen.getByRole('region', { name: 'Agent harness' });
+      expect(
+        within(harness).getByRole('heading', { level: 3, name: 'agent-lab' }),
+      ).toBeInTheDocument();
       const transcript = within(harness).getByRole('region', {
         name: /transcript/i,
       });
@@ -235,7 +271,9 @@ describe('HomePage', () => {
       expect(transcript).toHaveTextContent(
         'evals look honest: naive fails, correct passes.',
       );
-      expect(transcript.textContent).not.toMatch(/\/tmp\/|\/workspace\/|\/Users\//);
+      expect(transcript.textContent).not.toMatch(
+        /\/tmp\/|\/workspace\/|\/Users\//,
+      );
       for (const link of within(harness).queryAllByRole('link')) {
         expect(link.getAttribute('href')).not.toMatch(/agent-lab/);
       }
@@ -244,11 +282,15 @@ describe('HomePage', () => {
     }
   });
 
-  it('shows the Fourier capybara section', () => {
+  it('shows the Fourier drawing section', () => {
     renderHomePage();
-    const section = screen.getByRole('region', {
-      name: 'A capybara, in circles',
-    });
+    const section = screen.getByRole('region', { name: 'Side project' });
+    expect(
+      within(section).getByRole('heading', {
+        level: 3,
+        name: 'Fourier series drawing',
+      }),
+    ).toBeInTheDocument();
     expect(
       within(section).getByRole('img', { name: /capybara outline/i }),
     ).toBeInTheDocument();
@@ -261,6 +303,10 @@ describe('HomePage', () => {
         expect(text).not.toMatch(pattern);
       }
       expect(text).not.toMatch(/agent systems — traces/i);
+      // Plain business-casual copy from the review.
+      expect(text).not.toMatch(
+        /scalable|agentic|selected systems|craft proof|capybara, in circles|lives in|keep it honest|fail-open|exposed secrets/i,
+      );
     };
 
     renderHomePage();

@@ -31,7 +31,7 @@
 }
 
 .fourier__count {
-  font-size: var(--text-title);
+  font-size: var(--text-lead);
   font-weight: 600;
   letter-spacing: var(--track-tight);
   font-variant-numeric: tabular-nums;

@@ -30,12 +30,18 @@
 }
 
 .live-sdi__label {
-  font-size: var(--text-micro);
+  font-size: var(--text-sm);
   font-weight: 500;
   line-height: 1;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--sdi-soft);
+}
+
+/* Keeps the prop name's casing readable. */
+.live-sdi__label--plain {
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 .live-sdi__chips {
