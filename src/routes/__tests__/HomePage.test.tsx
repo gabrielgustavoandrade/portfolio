@@ -58,7 +58,7 @@ const BANNED = [
   /\bremote\b/i,
   /brazil/i,
   /relocat/i,
-  // M&M's stays "via Valtech" with only the approved numbers.
+  // M&M's stays "via Valtech" with no metrics.
   /\bmars\b/i,
   /\bMACH\b/,
   /amplience/i,
@@ -175,12 +175,12 @@ describe('HomePage', () => {
       '/work/m-ms-desktop.png',
     );
     expect(
-      within(mms).getByText('500K+ customizations / month'),
+      within(mms).getByText(
+        'Frontend for the product configurator used to personalize M&M’s in 12 countries.',
+      ),
     ).toBeInTheDocument();
-    const metrics = within(mms)
-      .getAllByRole('definition')
-      .map((node) => node.textContent);
-    expect(metrics).toEqual(['−65%', '−50%', '12']);
+    expect(within(mms).queryByRole('definition')).toBeNull();
+    expect(mms.textContent).not.toMatch(/500K|65%|50%/);
   });
 
   it('embeds the live smart-date-input demo', () => {

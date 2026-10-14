@@ -42,7 +42,10 @@ export function ProjectCard({ project }: { project: Project }) {
           <span>{project.index}</span>
           <span>{project.tag}</span>
         </div>
-        <h3 className="work-card__title" id={`work-${project.slug}`}>
+        <h3
+          className={`work-card__title${project.nowrapTitle ? ' work-card__title--nowrap' : ''}`}
+          id={`work-${project.slug}`}
+        >
           {project.name}
         </h3>
         <p className="work-card__descriptor">{project.descriptor}</p>

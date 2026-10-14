@@ -27,6 +27,8 @@ export interface Project {
   name: string;
   /** One-line descriptor shown under the name. */
   descriptor: string;
+  /** Keep the title on one line (e.g. hyphenated package names). */
+  nowrapTitle?: boolean;
   summary?: string;
   highlights?: string[];
   metrics?: ProjectMetric[];
@@ -48,7 +50,6 @@ export const projects: Project[] = [
     tag: 'Current',
     name: 'InteractiveAI',
     descriptor: 'Agent platform: React/Next.js and Python',
-    summary: 'React/Next.js app and Python FastAPI services.',
     highlights: ['Agent observability', 'AI workflows', 'In-product copilot'],
     image: {
       src: '/work/interactiveai-desktop',
@@ -66,6 +67,7 @@ export const projects: Project[] = [
     index: '02',
     tag: 'Open source',
     name: 'smart-date-input',
+    nowrapTitle: true,
     descriptor: 'Date and time input with natural-language parsing',
     summary: 'React and TypeScript component with keyboard navigation.',
     links: [
@@ -85,12 +87,8 @@ export const projects: Project[] = [
     index: '03',
     tag: 'via Valtech',
     name: 'M&M’s Design Your Own',
-    descriptor: '500K+ customizations / month',
-    metrics: [
-      { value: '−65%', label: 'image payload' },
-      { value: '−50%', label: 'API calls' },
-      { value: '12', label: 'countries' },
-    ],
+    descriptor:
+      'Frontend for the product configurator used to personalize M&M’s in 12 countries.',
     image: {
       src: '/work/m-ms-desktop',
       alt: 'M&M’s Design Your Own color step',

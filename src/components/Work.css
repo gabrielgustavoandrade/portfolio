@@ -6,6 +6,7 @@
 }
 
 .work-card {
+  container-type: inline-size;
   display: flex;
   flex-direction: column;
   gap: var(--space-24);
@@ -108,6 +109,13 @@
   line-height: 1.02;
   color: var(--cream);
   text-wrap: balance;
+}
+
+/* Single-token names (smart-date-input) stay on one line; the size tracks
+   the card width (~8em of text at most) so it never overflows. */
+.work-card__title--nowrap {
+  font-size: min(var(--text-heading), calc((100cqi - 2 * var(--space-8)) / 8));
+  white-space: nowrap;
 }
 
 .work-card__descriptor {
