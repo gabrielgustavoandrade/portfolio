@@ -38,7 +38,9 @@ export function HeroDustCanvas({
       alpha: true,
       premultipliedAlpha: false,
     });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(
+      Math.min(window.devicePixelRatio, compact ? 1.5 : 2),
+    );
     renderer.setSize(sizes.width, sizes.height);
     renderer.setClearColor(0x000000, 0);
     renderer.autoClear = true;
@@ -55,8 +57,10 @@ export function HeroDustCanvas({
     scene.add(atmosphere.group);
 
     let animationFrame = 0;
+    let running = true;
     let lastNow = performance.now();
     const animate = (now: number) => {
+      if (!running) return;
       animationFrame = requestAnimationFrame(animate);
       const dt = Math.min(0.05, (now - lastNow) / 1000);
       lastNow = now;
@@ -65,6 +69,23 @@ export function HeroDustCanvas({
       renderer.render(scene, camera);
     };
     animate(lastNow);
+
+    // The dust lives in the hero; nothing to draw once it scrolls away.
+    const visibility =
+      typeof IntersectionObserver === 'undefined'
+        ? null
+        : new IntersectionObserver(([entry]) => {
+            if (!entry) return;
+            if (!entry.isIntersecting) {
+              running = false;
+              cancelAnimationFrame(animationFrame);
+            } else if (!running) {
+              running = true;
+              lastNow = performance.now();
+              animationFrame = requestAnimationFrame(animate);
+            }
+          });
+    visibility?.observe(containerRef.current);
 
     const handleResize = () => {
       if (!containerRef.current) return;
@@ -81,7 +102,9 @@ export function HeroDustCanvas({
     window.addEventListener('resize', handleResize);
 
     return () => {
+      running = false;
       cancelAnimationFrame(animationFrame);
+      visibility?.disconnect();
       window.removeEventListener('resize', handleResize);
       atmosphere.dispose();
       renderer.dispose();

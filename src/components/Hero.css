@@ -234,14 +234,15 @@
   }
 }
 
-/* The docked mark would sit on top of copy on narrow screens; fade the
-   Earth out once it leaves the hero instead of docking it. */
-@media (max-width: 768px) {
-  .earth--quiet {
-    opacity: 0;
-    visibility: hidden;
-    transition:
-      opacity 200ms ease,
-      visibility 0s linear 200ms;
-  }
+/* ≤768px: the globe scrolls out of the hero instead of docking. Opacity
+   is written per frame by useEarthDock, so no transition may chase it. */
+.earth--exit {
+  transition: none;
+}
+
+/* Reduced motion on narrow screens: part of the document, no scrub. */
+.earth--static {
+  position: absolute;
+  transition: none;
+  will-change: auto;
 }

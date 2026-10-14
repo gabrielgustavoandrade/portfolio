@@ -33,6 +33,8 @@ const DAMPING_FACTOR = 0.05;
 const ROTATE_SPEED = 0.5;
 const MAX_PIXEL_RATIO_HI = 2;
 const MAX_PIXEL_RATIO_LO = 1.5;
+/** Matches EXIT_MAX_WIDTH: phones cap at the low ratio whatever the tier. */
+const COMPACT_QUERY = '(max-width: 768px)';
 
 /** Radians per second. ~4 minutes per full Earth turn; clouds a little faster. */
 const ROTATION_SPEED = {
@@ -86,10 +88,11 @@ export function EarthCanvas({
     });
     const maxAnisotropy = renderer.capabilities.getMaxAnisotropy();
     const anisotropy = Math.min(tier === 'hi' ? 8 : 4, maxAnisotropy);
+    const compact = window.matchMedia?.(COMPACT_QUERY).matches ?? false;
     renderer.setPixelRatio(
       Math.min(
         window.devicePixelRatio,
-        tier === 'hi' ? MAX_PIXEL_RATIO_HI : MAX_PIXEL_RATIO_LO,
+        tier === 'hi' && !compact ? MAX_PIXEL_RATIO_HI : MAX_PIXEL_RATIO_LO,
       ),
     );
     renderer.setSize(sizes.width, sizes.height);
@@ -183,10 +186,12 @@ export function EarthCanvas({
     controls.autoRotate = false;
     controls.rotateSpeed = ROTATE_SPEED;
 
-    let animationFrame: number;
+    let animationFrame = 0;
+    let running = true;
     let frame = 0;
     let lastNow = performance.now();
     const animate = (now: number) => {
+      if (!running) return;
       animationFrame = requestAnimationFrame(animate);
       const dt = Math.min(0.05, (now - lastNow) / 1000);
       lastNow = now;
@@ -217,6 +222,23 @@ export function EarthCanvas({
     };
     animate(lastNow);
 
+    // Stop drawing once the globe has scrolled fully off-screen.
+    const visibility =
+      typeof IntersectionObserver === 'undefined'
+        ? null
+        : new IntersectionObserver(([entry]) => {
+            if (!entry) return;
+            if (!entry.isIntersecting) {
+              running = false;
+              cancelAnimationFrame(animationFrame);
+            } else if (!running) {
+              running = true;
+              lastNow = performance.now();
+              animationFrame = requestAnimationFrame(animate);
+            }
+          });
+    visibility?.observe(containerRef.current);
+
     const handleResize = () => {
       if (!containerRef.current) return;
       const { clientWidth, clientHeight } = containerRef.current;
@@ -238,7 +260,9 @@ export function EarthCanvas({
     }
 
     return () => {
+      running = false;
       cancelAnimationFrame(animationFrame);
+      visibility?.disconnect();
       resizeObserver?.disconnect();
       window.removeEventListener('resize', handleResize);
       controls.dispose();

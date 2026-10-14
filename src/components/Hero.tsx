@@ -1,6 +1,7 @@
 import { Fragment, lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { useEarthDock } from '../hooks/useEarthDock';
-import { MOBILE_MAX_WIDTH } from '../utils/earthDock';
+import { useMediaQuery } from '../hooks/useMediaQuery';
+import { EXIT_MAX_WIDTH, MOBILE_MAX_WIDTH } from '../utils/earthDock';
 import './Hero.css';
 
 // Three.js stays out of the entry chunk: the poster paints first, the live
@@ -58,6 +59,7 @@ function useAfterFirstPaint() {
 
 export function Hero({ reducedMotion }: { reducedMotion: boolean }) {
   const earthRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef<HTMLElement>(null);
   const paceRef = useRef<'full' | 'idle'>('full');
   const [compact] = useState(
     () =>
@@ -67,7 +69,9 @@ export function Hero({ reducedMotion }: { reducedMotion: boolean }) {
   const [earthLive, setEarthLive] = useState(false);
   const [posterGone, setPosterGone] = useState(false);
 
-  useEarthDock({ earthRef, paceRef, reducedMotion });
+  const exit = useMediaQuery(`(max-width: ${EXIT_MAX_WIDTH}px)`);
+
+  useEarthDock({ earthRef, heroRef, paceRef, reducedMotion, exit });
 
   // The canvas fades in over the poster; drop the poster once it's covered.
   useEffect(() => {
@@ -81,7 +85,10 @@ export function Hero({ reducedMotion }: { reducedMotion: boolean }) {
 
   return (
     <>
-      <header className={`hero${reducedMotion ? ' hero--reduced' : ''}`}>
+      <header
+        ref={heroRef}
+        className={`hero${reducedMotion ? ' hero--reduced' : ''}`}
+      >
         <div className="hero__backdrop" aria-hidden="true" />
         {!reducedMotion && sceneAllowed ? (
           <Suspense fallback={null}>

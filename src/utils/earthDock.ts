@@ -121,3 +121,56 @@ export function getEarthFrame(
     scale,
   };
 }
+
+/**
+ * Narrow screens skip the dock: the corner mark would sit on top of copy.
+ * Instead the hero globe leaves upward, scrubbed 1:1 by scroll through the
+ * hero. Heights come from the hero box (100svh), never `innerHeight`, so
+ * the iOS address bar showing or hiding can't move the Earth.
+ */
+export const EXIT_MAX_WIDTH = 768;
+export const EXIT_END_SCALE = 0.72;
+/** Progress at which the fade starts; fully transparent at 1. */
+export const EXIT_FADE_START = 0.55;
+/** Past the top edge at progress 1, so the glow is gone too. */
+const EXIT_MARGIN = 24;
+/** Above this progress the scene renders at idle pace. */
+export const EXIT_IDLE_PROGRESS = 0.3;
+
+export interface EarthExitFrame extends EarthFrame {
+  opacity: number;
+}
+
+export function smoothstep(edge0: number, edge1: number, value: number) {
+  const x = clamp((value - edge0) / Math.max(1e-6, edge1 - edge0));
+  return x * x * (3 - 2 * x);
+}
+
+export function getExitProgress(scrollY: number, heroHeight: number) {
+  return clamp(scrollY / Math.max(1, heroHeight));
+}
+
+/**
+ * Position is linear in progress so the globe tracks the finger; at 1 the
+ * whole (scaled) box sits above the viewport.
+ */
+export function getExitFrame(
+  progress: number,
+  viewportWidth: number,
+  heroHeight: number,
+): EarthExitFrame {
+  const hero = getHeroPose(viewportWidth, heroHeight);
+  const boxSize = Math.round(hero.diameter / EARTH_FILL);
+  const p = clamp(progress);
+  const scale = 1 + (EXIT_END_SCALE - 1) * p;
+  const travel = hero.centerY + (boxSize * EXIT_END_SCALE) / 2 + EXIT_MARGIN;
+  const centerY = hero.centerY - travel * p;
+
+  return {
+    boxSize,
+    x: hero.centerX - boxSize / 2,
+    y: centerY - boxSize / 2,
+    scale,
+    opacity: 1 - smoothstep(EXIT_FADE_START, 1, p),
+  };
+}
