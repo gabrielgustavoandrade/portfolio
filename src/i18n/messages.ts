@@ -151,7 +151,11 @@ const en = {
       Valtech: {
         engagement: 'Contract',
         period: 'Sep 2021 – May 2024',
-        points: ['Good Eggs: 7,000+ products'],
+        points: [
+          'Good Eggs: 7,000+ products, web (React/Next.js) and mobile (React Native)',
+          "M&M's Design Your Own configurator in 12 countries",
+          'Catalyst/LEAP design system cut site rollout times 40%',
+        ],
       },
       Pacto: {
         engagement: 'Contract',
@@ -306,7 +310,11 @@ const pt: Messages = {
       Valtech: {
         engagement: 'Contrato',
         period: 'Set 2021 – Mai 2024',
-        points: ['Good Eggs: mais de 7.000 produtos'],
+        points: [
+          'Good Eggs: mais de 7.000 produtos, web (React/Next.js) e mobile (React Native)',
+          "Configurador M&M's Design Your Own em 12 países",
+          'Design system Catalyst/LEAP reduziu em 40% o tempo de lançamento de sites',
+        ],
       },
       Pacto: {
         engagement: 'Contrato',

@@ -233,7 +233,7 @@ describe('HomePage', () => {
     ]);
     expect(within(experience).getAllByText(/\b20\d\d\b/)).toHaveLength(4);
     expect(
-      within(experience).getByText('Good Eggs: 7,000+ products'),
+      within(experience).getByText('Good Eggs: 7,000+ products, web (React/Next.js) and mobile (React Native)'),
     ).toBeInTheDocument();
     expect(experience.textContent).not.toMatch(/see 03/i);
     // Points stay a real list on every viewport.
