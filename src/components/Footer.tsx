@@ -6,7 +6,10 @@ export function Footer() {
   const { t } = useI18n();
   return (
     <footer className="footer micro">
-      <span>Gabriel Andrade · {new Date().getFullYear()}</span>
+      {/* The prerender bakes in the build year; the client may be newer. */}
+      <span suppressHydrationWarning>
+        Gabriel Andrade · {new Date().getFullYear()}
+      </span>
       <nav className="footer__links" aria-label={t.footer.label}>
         <a href={`mailto:${EMAIL}`}>{t.footer.email}</a>
         {contactLinks.map((link) => (

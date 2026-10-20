@@ -1,6 +1,6 @@
 import { cleanup, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, useLocation } from 'react-router-dom';
 import { vi } from 'vitest';
 import { LANG_STORAGE_KEY } from '../../i18n/detectLanguage';
 import { I18nProvider } from '../../i18n/I18nProvider';
@@ -19,14 +19,20 @@ vi.mock('../../components/earth/HeroDustCanvas', () => ({
   HeroDustCanvas: () => <div data-testid="hero-dust" />,
 }));
 
-const renderHomePage = () =>
+function LocationProbe() {
+  const { pathname, hash } = useLocation();
+  return <output data-testid="location">{`${pathname}${hash}`}</output>;
+}
+
+const renderHomePage = (path = '/') =>
   render(
     <MemoryRouter
-      initialEntries={['/']}
+      initialEntries={[path]}
       future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
     >
       <I18nProvider>
         <HomePage />
+        <LocationProbe />
       </I18nProvider>
     </MemoryRouter>,
   );
@@ -233,7 +239,9 @@ describe('HomePage', () => {
     ]);
     expect(within(experience).getAllByText(/\b20\d\d\b/)).toHaveLength(4);
     expect(
-      within(experience).getByText('Good Eggs: 7,000+ products, web (React/Next.js) and mobile (React Native)'),
+      within(experience).getByText(
+        'Good Eggs: 7,000+ products, web (React/Next.js) and mobile (React Native)',
+      ),
     ).toBeInTheDocument();
     expect(experience.textContent).not.toMatch(/see 03/i);
     // Points stay a real list on every viewport.
@@ -375,9 +383,9 @@ describe('HomePage', () => {
       document.documentElement.lang = 'en';
     });
 
-    it('switches every section to pt-BR, updates <html lang> and persists', async () => {
+    it('switches every section to pt-BR via /pt-BR/, updates <html lang> and persists', async () => {
       const user = userEvent.setup();
-      renderHomePage();
+      renderHomePage('/#contact');
 
       const toggle = screen.getByRole('group', { name: 'Language' });
       const en = within(toggle).getByRole('button', { name: 'EN' });
@@ -388,6 +396,10 @@ describe('HomePage', () => {
 
       await user.click(pt);
 
+      // The toggle moves between the two prerendered URLs, keeping the hash.
+      expect(screen.getByTestId('location')).toHaveTextContent(
+        '/pt-BR/#contact',
+      );
       expect(pt).toHaveAttribute('aria-pressed', 'true');
       expect(en).toHaveAttribute('aria-pressed', 'false');
       expect(document.documentElement.lang).toBe('pt-BR');
@@ -430,6 +442,7 @@ describe('HomePage', () => {
       }
 
       await user.click(within(toggle).getByRole('button', { name: 'EN' }));
+      expect(screen.getByTestId('location')).toHaveTextContent('/#contact');
       expect(document.documentElement.lang).toBe('en');
       expect(window.localStorage.getItem(LANG_STORAGE_KEY)).toBe('en');
       expect(
@@ -437,19 +450,15 @@ describe('HomePage', () => {
       ).toBeInTheDocument();
     });
 
-    it('restores the saved language on the next visit', () => {
-      window.localStorage.setItem(LANG_STORAGE_KEY, 'pt');
+    it('renders pt-BR at /pt-BR/ regardless of browser language', () => {
       const restore = setNavigatorLanguages(['en-US']);
       try {
-        renderHomePage();
+        renderHomePage('/pt-BR/');
         expect(screen.getByRole('button', { name: 'PT' })).toHaveAttribute(
           'aria-pressed',
           'true',
         );
         expect(document.documentElement.lang).toBe('pt-BR');
-        expect(
-          screen.getByRole('heading', { level: 1, name: 'Gabriel Andrade' }),
-        ).toBeInTheDocument();
         expect(document.querySelector('.hero__headline')).toHaveTextContent(
           'Engenheiro Full Stack Sênior',
         );
@@ -458,22 +467,25 @@ describe('HomePage', () => {
       }
     });
 
-    it('falls back to the browser language, then English', () => {
-      let restore = setNavigatorLanguages(['pt-BR', 'en']);
-      try {
-        renderHomePage();
-        expect(screen.getByRole('button', { name: 'PT' })).toHaveAttribute(
-          'aria-pressed',
-          'true',
-        );
-      } finally {
-        restore();
-        cleanup();
-      }
+    it('sends / to /pt-BR/ when pt-BR was saved on a previous visit', () => {
+      window.localStorage.setItem(LANG_STORAGE_KEY, 'pt');
+      renderHomePage('/#work');
+      expect(screen.getByTestId('location')).toHaveTextContent('/pt-BR/#work');
+      expect(screen.getByRole('button', { name: 'PT' })).toHaveAttribute(
+        'aria-pressed',
+        'true',
+      );
+      expect(
+        screen.getByRole('heading', { level: 1, name: 'Gabriel Andrade' }),
+      ).toBeInTheDocument();
+      expect(document.documentElement.lang).toBe('pt-BR');
+    });
 
-      restore = setNavigatorLanguages(['de-DE', 'fr']);
+    it('stays in English on / without a saved choice, even for pt browsers', () => {
+      const restore = setNavigatorLanguages(['pt-BR', 'en']);
       try {
         renderHomePage();
+        expect(screen.getByTestId('location')).toHaveTextContent(/^\/$/);
         expect(screen.getByRole('button', { name: 'EN' })).toHaveAttribute(
           'aria-pressed',
           'true',

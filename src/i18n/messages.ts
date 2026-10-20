@@ -29,7 +29,7 @@ const en = {
   meta: {
     title: 'Gabriel Andrade — Senior Full Stack Engineer',
     description:
-      'Senior Full Stack Engineer | AI agents in production | React, TypeScript, Next.js, Python',
+      'Gabriel Andrade is a senior full-stack engineer in Madrid building AI-agent platforms with React, TypeScript, Next.js and Python.',
   },
   skipLink: 'Skip to main content',
   nav: {
@@ -188,7 +188,7 @@ const pt: Messages = {
   meta: {
     title: 'Gabriel Andrade — Engenheiro Full Stack Sênior',
     description:
-      'Engenheiro Full Stack Sênior | Agentes de IA em produção | React, TypeScript, Next.js, Python',
+      'Gabriel Andrade é engenheiro full stack sênior em Madri e desenvolve plataformas de agentes de IA com React, TypeScript, Next.js e Python.',
   },
   skipLink: 'Pular para o conteúdo principal',
   nav: {

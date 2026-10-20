@@ -5,9 +5,10 @@ import {
   useContext,
   useEffect,
   useMemo,
-  useState,
 } from 'react';
-import { detectLanguage, storeLang } from './detectLanguage';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { canonicalUrl, LANG_PATH, langFromPath, OG_LOCALE } from '../seo/site';
+import { readStoredLang, storeLang } from './detectLanguage';
 import { HTML_LANG, type Lang, MESSAGES, type Messages } from './messages';
 
 interface I18nValue {
@@ -23,22 +24,42 @@ const I18nContext = createContext<I18nValue>({
   setLang: () => {},
 });
 
-export function I18nProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Lang>(detectLanguage);
+const setMeta = (selector: string, attribute: string, value: string) =>
+  document.querySelector(selector)?.setAttribute(attribute, value);
 
-  const setLang = useCallback((next: Lang) => {
-    setLangState(next);
-    storeLang(next);
+/** The language comes from the URL: `/pt-BR/` is pt-BR, everything else EN. */
+export function I18nProvider({ children }: { children: ReactNode }) {
+  const { pathname, hash } = useLocation();
+  const navigate = useNavigate();
+  const lang = langFromPath(pathname);
+
+  const setLang = useCallback(
+    (next: Lang) => {
+      storeLang(next);
+      navigate({ pathname: LANG_PATH[next], hash });
+    },
+    [navigate, hash],
+  );
+
+  // A saved pt-BR choice sends `/` to `/pt-BR/`; explicit URLs are kept.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: first load only
+  useEffect(() => {
+    if (pathname === '/' && readStoredLang() === 'pt') {
+      navigate({ pathname: LANG_PATH.pt, hash }, { replace: true });
+    }
   }, []);
 
   const t = MESSAGES[lang];
 
+  // The prerendered head already matches; this keeps it right after a toggle.
   useEffect(() => {
+    const url = canonicalUrl(lang);
     document.documentElement.lang = HTML_LANG[lang];
     document.title = t.meta.title;
-    document
-      .querySelector('meta[name="description"]')
-      ?.setAttribute('content', t.meta.description);
+    setMeta('meta[name="description"]', 'content', t.meta.description);
+    setMeta('link[rel="canonical"]', 'href', url);
+    setMeta('meta[property="og:url"]', 'content', url);
+    setMeta('meta[property="og:locale"]', 'content', OG_LOCALE[lang]);
   }, [lang, t]);
 
   const value = useMemo(() => ({ lang, t, setLang }), [lang, t, setLang]);

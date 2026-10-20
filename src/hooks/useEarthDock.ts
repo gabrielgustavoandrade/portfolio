@@ -1,4 +1,4 @@
-import { type MutableRefObject, type RefObject, useLayoutEffect } from 'react';
+import type { MutableRefObject, RefObject } from 'react';
 import {
   DOCK_SETTLE_EPSILON,
   DOCK_SMOOTH_SECONDS,
@@ -10,6 +10,7 @@ import {
   getExitFrame,
   getExitProgress,
 } from '../utils/earthDock';
+import { useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect';
 
 /** Matches the 200ms cross-fade in `.earth`. */
 const REDUCED_FADE_MS = 200;
@@ -40,7 +41,7 @@ export function useEarthDock({
   reducedMotion,
   exit,
 }: UseEarthDockOptions) {
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const earth = earthRef.current;
     if (!earth || !exit) return;
 
@@ -130,7 +131,7 @@ export function useEarthDock({
     };
   }, [earthRef, heroRef, paceRef, reducedMotion, exit]);
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const earth = earthRef.current;
     if (!earth || exit) return;
 

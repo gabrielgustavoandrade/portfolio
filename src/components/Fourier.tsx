@@ -1,19 +1,13 @@
-import { useMemo } from 'react';
+import { useSeekParam } from '../hooks/useSeekParam';
 import { useI18n } from '../i18n/I18nProvider';
-import { parseSeek, STAGES } from '../utils/fourier';
+import { STAGES } from '../utils/fourier';
 import { FourierCanvas } from './FourierCanvas';
 import './Fourier.css';
 
 export function Fourier({ reducedMotion }: { reducedMotion: boolean }) {
   const { t } = useI18n();
   // `?fourier=0.5` freezes the drawing halfway (screenshots, reviews).
-  const seek = useMemo(
-    () =>
-      typeof window === 'undefined'
-        ? null
-        : parseSeek(window.location.search, 'fourier'),
-    [],
-  );
+  const seek = useSeekParam('fourier');
 
   return (
     <section

@@ -1,20 +1,13 @@
-import { useMemo } from 'react';
 import { HARNESS, HARNESS_SESSION } from '../data/harness';
+import { useSeekParam } from '../hooks/useSeekParam';
 import { useI18n } from '../i18n/I18nProvider';
-import { parseSeek } from '../utils/fourier';
 import { TerminalReplay } from './TerminalReplay';
 import './Harness.css';
 
 export function Harness({ reducedMotion }: { reducedMotion: boolean }) {
   const { t } = useI18n();
   // `?replay=end` (or 0–1) freezes the terminal for screenshots.
-  const seek = useMemo(
-    () =>
-      typeof window === 'undefined'
-        ? null
-        : parseSeek(window.location.search, 'replay'),
-    [],
-  );
+  const seek = useSeekParam('replay');
 
   return (
     <section

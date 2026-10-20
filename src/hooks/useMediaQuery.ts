@@ -1,20 +1,21 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useSyncExternalStore } from 'react';
 
-const matches = (query: string) =>
-  typeof window !== 'undefined' &&
-  typeof window.matchMedia === 'function' &&
-  window.matchMedia(query).matches;
-
+/**
+ * Live `matchMedia` result. The server (and hydration) always sees `false`,
+ * so prerendered HTML hydrates cleanly and the real value lands right after.
+ */
 export function useMediaQuery(query: string) {
-  const [match, setMatch] = useState(() => matches(query));
+  const subscribe = useCallback(
+    (onChange: () => void) => {
+      if (typeof window.matchMedia !== 'function') return () => {};
+      const media = window.matchMedia(query);
+      media.addEventListener('change', onChange);
+      return () => media.removeEventListener('change', onChange);
+    },
+    [query],
+  );
+  const getSnapshot = () =>
+    typeof window.matchMedia === 'function' && window.matchMedia(query).matches;
 
-  useEffect(() => {
-    const media = window.matchMedia(query);
-    const onChange = () => setMatch(media.matches);
-    onChange();
-    media.addEventListener('change', onChange);
-    return () => media.removeEventListener('change', onChange);
-  }, [query]);
-
-  return match;
+  return useSyncExternalStore(subscribe, getSnapshot, () => false);
 }

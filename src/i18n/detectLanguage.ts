@@ -6,6 +6,7 @@ const isLang = (value: unknown): value is Lang =>
   value === 'en' || value === 'pt';
 
 export function readStoredLang(): Lang | null {
+  if (typeof window === 'undefined') return null;
   try {
     const stored = window.localStorage.getItem(LANG_STORAGE_KEY);
     return isLang(stored) ? stored : null;
@@ -15,22 +16,10 @@ export function readStoredLang(): Lang | null {
 }
 
 export function storeLang(lang: Lang) {
+  if (typeof window === 'undefined') return;
   try {
     window.localStorage.setItem(LANG_STORAGE_KEY, lang);
   } catch {
     // Private mode or storage disabled: the choice lasts for this visit.
   }
-}
-
-/** Saved choice, else the browser language (pt* → PT), else English. */
-export function detectLanguage(): Lang {
-  if (typeof window === 'undefined') return 'en';
-  const stored = readStoredLang();
-  if (stored) return stored;
-  const preferred = window.navigator.languages?.length
-    ? window.navigator.languages
-    : [window.navigator.language];
-  return preferred.some((tag) => tag?.toLowerCase().startsWith('pt'))
-    ? 'pt'
-    : 'en';
 }

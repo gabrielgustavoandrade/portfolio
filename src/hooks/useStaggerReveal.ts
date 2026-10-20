@@ -1,4 +1,5 @@
-import { type RefObject, useLayoutEffect } from 'react';
+import type { RefObject } from 'react';
+import { useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect';
 
 export const ENTER_EASING = 'cubic-bezier(0.22, 1, 0.36, 1)';
 
@@ -30,7 +31,7 @@ export function useStaggerReveal(
     threshold = 0.2,
   }: StaggerRevealOptions,
 ) {
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const container = containerRef.current;
     if (!container) return;
     const items = Array.from(container.querySelectorAll<HTMLElement>(selector));

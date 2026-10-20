@@ -1,8 +1,9 @@
 {
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
+  "trailingSlash": true,
+  "redirects": [
+    { "source": "/work", "destination": "/#work", "statusCode": 301 },
+    { "source": "/work/:path*", "destination": "/#work", "statusCode": 301 },
+    { "source": "/blog", "destination": "/", "statusCode": 301 },
+    { "source": "/blog/:path*", "destination": "/", "statusCode": 301 }
   ]
 }
