@@ -1,7 +1,10 @@
 import type { CSSProperties } from 'react';
 import type { Project } from '../data/projects';
+import { useI18n } from '../i18n/I18nProvider';
 
 export function ProjectCard({ project }: { project: Project }) {
+  const { t } = useI18n();
+  const copy = t.work.projects[project.slug];
   const { image } = project;
   const imageStyle = {
     '--pos': image.position ?? '50% 50%',
@@ -27,7 +30,7 @@ export function ProjectCard({ project }: { project: Project }) {
             <source srcSet={`${image.src}.webp`} type="image/webp" />
             <img
               src={`${image.src}.png`}
-              alt={image.alt}
+              alt={copy.imageAlt}
               width={image.width}
               height={image.height}
               loading="lazy"
@@ -40,7 +43,7 @@ export function ProjectCard({ project }: { project: Project }) {
       <div className="work-card__body">
         <div className="work-card__meta micro">
           <span>{project.index}</span>
-          <span>{project.tag}</span>
+          <span>{copy.tag}</span>
         </div>
         <h3
           className={`work-card__title${project.nowrapTitle ? ' work-card__title--nowrap' : ''}`}
@@ -48,15 +51,15 @@ export function ProjectCard({ project }: { project: Project }) {
         >
           {project.name}
         </h3>
-        <p className="work-card__descriptor">{project.descriptor}</p>
-        {project.summary ? (
-          <p className="work-card__summary">{project.summary}</p>
+        <p className="work-card__descriptor">{copy.descriptor}</p>
+        {copy.summary ? (
+          <p className="work-card__summary">{copy.summary}</p>
         ) : null}
 
         <div className="work-card__foot">
-          {project.highlights ? (
-            <ul className="work-card__pills" aria-label="Highlights">
-              {project.highlights.map((item) => (
+          {copy.highlights ? (
+            <ul className="work-card__pills" aria-label={t.work.highlights}>
+              {copy.highlights.map((item) => (
                 <li key={item} className="tag">
                   {item}
                 </li>

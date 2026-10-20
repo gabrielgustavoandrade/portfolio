@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { TerminalStep } from '../data/harness';
 import { useInView } from '../hooks/useInView';
+import { useI18n } from '../i18n/I18nProvider';
 import {
   buildTimeline,
   type ReplayFrame,
@@ -26,6 +27,7 @@ export function TerminalReplay({
   reducedMotion: boolean;
   seek?: number | null;
 }) {
+  const { t } = useI18n();
   const timeline = useMemo(() => buildTimeline(steps), [steps]);
   const frozen = reducedMotion || seek !== null;
   const rootRef = useRef<HTMLDivElement>(null);
@@ -101,7 +103,7 @@ export function TerminalReplay({
             onClick={() => setRun((value) => value + 1)}
             disabled={!frame.done}
           >
-            Replay
+            {t.terminal.replay}
           </button>
         ) : (
           <span />
@@ -111,7 +113,7 @@ export function TerminalReplay({
         ref={screenRef}
         className="terminal__screen"
         onScroll={onScroll}
-        aria-label={`${title} transcript`}
+        aria-label={t.terminal.transcript(title)}
         aria-busy={!frame.done}
       >
         {shown.map((step, index) => {
@@ -119,7 +121,9 @@ export function TerminalReplay({
           const command = current
             ? step.command.slice(0, frame.chars)
             : step.command;
-          const output = current ? step.output.slice(0, frame.lines) : step.output;
+          const output = current
+            ? step.output.slice(0, frame.lines)
+            : step.output;
           const typing = current && !frame.done && frame.lines === 0;
           return (
             // biome-ignore lint/suspicious/noArrayIndexKey: fixed recording

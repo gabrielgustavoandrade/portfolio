@@ -43,9 +43,9 @@
   --space-96: 96px;
   --inset: clamp(24px, 6.67vw, 96px);
   /* Section frame: top padding, label → body offset, bottom padding */
-  --section-top: clamp(40px, 2.7vw + 29px, 68px);
-  --section-head-gap: clamp(48px, 7.7vw + 18px, 128px);
-  --section-bottom: clamp(64px, 3vw + 52px, 96px);
+  --section-top: clamp(32px, 1.5vw + 26px, 48px);
+  --section-head-gap: clamp(24px, 1.5vw + 18px, 40px);
+  --section-bottom: clamp(40px, 1.5vw + 34px, 56px);
 
   /* Radius */
   --radius-card: 16px;

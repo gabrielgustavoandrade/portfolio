@@ -1,5 +1,5 @@
 .contact {
-  padding-bottom: var(--space-64);
+  padding-bottom: var(--space-40);
 }
 
 .contact__backdrop {
@@ -19,7 +19,7 @@
 .contact__body {
   display: flex;
   flex-direction: column;
-  gap: var(--space-64);
+  gap: var(--space-40);
 }
 
 .contact__lead {
@@ -44,9 +44,9 @@
 
 .contact__links a {
   display: grid;
-  grid-template-columns: 240px 1fr auto;
+  grid-template-columns: 160px 1fr auto;
   align-items: center;
-  padding: var(--space-24) 0;
+  padding: var(--space-16) 0;
   border-top: 1px solid var(--hairline);
   font-size: var(--text-lead);
   font-weight: 500;

@@ -1,6 +1,7 @@
 import { SmartDateInput } from '@gabrielgustavoandrade/smart-date-input';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useInView } from '../hooks/useInView';
+import { useI18n } from '../i18n/I18nProvider';
 import './LiveSmartDateInput.css';
 
 const AUTO_TEXT = 'next friday 3pm';
@@ -18,8 +19,8 @@ function setNativeValue(input: HTMLInputElement, next: string) {
   input.dispatchEvent(new Event('input', { bubbles: true }));
 }
 
-function formatValue(value: number) {
-  return new Date(value).toLocaleString('en-US', {
+function formatValue(value: number, locale: string) {
+  return new Date(value).toLocaleString(locale, {
     weekday: 'short',
     month: 'short',
     day: 'numeric',
@@ -38,6 +39,7 @@ export function LiveSmartDateInput({
   /** Fill samples at once instead of typing them (reduced motion). */
   instant?: boolean;
 }) {
+  const { t } = useI18n();
   const [value, setValue] = useState<number | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
   const fieldRef = useRef<HTMLDivElement>(null);
@@ -50,10 +52,18 @@ export function LiveSmartDateInput({
     const field = fieldRef.current;
     field
       ?.querySelector('input')
-      ?.setAttribute('aria-label', 'Try smart-date-input');
+      ?.setAttribute('aria-label', t.liveDemo.inputLabel);
     const trigger = field?.querySelector('button');
-    if (trigger && !trigger.hasAttribute('aria-label')) {
-      trigger.setAttribute('aria-label', 'Open calendar');
+    // Ours to rewrite on a language switch, unless the package names it.
+    if (trigger && trigger.dataset.labelled !== 'package') {
+      if (!trigger.dataset.labelled) {
+        trigger.dataset.labelled = trigger.hasAttribute('aria-label')
+          ? 'package'
+          : 'ours';
+      }
+      if (trigger.dataset.labelled === 'ours') {
+        trigger.setAttribute('aria-label', t.liveDemo.calendar);
+      }
     }
   });
 
@@ -112,8 +122,8 @@ export function LiveSmartDateInput({
       onPointerDownCapture={handOver}
     >
       <div className="live-sdi__head">
-        <span className="live-sdi__label">Live component</span>
-        <span className="live-sdi__label">From npm</span>
+        <span className="live-sdi__label">{t.liveDemo.live}</span>
+        <span className="live-sdi__label">{t.liveDemo.fromNpm}</span>
       </div>
 
       <div className="live-sdi__chips">
@@ -135,17 +145,19 @@ export function LiveSmartDateInput({
           onChange={setValue}
           showTime
           hourFormat="12"
-          placeholder="e.g. next friday 3pm"
+          placeholder={t.liveDemo.placeholder}
           className="live-sdi__input"
         />
       </div>
 
       <div className="live-sdi__out">
         <span className="live-sdi__label live-sdi__label--plain">
-          Value from onChange
+          {t.liveDemo.valueLabel}
         </span>
         <output className="live-sdi__readout" aria-live="polite">
-          {value === null ? 'null' : `${value}  →  ${formatValue(value)}`}
+          {value === null
+            ? 'null'
+            : `${value}  →  ${formatValue(value, t.liveDemo.locale)}`}
         </output>
       </div>
     </div>

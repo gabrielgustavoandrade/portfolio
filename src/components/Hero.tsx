@@ -1,7 +1,9 @@
 import { Fragment, lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { useEarthDock } from '../hooks/useEarthDock';
 import { useMediaQuery } from '../hooks/useMediaQuery';
+import { useI18n } from '../i18n/I18nProvider';
 import { EXIT_MAX_WIDTH, MOBILE_MAX_WIDTH } from '../utils/earthDock';
+import { LanguageToggle } from './LanguageToggle';
 import './Hero.css';
 
 // Three.js stays out of the entry chunk: the poster paints first, the live
@@ -23,12 +25,6 @@ export const EARTH_POSTER = {
   srcSet: '/earth/poster-800.webp 800w, /earth/poster-1600.webp 1600w',
   sizes: '(max-width: 720px) 184vw, 1030px',
 } as const;
-
-const HEADLINE = [
-  'Senior Full Stack Engineer',
-  'AI agents in production',
-  'React, TypeScript, Next.js, Python',
-] as const;
 
 const SCENE_IDLE_TIMEOUT_MS = 1200;
 /** Matches the `.earth__canvas` opacity transition in Hero.css. */
@@ -58,6 +54,7 @@ function useAfterFirstPaint() {
 }
 
 export function Hero({ reducedMotion }: { reducedMotion: boolean }) {
+  const { t } = useI18n();
   const earthRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLElement>(null);
   const paceRef = useRef<'full' | 'idle'>('full');
@@ -96,21 +93,26 @@ export function Hero({ reducedMotion }: { reducedMotion: boolean }) {
           </Suspense>
         ) : null}
 
-        <nav className="hero__nav micro" aria-label="Primary">
-          <a href="#work">Work</a>
-          <a className="hero__nav-wide" href="#harness">
-            Harness
-          </a>
-          <a href="#projects">Projects</a>
-          <a href="#experience">Experience</a>
-          <a href="#contact">Contact</a>
-        </nav>
+        <div className="hero__chrome">
+          <nav className="hero__nav micro" aria-label={t.nav.label}>
+            <a href="#work">{t.nav.work}</a>
+            <a className="hero__nav-wide" href="#harness">
+              {t.nav.harness}
+            </a>
+            <a className="hero__nav-wide" href="#projects">
+              {t.nav.projects}
+            </a>
+            <a href="#experience">{t.nav.experience}</a>
+            <a href="#contact">{t.nav.contact}</a>
+          </nav>
+          <LanguageToggle />
+        </div>
 
         <div className="hero__copy">
           <h1 className="hero__name hero__rise">Gabriel Andrade</h1>
           {/* One segment per line; the pipes stay in the text for copy/paste. */}
           <p className="hero__headline hero__rise">
-            {HEADLINE.map((segment, index) => (
+            {t.hero.headline.map((segment, index) => (
               <Fragment key={segment}>
                 {index > 0 ? <span className="hero__sep"> | </span> : null}
                 <span className="hero__segment">{segment}</span>
@@ -121,7 +123,7 @@ export function Hero({ reducedMotion }: { reducedMotion: boolean }) {
 
         <a className="hero__cue micro" href="#work">
           <span className="hero__cue-line" aria-hidden="true" />
-          <span>Work ↓</span>
+          <span>{t.nav.cue}</span>
         </a>
       </header>
 

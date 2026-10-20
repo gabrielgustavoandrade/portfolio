@@ -55,3 +55,12 @@
     padding: var(--space-8);
   }
 }
+
+/* Narrower stage on wide screens: the drawing reads the same and the
+   section no longer outgrows its copy column. */
+@media (min-width: 1101px) {
+  .fourier__figure {
+    justify-self: end;
+    width: min(100%, 560px);
+  }
+}

@@ -1,10 +1,12 @@
 import { SMART_DATE_INPUT_LINKS } from '../data/projects';
+import { useI18n } from '../i18n/I18nProvider';
 import { LiveSmartDateInput } from './LiveSmartDateInput';
 import './CraftProof.css';
 
 const KEYS = ['↑', '↓', 'Enter', 'Tab'];
 
 export function CraftProof({ reducedMotion }: { reducedMotion: boolean }) {
+  const { t } = useI18n();
   return (
     <section
       id="projects"
@@ -12,29 +14,26 @@ export function CraftProof({ reducedMotion }: { reducedMotion: boolean }) {
       aria-labelledby="craft-label"
     >
       <h2 id="craft-label" className="section__label micro">
-        Open source
+        {t.craft.label}
       </h2>
 
       <div className="section__body section__split craft__layout">
         <div className="section__intro craft__intro">
           <div className="section__copy craft__copy">
             <h3 className="section__title">smart-date-input</h3>
-            <p className="section__lede">
-              React/TypeScript date and time input with natural-language parsing
-              and keyboard navigation, published as an npm component.
-            </p>
+            <p className="section__lede">{t.craft.lede}</p>
             <span className="section__note craft__package">
               {SMART_DATE_INPUT_LINKS.packageName}
             </span>
           </div>
 
           <div className="craft__keys">
-            <span className="micro">Keyboard</span>
+            <span className="micro">{t.craft.keyboard}</span>
             <div className="craft__keys-row">
               {KEYS.map((key) => (
                 <kbd key={key}>{key}</kbd>
               ))}
-              <span>Move through suggestions and select</span>
+              <span>{t.craft.keysHint}</span>
             </div>
           </div>
 
@@ -63,7 +62,7 @@ export function CraftProof({ reducedMotion }: { reducedMotion: boolean }) {
             autoType={!reducedMotion}
             instant={reducedMotion}
           />
-          <figcaption>Running the published npm package.</figcaption>
+          <figcaption>{t.craft.caption}</figcaption>
         </figure>
       </div>
     </section>

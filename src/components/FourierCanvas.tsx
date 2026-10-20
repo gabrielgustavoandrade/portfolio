@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useInView } from '../hooks/useInView';
+import { useI18n } from '../i18n/I18nProvider';
 import {
   buildCapybaraSeries,
   evaluate,
@@ -68,7 +69,11 @@ function drawChain(
   return [x, y] as const;
 }
 
-function traceFor(series: FourierSeries, terms: number, cache: Map<number, Trace>) {
+function traceFor(
+  series: FourierSeries,
+  terms: number,
+  cache: Map<number, Trace>,
+) {
   let trace = cache.get(terms);
   if (!trace) {
     trace = new Float32Array((TRACE_STEPS + 1) * 2);
@@ -186,6 +191,7 @@ export function FourierCanvas({
   reducedMotion: boolean;
   seek?: number | null;
 }) {
+  const { t } = useI18n();
   const boxRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const counterRef = useRef<HTMLSpanElement>(null);
@@ -212,9 +218,7 @@ export function FourierCanvas({
       g.setTransform(canvas.width / W, 0, 0, canvas.height / H, 0, 0);
     };
 
-    let seconds = frozen
-      ? (seek ?? 1) * TOTAL_SECONDS
-      : 0;
+    let seconds = frozen ? (seek ?? 1) * TOTAL_SECONDS : 0;
     const paint = () => {
       const terms = drawFrame(g, series, cache, seconds);
       if (counterRef.current) {
@@ -280,12 +284,12 @@ export function FourierCanvas({
         ref={canvasRef}
         className="fourier__canvas"
         role="img"
-        aria-label="A capybara outline traced by two chains of rotating circles, one per axis."
+        aria-label={t.fourier.canvasLabel}
       />
       <div className="fourier__hud">
         <p className="fourier__count">
           N = <span ref={counterRef}>{STAGES[STAGES.length - 1]}</span>
-          <span className="fourier__count-unit"> circles per axis</span>
+          <span className="fourier__count-unit"> {t.fourier.unit}</span>
         </p>
         {!frozen ? (
           <button
@@ -294,7 +298,7 @@ export function FourierCanvas({
             onClick={() => setRun((value) => value + 1)}
             disabled={!done}
           >
-            Replay
+            {t.fourier.replay}
           </button>
         ) : null}
       </div>

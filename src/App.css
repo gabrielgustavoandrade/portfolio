@@ -43,8 +43,7 @@
 .section__intro {
   display: flex;
   flex-direction: column;
-  gap: var(--space-40);
-  padding-top: var(--space-24);
+  gap: var(--space-24);
 }
 
 .section__copy {
@@ -102,21 +101,21 @@
   color: var(--mute);
 }
 
-@media (min-width: 1024px) and (min-height: 700px) {
-  .section--frame {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+/* About is one paragraph: on wide screens it shares a band with Contact. */
+@media (min-width: 1101px) {
+  .closing {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  }
+
+  .closing .about {
+    padding-right: 0;
   }
 }
 
 @media (max-width: 1100px) {
   .section__split {
     grid-template-columns: minmax(0, 1fr);
-  }
-
-  .section__intro {
-    padding-top: 0;
   }
 
   .section__figure {

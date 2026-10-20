@@ -1,10 +1,12 @@
 import { useMemo } from 'react';
 import { HARNESS, HARNESS_SESSION } from '../data/harness';
+import { useI18n } from '../i18n/I18nProvider';
 import { parseSeek } from '../utils/fourier';
 import { TerminalReplay } from './TerminalReplay';
 import './Harness.css';
 
 export function Harness({ reducedMotion }: { reducedMotion: boolean }) {
+  const { t } = useI18n();
   // `?replay=end` (or 0–1) freezes the terminal for screenshots.
   const seek = useMemo(
     () =>
@@ -21,19 +23,25 @@ export function Harness({ reducedMotion }: { reducedMotion: boolean }) {
       aria-labelledby="harness-label"
     >
       <h2 id="harness-label" className="section__label micro">
-        Agent harness
+        {t.harness.label}
       </h2>
 
       <div className="section__body section__split harness__layout">
         <div className="section__intro">
           <div className="section__copy">
-            <h3 className="section__title">{HARNESS.name}</h3>
-            <p className="section__lede">{HARNESS.lede}</p>
-            <span className="section__note">{HARNESS.note}</span>
+            <div className="harness__heading">
+              <h3 className="section__title">{HARNESS.name}</h3>
+              <span className="status-badge micro">
+                <span className="status-badge__dot" aria-hidden="true" />
+                {t.harness.status}
+              </span>
+            </div>
+            <p className="section__lede">{t.harness.lede}</p>
+            <span className="section__note">{t.harness.note}</span>
           </div>
 
           <ul className="section__facts">
-            {HARNESS.facts.map((fact) => (
+            {t.harness.facts.map((fact) => (
               <li key={fact}>{fact}</li>
             ))}
           </ul>
@@ -42,11 +50,11 @@ export function Harness({ reducedMotion }: { reducedMotion: boolean }) {
         <figure className="section__figure harness__figure">
           <TerminalReplay
             steps={HARNESS_SESSION}
-            title={HARNESS.name}
+            title={HARNESS.binary}
             reducedMotion={reducedMotion}
             seek={seek}
           />
-          <figcaption>{HARNESS.caption}</figcaption>
+          <figcaption>{t.harness.caption}</figcaption>
         </figure>
       </div>
     </section>

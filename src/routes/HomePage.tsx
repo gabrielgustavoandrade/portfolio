@@ -10,10 +10,12 @@ import { Harness } from '../components/Harness';
 import { Hero } from '../components/Hero';
 import { Work } from '../components/Work';
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
+import { useI18n } from '../i18n/I18nProvider';
 
 export function HomePage() {
   const { hash } = useLocation();
   const reducedMotion = usePrefersReducedMotion();
+  const { t } = useI18n();
 
   useEffect(() => {
     if (!hash) return;
@@ -31,7 +33,7 @@ export function HomePage() {
   return (
     <div className="home">
       <a href="#main-content" className="skip-link">
-        Skip to main content
+        {t.skipLink}
       </a>
       <Hero reducedMotion={reducedMotion} />
       <main id="main-content">
@@ -40,8 +42,11 @@ export function HomePage() {
         <CraftProof reducedMotion={reducedMotion} />
         <Fourier reducedMotion={reducedMotion} />
         <Experience reducedMotion={reducedMotion} />
-        <About reducedMotion={reducedMotion} />
-        <Contact reducedMotion={reducedMotion} />
+        {/* About and Contact share one band on wide screens. */}
+        <div className="closing">
+          <About reducedMotion={reducedMotion} />
+          <Contact reducedMotion={reducedMotion} />
+        </div>
       </main>
       <Footer />
     </div>

@@ -1,11 +1,13 @@
 import { type CSSProperties, useRef } from 'react';
 import { contactLinks, EMAIL } from '../data/contact';
 import { useInView } from '../hooks/useInView';
+import { useI18n } from '../i18n/I18nProvider';
 import './Contact.css';
 
 const [emailUser, emailDomain] = EMAIL.split('@');
 
 export function Contact({ reducedMotion }: { reducedMotion: boolean }) {
+  const { t } = useI18n();
   const bodyRef = useRef<HTMLDivElement>(null);
   const inView = useInView(bodyRef, { skip: reducedMotion });
 
@@ -17,14 +19,14 @@ export function Contact({ reducedMotion }: { reducedMotion: boolean }) {
     >
       <div className="contact__backdrop" aria-hidden="true" />
       <h2 id="contact-label" className="section__label micro">
-        Contact
+        {t.contact.label}
       </h2>
       <div
         ref={bodyRef}
         className={`section__body contact__body${inView ? ' is-in' : ''}`}
       >
         <div className="contact__lead">
-          <p className="section__lede">Email is the best way to reach me.</p>
+          <p className="section__lede">{t.contact.lede}</p>
           <a
             className="contact__email"
             href={`mailto:${EMAIL}`}

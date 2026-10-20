@@ -11,7 +11,6 @@ export interface ProjectMetric {
 export interface ProjectImage {
   /** Path without extension; a .webp and a .png live side by side in public/. */
   src: string;
-  alt: string;
   width: number;
   height: number;
   /** `cover` crops into the frame; `contain` letterboxes on a light mat. */
@@ -20,17 +19,13 @@ export interface ProjectImage {
   mobilePosition?: string;
 }
 
+/** Tag, descriptor, summary, highlights and alt text live in i18n/messages. */
 export interface Project {
   slug: string;
   index: string;
-  tag: string;
   name: string;
-  /** One-line descriptor shown under the name. */
-  descriptor: string;
   /** Keep the title on one line (e.g. hyphenated package names). */
   nowrapTitle?: boolean;
-  summary?: string;
-  highlights?: string[];
   metrics?: ProjectMetric[];
   links?: ProjectLink[];
   image: ProjectImage;
@@ -47,13 +42,9 @@ export const projects: Project[] = [
   {
     slug: 'interactive-ai',
     index: '01',
-    tag: 'Current',
     name: 'InteractiveAI',
-    descriptor: 'Agent platform: React/Next.js and Python',
-    highlights: ['Agent observability', 'AI workflows', 'In-product copilot'],
     image: {
       src: '/work/interactiveai-desktop',
-      alt: 'InteractiveAI platform, public site',
       width: 2880,
       height: 1800,
       fit: 'cover',
@@ -65,18 +56,14 @@ export const projects: Project[] = [
   {
     slug: 'smart-date-input',
     index: '02',
-    tag: 'Open source',
     name: 'smart-date-input',
     nowrapTitle: true,
-    descriptor: 'Date and time input with natural-language parsing',
-    summary: 'React and TypeScript component with keyboard navigation.',
     links: [
       { label: 'npm', url: SMART_DATE_INPUT_LINKS.npm },
       { label: 'GitHub', url: SMART_DATE_INPUT_LINKS.github },
     ],
     image: {
       src: '/work/sdi-render-readable',
-      alt: 'smart-date-input parsing “next friday at 2pm” to Oct 16 at 14:00',
       width: 1488,
       height: 368,
       fit: 'contain',
@@ -85,13 +72,9 @@ export const projects: Project[] = [
   {
     slug: 'mms-design-your-own',
     index: '03',
-    tag: 'via Valtech',
     name: 'M&M’s Design Your Own',
-    descriptor:
-      'Frontend for the product configurator used to personalize M&M’s in 12 countries.',
     image: {
       src: '/work/m-ms-desktop',
-      alt: 'M&M’s Design Your Own color step',
       width: 2880,
       height: 1800,
       fit: 'cover',

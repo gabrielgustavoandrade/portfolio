@@ -1,6 +1,9 @@
 import { cleanup, render, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { vi } from 'vitest';
+import { LANG_STORAGE_KEY } from '../../i18n/detectLanguage';
+import { I18nProvider } from '../../i18n/I18nProvider';
 import { HomePage } from '../HomePage';
 
 const earthSpy = vi.fn();
@@ -22,7 +25,9 @@ const renderHomePage = () =>
       initialEntries={['/']}
       future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
     >
-      <HomePage />
+      <I18nProvider>
+        <HomePage />
+      </I18nProvider>
     </MemoryRouter>,
   );
 
@@ -49,6 +54,8 @@ const BANNED = [
   /plasma/i,
   /marmoraria/i,
   /langgraph/i,
+  // The harness is publicly called Holdout.
+  /agent-lab/i,
   /langfuse/i,
   /lang\s?chain/i,
   // No location or availability copy.
@@ -74,6 +81,7 @@ const BANNED = [
 describe('HomePage', () => {
   beforeEach(() => {
     earthSpy.mockClear();
+    window.localStorage.clear();
   });
 
   it('renders the hero with name, approved headline and the live Earth', async () => {
@@ -253,14 +261,24 @@ describe('HomePage', () => {
     ).toHaveAttribute('href', 'https://github.com/gabrielgustavoandrade');
   });
 
-  it('shows the agent harness with a real session replay and no repo link', () => {
+  it('shows Holdout as in progress with a real session replay and no repo link', () => {
     const restore = mockReducedMotion();
     try {
       renderHomePage();
       const harness = screen.getByRole('region', { name: 'Agent harness' });
       expect(
-        within(harness).getByRole('heading', { level: 3, name: 'agent-lab' }),
+        within(harness).getByRole('heading', { level: 3, name: 'Holdout' }),
       ).toBeInTheDocument();
+      expect(within(harness).getByText('Still in progress')).toHaveClass(
+        'status-badge',
+      );
+      expect(
+        within(harness).getByText(
+          'Private repository while the project is still in progress.',
+        ),
+      ).toBeInTheDocument();
+      expect(harness.textContent).toMatch(/factory-style/i);
+      expect(harness.textContent).toMatch(/orchestration/i);
       const transcript = within(harness).getByRole('region', {
         name: /transcript/i,
       });
@@ -269,14 +287,15 @@ describe('HomePage', () => {
       );
       expect(transcript).toHaveTextContent('spawned: worker-1 pid=713651');
       expect(transcript).toHaveTextContent(
+        'path=.holdout/sessions/20261012-205802-demo',
+      );
+      expect(transcript).toHaveTextContent(
         'evals look honest: naive fails, correct passes.',
       );
       expect(transcript.textContent).not.toMatch(
         /\/tmp\/|\/workspace\/|\/Users\//,
       );
-      for (const link of within(harness).queryAllByRole('link')) {
-        expect(link.getAttribute('href')).not.toMatch(/agent-lab/);
-      }
+      expect(within(harness).queryAllByRole('link')).toHaveLength(0);
     } finally {
       restore();
     }
@@ -342,5 +361,127 @@ describe('HomePage', () => {
     } finally {
       restore();
     }
+  });
+
+  describe('language toggle', () => {
+    const setNavigatorLanguages = (languages: string[]) => {
+      const spy = vi
+        .spyOn(window.navigator, 'languages', 'get')
+        .mockReturnValue(languages);
+      return () => spy.mockRestore();
+    };
+
+    afterEach(() => {
+      document.documentElement.lang = 'en';
+    });
+
+    it('switches every section to pt-BR, updates <html lang> and persists', async () => {
+      const user = userEvent.setup();
+      renderHomePage();
+
+      const toggle = screen.getByRole('group', { name: 'Language' });
+      const en = within(toggle).getByRole('button', { name: 'EN' });
+      const pt = within(toggle).getByRole('button', { name: 'PT' });
+      expect(en).toHaveAttribute('aria-pressed', 'true');
+      expect(pt).toHaveAttribute('aria-pressed', 'false');
+      expect(document.documentElement.lang).toBe('en');
+
+      await user.click(pt);
+
+      expect(pt).toHaveAttribute('aria-pressed', 'true');
+      expect(en).toHaveAttribute('aria-pressed', 'false');
+      expect(document.documentElement.lang).toBe('pt-BR');
+      expect(document.title).toBe(
+        'Gabriel Andrade — Engenheiro Full Stack Sênior',
+      );
+      expect(window.localStorage.getItem(LANG_STORAGE_KEY)).toBe('pt');
+
+      const nav = screen.getByRole('navigation', { name: 'Principal' });
+      expect(
+        within(nav)
+          .getAllByRole('link')
+          .map((link) => link.textContent),
+      ).toEqual(['Trabalhos', 'Harness', 'Projetos', 'Experiência', 'Contato']);
+      expect(screen.getByRole('group', { name: 'Idioma' })).toBeInTheDocument();
+
+      const harness = screen.getByRole('region', {
+        name: 'Harness de agentes',
+      });
+      expect(
+        within(harness).getByRole('heading', { level: 3, name: 'Holdout' }),
+      ).toBeInTheDocument();
+      expect(within(harness).getByText('Em andamento')).toHaveClass(
+        'status-badge',
+      );
+      expect(
+        screen.getByRole('region', { name: 'Experiência' }).textContent,
+      ).toMatch(/Contrato · Mar 2026 – Atual/);
+      expect(
+        screen.getByRole('textbox', { name: 'Teste o smart-date-input' }),
+      ).toBeInTheDocument();
+
+      // Brazilian, not European, Portuguese; and none of the retired copy.
+      const text = document.body.textContent ?? '';
+      expect(text).not.toMatch(
+        /\b(ecrã|telemóvel|ficheiro|equipa|utilizador)/i,
+      );
+      for (const pattern of BANNED) {
+        expect(text).not.toMatch(pattern);
+      }
+
+      await user.click(within(toggle).getByRole('button', { name: 'EN' }));
+      expect(document.documentElement.lang).toBe('en');
+      expect(window.localStorage.getItem(LANG_STORAGE_KEY)).toBe('en');
+      expect(
+        screen.getByRole('region', { name: 'Agent harness' }),
+      ).toBeInTheDocument();
+    });
+
+    it('restores the saved language on the next visit', () => {
+      window.localStorage.setItem(LANG_STORAGE_KEY, 'pt');
+      const restore = setNavigatorLanguages(['en-US']);
+      try {
+        renderHomePage();
+        expect(screen.getByRole('button', { name: 'PT' })).toHaveAttribute(
+          'aria-pressed',
+          'true',
+        );
+        expect(document.documentElement.lang).toBe('pt-BR');
+        expect(
+          screen.getByRole('heading', { level: 1, name: 'Gabriel Andrade' }),
+        ).toBeInTheDocument();
+        expect(document.querySelector('.hero__headline')).toHaveTextContent(
+          'Engenheiro Full Stack Sênior',
+        );
+      } finally {
+        restore();
+      }
+    });
+
+    it('falls back to the browser language, then English', () => {
+      let restore = setNavigatorLanguages(['pt-BR', 'en']);
+      try {
+        renderHomePage();
+        expect(screen.getByRole('button', { name: 'PT' })).toHaveAttribute(
+          'aria-pressed',
+          'true',
+        );
+      } finally {
+        restore();
+        cleanup();
+      }
+
+      restore = setNavigatorLanguages(['de-DE', 'fr']);
+      try {
+        renderHomePage();
+        expect(screen.getByRole('button', { name: 'EN' })).toHaveAttribute(
+          'aria-pressed',
+          'true',
+        );
+        expect(document.documentElement.lang).toBe('en');
+      } finally {
+        restore();
+      }
+    });
   });
 });

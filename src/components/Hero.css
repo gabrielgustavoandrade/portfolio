@@ -34,11 +34,17 @@
   pointer-events: none;
 }
 
-.hero__nav {
+.hero__chrome {
   position: absolute;
   top: var(--space-40);
   right: var(--inset);
   z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: var(--space-40);
+}
+
+.hero__nav {
   display: flex;
   gap: var(--space-40);
   color: var(--cream);
@@ -207,15 +213,25 @@
     );
   }
 
-  .hero__nav {
+  /* Links own the first row; the language toggle sits right-aligned
+     under them so longer pt-BR labels never push it off-screen. */
+  .hero__chrome {
     top: var(--space-24);
     left: var(--inset);
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    row-gap: var(--space-8);
+  }
+
+  .hero__nav {
+    flex: 1 0 100%;
     justify-content: space-between;
     gap: var(--space-16);
     letter-spacing: 0.1em;
   }
 
-  /* Four items fit a 390px row; the harness is one scroll past Work. */
+  /* Three links fit a 390px row in both languages; Harness and Projects
+     are each one scroll past Work. */
   .hero__nav-wide {
     display: none;
   }
