@@ -1,24 +1,22 @@
 import type { MutableRefObject, RefObject } from 'react';
-import { EARTH_FILL } from '../components/earth/earthGeometry';
 import {
   DOCK_SETTLE_EPSILON,
   DOCK_SMOOTH_SECONDS,
   damp,
   type EarthFrame,
+  EXIT_IDLE_PROGRESS,
   getDockProgress,
   getEarthFrame,
+  getExitFrame,
+  getExitProgress,
 } from '../utils/earthDock';
 import { useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect';
-
-/** Space between the hero copy and the globe, and above the bottom cue. */
-const HERO_GAP_PX = 20;
-const HERO_BOTTOM_PX = 64;
-const HERO_MIN_DIAMETER = 220;
-const HERO_WIDTH_FRACTION = 0.9;
 
 /** Matches the 200ms cross-fade in `.earth`. */
 const REDUCED_FADE_MS = 200;
 
+/** Soft edge where the static globe meets the bottom of the hero. */
+const STATIC_FADE_PX = 96;
 
 interface UseEarthDockOptions {
   earthRef: RefObject<HTMLDivElement | null>;
@@ -47,59 +45,92 @@ export function useEarthDock({
     const earth = earthRef.current;
     if (!earth || !exit) return;
 
-    // Phones: no scroll-linked motion at all (iOS Safari stuttered it).
-    // The globe is rendered inside the hero (see Hero.tsx) and sized and
-    // placed in plain pixels from the hero's real box: centered, fully
-    // framed, between the name and the bottom cue. Re-placed whenever the
-    // hero or copy box changes, because WebKit can run this before layout
-    // settles (it read ~220px for a 664px hero and parked the globe off
-    // the top-left).
-    const hero = heroRef.current;
-    if (!hero) return;
-    earth.classList.add('earth--hero');
-    paceRef.current = 'full';
-    let last = '';
-    const place = () => {
-      const heroBox = hero.getBoundingClientRect();
-      const width = hero.clientWidth;
-      const height = hero.clientHeight;
-      if (!width || !height) return;
-      const copy = hero.querySelector('.hero__copy');
-      const copyBottom = copy
-        ? copy.getBoundingClientRect().bottom - heroBox.top
-        : height * 0.4;
-      const top = copyBottom + HERO_GAP_PX;
-      const avail = height - top - HERO_BOTTOM_PX;
-      const diameter = Math.max(
-        HERO_MIN_DIAMETER,
-        Math.min(width * HERO_WIDTH_FRACTION, avail),
-      );
-      const box = Math.round(diameter / EARTH_FILL);
-      const centerY = top + diameter / 2;
-      const key = `${width}x${height}:${box}:${Math.round(centerY)}`;
-      if (key === last) return;
-      last = key;
-      earth.style.width = `${box}px`;
-      earth.style.height = `${box}px`;
-      earth.style.left = `${Math.round((width - box) / 2)}px`;
-      earth.style.top = `${Math.round(centerY - box / 2)}px`;
-      earth.style.transform = 'none';
+    // Cached; only a width change (rotation) re-measures, so the iOS
+    // toolbar collapsing on scroll never shifts the globe.
+    let width = window.innerWidth;
+    let heroHeight = heroRef.current?.offsetHeight || window.innerHeight;
+    const measure = () => {
+      width = window.innerWidth;
+      heroHeight = heroRef.current?.offsetHeight || window.innerHeight;
     };
-    place();
-    const observer =
-      typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(place);
-    observer?.observe(hero);
-    const copy = hero.querySelector('.hero__copy');
-    if (copy) observer?.observe(copy);
-    window.addEventListener('resize', place);
-    document.fonts?.ready.then(place);
+    const setBox = (frame: EarthFrame) => {
+      earth.style.width = `${frame.boxSize}px`;
+      earth.style.height = `${frame.boxSize}px`;
+    };
+    const cleanupStyles = (className: string) => {
+      earth.classList.remove(className);
+      earth.style.removeProperty('opacity');
+      earth.style.removeProperty('mask-image');
+      earth.style.removeProperty('-webkit-mask-image');
+    };
+
+    // Phones always take the static path: iOS Safari stuttered the globe's
+    // rotation during scroll-linked motion, so on narrow screens the globe
+    // simply lives in the hero and scrolls away with the page.
+    if (reducedMotion || exit) {
+      // No scroll-linked motion: the globe sits in the document and
+      // scrolls away with the hero. Fade it out at the hero's bottom edge
+      // so it never lies over the next section.
+      earth.classList.add('earth--static');
+      paceRef.current = 'full';
+      const place = () => {
+        const frame = getExitFrame(0, width, heroHeight);
+        setBox(frame);
+        earth.style.transform = transformFor(frame);
+        const cut = Math.max(0, heroHeight - frame.y);
+        const mask = `linear-gradient(to bottom, #000 ${Math.max(0, cut - STATIC_FADE_PX)}px, transparent ${cut}px)`;
+        earth.style.setProperty('mask-image', mask);
+        earth.style.setProperty('-webkit-mask-image', mask);
+      };
+      const onResize = () => {
+        if (window.innerWidth === width) return;
+        measure();
+        place();
+      };
+      place();
+      window.addEventListener('resize', onResize);
+      return () => {
+        window.removeEventListener('resize', onResize);
+        cleanupStyles('earth--static');
+      };
+    }
+
+    earth.classList.add('earth--exit');
+    let frameId = 0;
+    let lastProgress = -1;
+
+    const update = () => {
+      frameId = 0;
+      const progress = getExitProgress(window.scrollY, heroHeight);
+      if (progress === lastProgress) return;
+      lastProgress = progress;
+      const frame = getExitFrame(progress, width, heroHeight);
+      earth.style.transform = transformFor(frame);
+      earth.style.opacity = `${frame.opacity}`;
+      paceRef.current = progress > EXIT_IDLE_PROGRESS ? 'idle' : 'full';
+    };
+    const layout = () => {
+      setBox(getExitFrame(0, width, heroHeight));
+      lastProgress = -1;
+      update();
+    };
+    const onScroll = () => {
+      if (frameId === 0) frameId = requestAnimationFrame(update);
+    };
+    const onResize = () => {
+      if (window.innerWidth === width) return;
+      measure();
+      layout();
+    };
+
+    layout();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onResize);
     return () => {
-      observer?.disconnect();
-      window.removeEventListener('resize', place);
-      earth.classList.remove('earth--hero');
-      for (const prop of ['width', 'height', 'left', 'top', 'transform']) {
-        earth.style.removeProperty(prop);
-      }
+      cancelAnimationFrame(frameId);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onResize);
+      cleanupStyles('earth--exit');
     };
   }, [earthRef, heroRef, paceRef, reducedMotion, exit]);
 
