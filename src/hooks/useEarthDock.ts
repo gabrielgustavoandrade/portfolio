@@ -64,7 +64,10 @@ export function useEarthDock({
       earth.style.removeProperty('-webkit-mask-image');
     };
 
-    if (reducedMotion) {
+    // Phones always take the static path: iOS Safari stuttered the globe's
+    // rotation during scroll-linked motion, so on narrow screens the globe
+    // simply lives in the hero and scrolls away with the page.
+    if (reducedMotion || exit) {
       // No scroll-linked motion: the globe sits in the document and
       // scrolls away with the hero. Fade it out at the hero's bottom edge
       // so it never lies over the next section.
