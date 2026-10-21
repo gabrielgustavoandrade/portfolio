@@ -33,6 +33,8 @@ const DAMPING_FACTOR = 0.05;
 const ROTATE_SPEED = 0.5;
 const MAX_PIXEL_RATIO_HI = 2;
 const MAX_PIXEL_RATIO_LO = 1.5;
+/** iPhones start lower: Safari's compositor is busiest exactly while scrolling. */
+const MAX_PIXEL_RATIO_IOS = 1.25;
 /** Matches EXIT_MAX_WIDTH: phones cap at the low ratio whatever the tier. */
 const COMPACT_QUERY = '(max-width: 768px)';
 
@@ -89,10 +91,17 @@ export function EarthCanvas({
     const maxAnisotropy = renderer.capabilities.getMaxAnisotropy();
     const anisotropy = Math.min(tier === 'hi' ? 8 : 4, maxAnisotropy);
     const compact = window.matchMedia?.(COMPACT_QUERY).matches ?? false;
+    const iOS =
+      /iP(hone|ad|od)/.test(navigator.userAgent) ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
     renderer.setPixelRatio(
       Math.min(
         window.devicePixelRatio,
-        tier === 'hi' && !compact ? MAX_PIXEL_RATIO_HI : MAX_PIXEL_RATIO_LO,
+        tier === 'hi' && !compact
+          ? MAX_PIXEL_RATIO_HI
+          : iOS
+            ? MAX_PIXEL_RATIO_IOS
+            : MAX_PIXEL_RATIO_LO,
       ),
     );
     renderer.setSize(sizes.width, sizes.height);
@@ -195,8 +204,20 @@ export function EarthCanvas({
     let sampleSum = 0;
     let sampleCount = 0;
     let skipSamples = 10; // ignore warm-up and texture upload
+    // Never reallocate during a scroll gesture: frame times there reflect the
+    // browser's own work, and a mid-scroll setSize is itself a hitch.
+    let lastScrollAt = 0;
+    const onScroll = () => {
+      lastScrollAt = performance.now();
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
     const adaptResolution = (frameMs: number) => {
       if (!texturesLoaded) return;
+      if (performance.now() - lastScrollAt < 500) {
+        sampleSum = 0;
+        sampleCount = 0;
+        return;
+      }
       if (skipSamples > 0) {
         skipSamples -= 1;
         return;
@@ -223,7 +244,7 @@ export function EarthCanvas({
     const animate = (now: number) => {
       if (!running) return;
       animationFrame = requestAnimationFrame(animate);
-      const dt = Math.min(0.05, (now - lastNow) / 1000);
+      const dt = Math.min(0.25, Math.max(0, (now - lastNow) / 1000));
       lastNow = now;
       const idle = paceBag.current?.current === 'idle';
       if (!idle && running) adaptResolution(now - lastFrameAt);
@@ -238,7 +259,9 @@ export function EarthCanvas({
       glowMesh.rotation.y += ROTATION_SPEED.earth * turn;
 
       frame += 1;
-      if (idle && frame % 3 !== 0) {
+      // Docked desktop mark only: on phones the globe is still visibly
+      // moving while it scrolls out, and 20fps there read as a stutter.
+      if (idle && !compact && frame % 3 !== 0) {
         return;
       }
 
@@ -277,6 +300,9 @@ export function EarthCanvas({
       if (!containerRef.current) return;
       const { clientWidth, clientHeight } = containerRef.current;
       if (clientWidth === 0 || clientHeight === 0) return;
+      // Address-bar resizes on iOS report the same box; reallocating the
+      // buffer anyway froze the globe mid-scroll.
+      if (clientWidth === sizes.width && clientHeight === sizes.height) return;
       camera.aspect = clientWidth / clientHeight;
       camera.updateProjectionMatrix();
       sizes.width = clientWidth;
@@ -301,6 +327,7 @@ export function EarthCanvas({
       visibility?.disconnect();
       resizeObserver?.disconnect();
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('scroll', onScroll);
       controls.dispose();
       renderer.dispose();
       containerRef.current?.removeChild(renderer.domElement);

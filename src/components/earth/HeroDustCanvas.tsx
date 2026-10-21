@@ -87,9 +87,35 @@ export function HeroDustCanvas({
           });
     visibility?.observe(containerRef.current);
 
+    // iOS Safari fires resize on every address-bar collapse/expand. The hero
+    // is sized in svh so the box doesn't change, but renderer.setSize would
+    // still reallocate the drawing buffer and stall the GPU mid-scroll, so
+    // only resize when the box really changed.
+    const touch = window.matchMedia?.('(pointer: coarse)').matches ?? false;
+    if (touch) {
+      renderer.domElement.style.height = `${sizes.height}px`;
+      containerRef.current.style.overflow = 'hidden';
+    }
+    let lastW = sizes.width;
+    let lastH = sizes.height;
     const handleResize = () => {
       if (!containerRef.current) return;
       const { clientWidth, clientHeight } = containerRef.current;
+      if (clientWidth === 0 || clientHeight === 0) return;
+      // Touch: height-only changes are the toolbar. Keep the buffer at the
+      // tallest height seen (the container clips it) and never reallocate.
+      if (touch && clientWidth === lastW && clientHeight <= lastH) return;
+      if (clientWidth === lastW && clientHeight === lastH) return;
+      lastW = clientWidth;
+      lastH = touch ? Math.max(lastH, clientHeight) : clientHeight;
+      if (touch) {
+        camera.aspect = clientWidth / Math.max(1, lastH);
+        camera.updateProjectionMatrix();
+        renderer.domElement.style.height = `${lastH}px`;
+        renderer.setSize(clientWidth, lastH, false);
+        atmosphere.setViewSize(clientWidth, lastH, renderer.getPixelRatio());
+        return;
+      }
       camera.aspect = clientWidth / Math.max(1, clientHeight);
       camera.updateProjectionMatrix();
       renderer.setSize(clientWidth, clientHeight);
