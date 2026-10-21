@@ -262,3 +262,10 @@
   transition: none;
   will-change: auto;
 }
+
+/* ≤768px: the globe lives inside the hero, placed in px by useEarthDock. */
+.earth--hero {
+  position: absolute;
+  transition: none;
+  will-change: auto;
+}
