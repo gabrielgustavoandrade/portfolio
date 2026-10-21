@@ -186,16 +186,48 @@ export function EarthCanvas({
     controls.autoRotate = false;
     controls.rotateSpeed = ROTATE_SPEED;
 
+    // Adaptive resolution: if the device can't hold ~50fps at the starting
+    // pixel ratio, step the drawing buffer down (never below 1x) instead of
+    // stuttering. Strong phones keep full sharpness; weak ones go smooth.
+    const MIN_PIXEL_RATIO = 1;
+    const SLOW_FRAME_MS = 20;
+    const SAMPLE_FRAMES = 20;
+    let sampleSum = 0;
+    let sampleCount = 0;
+    let skipSamples = 10; // ignore warm-up and texture upload
+    const adaptResolution = (frameMs: number) => {
+      if (!texturesLoaded) return;
+      if (skipSamples > 0) {
+        skipSamples -= 1;
+        return;
+      }
+      sampleSum += frameMs;
+      sampleCount += 1;
+      if (sampleCount < SAMPLE_FRAMES) return;
+      const avg = sampleSum / sampleCount;
+      sampleSum = 0;
+      sampleCount = 0;
+      const current = renderer.getPixelRatio();
+      if (avg > SLOW_FRAME_MS && current > MIN_PIXEL_RATIO) {
+        renderer.setPixelRatio(Math.max(MIN_PIXEL_RATIO, current - 0.25));
+        renderer.setSize(sizes.width, sizes.height);
+        skipSamples = 10;
+      }
+    };
+
     let animationFrame = 0;
     let running = true;
     let frame = 0;
     let lastNow = performance.now();
+    let lastFrameAt = lastNow;
     const animate = (now: number) => {
       if (!running) return;
       animationFrame = requestAnimationFrame(animate);
       const dt = Math.min(0.05, (now - lastNow) / 1000);
       lastNow = now;
       const idle = paceBag.current?.current === 'idle';
+      if (!idle && running) adaptResolution(now - lastFrameAt);
+      lastFrameAt = now;
       controls.enabled = !idle;
       controls.update();
 
@@ -234,6 +266,8 @@ export function EarthCanvas({
             } else if (!running) {
               running = true;
               lastNow = performance.now();
+              lastFrameAt = lastNow;
+              skipSamples = 10;
               animationFrame = requestAnimationFrame(animate);
             }
           });
@@ -245,6 +279,8 @@ export function EarthCanvas({
       if (clientWidth === 0 || clientHeight === 0) return;
       camera.aspect = clientWidth / clientHeight;
       camera.updateProjectionMatrix();
+      sizes.width = clientWidth;
+      sizes.height = clientHeight;
       renderer.setSize(clientWidth, clientHeight);
     };
 
