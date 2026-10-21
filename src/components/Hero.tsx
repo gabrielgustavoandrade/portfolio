@@ -127,30 +127,34 @@ export function Hero({ reducedMotion }: { reducedMotion: boolean }) {
         </a>
       </header>
 
-      <div className="earth" ref={earthRef} aria-hidden="true">
-        <div className="earth__intro">
-          {!posterGone ? (
-            <img
-              className="earth__poster"
-              src={EARTH_POSTER.src}
-              srcSet={EARTH_POSTER.srcSet}
-              sizes={EARTH_POSTER.sizes}
-              alt=""
-              decoding="async"
-              fetchPriority="high"
-              draggable={false}
-            />
-          ) : null}
-          {sceneAllowed ? (
-            <Suspense fallback={null}>
-              <EarthCanvas
-                paceRef={paceRef}
-                spin={reducedMotion ? 0 : 1}
-                onReady={() => setEarthLive(true)}
-                className={earthLive ? 'is-live' : undefined}
+      {/* Phones: a viewport-sized clip so the oversized globe box can't widen
+          the page (iOS pans sideways otherwise). display: contents elsewhere. */}
+      <div className="earth-clip">
+        <div className="earth" ref={earthRef} aria-hidden="true">
+          <div className="earth__intro">
+            {!posterGone ? (
+              <img
+                className="earth__poster"
+                src={EARTH_POSTER.src}
+                srcSet={EARTH_POSTER.srcSet}
+                sizes={EARTH_POSTER.sizes}
+                alt=""
+                decoding="async"
+                fetchPriority="high"
+                draggable={false}
               />
-            </Suspense>
-          ) : null}
+            ) : null}
+            {sceneAllowed ? (
+              <Suspense fallback={null}>
+                <EarthCanvas
+                  paceRef={paceRef}
+                  spin={reducedMotion ? 0 : 1}
+                  onReady={() => setEarthLive(true)}
+                  className={earthLive ? 'is-live' : undefined}
+                />
+              </Suspense>
+            ) : null}
+          </div>
         </div>
       </div>
     </>
