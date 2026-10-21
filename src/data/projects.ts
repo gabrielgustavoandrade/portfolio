@@ -44,7 +44,7 @@ export const projects: Project[] = [
     index: '01',
     name: 'InteractiveAI',
     image: {
-      src: '/work/interactiveai-desktop',
+      src: '/images/work/interactiveai-desktop',
       width: 2880,
       height: 1800,
       fit: 'cover',
@@ -63,7 +63,7 @@ export const projects: Project[] = [
       { label: 'GitHub', url: SMART_DATE_INPUT_LINKS.github },
     ],
     image: {
-      src: '/work/sdi-render-readable',
+      src: '/images/work/sdi-render-readable',
       width: 1488,
       height: 368,
       fit: 'contain',
@@ -74,7 +74,7 @@ export const projects: Project[] = [
     index: '03',
     name: 'M&M’s Design Your Own',
     image: {
-      src: '/work/m-ms-desktop',
+      src: '/images/work/m-ms-desktop',
       width: 2880,
       height: 1800,
       fit: 'cover',

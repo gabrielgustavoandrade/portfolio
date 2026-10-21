@@ -171,12 +171,12 @@ describe('HomePage', () => {
     expect(within(interactive).queryByRole('definition')).toBeNull();
     expect(within(interactive).getByRole('img')).toHaveAttribute(
       'src',
-      '/work/interactiveai-desktop.png',
+      '/images/work/interactiveai-desktop.png',
     );
 
     expect(within(sdi).getByRole('img')).toHaveAttribute(
       'src',
-      '/work/sdi-render-readable.png',
+      '/images/work/sdi-render-readable.png',
     );
     expect(within(sdi).getByRole('link', { name: /npm/i })).toHaveAttribute(
       'href',
@@ -186,7 +186,7 @@ describe('HomePage', () => {
     expect(within(mms).getByText(/via valtech/i)).toBeInTheDocument();
     expect(within(mms).getByRole('img')).toHaveAttribute(
       'src',
-      '/work/m-ms-desktop.png',
+      '/images/work/m-ms-desktop.png',
     );
     expect(
       within(mms).getByText(
