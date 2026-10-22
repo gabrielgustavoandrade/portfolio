@@ -33,6 +33,8 @@ const DAMPING_FACTOR = 0.05;
 const ROTATE_SPEED = 0.5;
 const MAX_PIXEL_RATIO_HI = 2;
 const MAX_PIXEL_RATIO_LO = 1.5;
+/** Phones (static hero globe, paused while scrolling). */
+const MAX_PIXEL_RATIO_PHONE = 2;
 /** iPhones start lower: Safari's compositor is busiest exactly while scrolling. */
 const MAX_PIXEL_RATIO_IOS = 1.25;
 /** Matches EXIT_MAX_WIDTH: phones cap at the low ratio whatever the tier. */
@@ -82,7 +84,10 @@ export function EarthCanvas({
     );
     camera.position.z = CAMERA_POSITION_Z;
 
-    const tier = pickEarthTextureTier();
+    const compact = window.matchMedia?.(COMPACT_QUERY).matches ?? false;
+    // Phones: the globe is a static hero element whose loop pauses during
+    // scroll, so it can afford the sharp 4K maps and a 2x buffer.
+    const tier = compact ? 'hi' : pickEarthTextureTier();
     const renderer = new THREE.WebGLRenderer({
       antialias: true,
       alpha: true,
@@ -92,7 +97,6 @@ export function EarthCanvas({
     // itself, and each extra GPU query is a fingerprinting surface for
     // Safari's Advanced Fingerprinting Protection.
     const anisotropy = tier === 'hi' ? 8 : 4;
-    const compact = window.matchMedia?.(COMPACT_QUERY).matches ?? false;
     const iOS =
       /iP(hone|ad|od)/.test(navigator.userAgent) ||
       (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
@@ -102,7 +106,7 @@ export function EarthCanvas({
         tier === 'hi' && !compact
           ? MAX_PIXEL_RATIO_HI
           : compact
-            ? 1
+            ? MAX_PIXEL_RATIO_PHONE
             : iOS
               ? MAX_PIXEL_RATIO_IOS
               : MAX_PIXEL_RATIO_LO,
@@ -202,7 +206,8 @@ export function EarthCanvas({
     // Adaptive resolution: if the device can't hold ~50fps at the starting
     // pixel ratio, step the drawing buffer down (never below 1x) instead of
     // stuttering. Strong phones keep full sharpness; weak ones go smooth.
-    const MIN_PIXEL_RATIO = 1;
+    // Phones never fall below 1.5x: the static globe must stay crisp.
+    const MIN_PIXEL_RATIO = compact ? 1.5 : 1;
     const SLOW_FRAME_MS = 20;
     const SAMPLE_FRAMES = 20;
     let sampleSum = 0;
