@@ -1,54 +1,52 @@
-import { useMagneticHover } from '../hooks/useMagneticHover';
+import { type CSSProperties, useRef } from 'react';
+import { contactLinks, EMAIL } from '../data/contact';
+import { useInView } from '../hooks/useInView';
+import { useI18n } from '../i18n/I18nProvider';
 import './Contact.css';
 
-export function Contact() {
-  const emailButtonRef = useMagneticHover<HTMLAnchorElement>({
-    strength: 0.2,
-    maxDistance: 60,
-  });
-  const linkedinButtonRef = useMagneticHover<HTMLAnchorElement>({
-    strength: 0.2,
-    maxDistance: 60,
-  });
-  const githubButtonRef = useMagneticHover<HTMLAnchorElement>({
-    strength: 0.2,
-    maxDistance: 60,
-  });
+const [emailUser, emailDomain] = EMAIL.split('@');
+
+export function Contact({ reducedMotion }: { reducedMotion: boolean }) {
+  const { t } = useI18n();
+  const bodyRef = useRef<HTMLDivElement>(null);
+  const inView = useInView(bodyRef, { skip: reducedMotion });
 
   return (
-    <section className="contact" id="contact">
-      <div className="contact__container">
-
-        <div className="contact__actions">
+    <section
+      id="contact"
+      className="section contact"
+      aria-labelledby="contact-label"
+    >
+      <div className="contact__backdrop" aria-hidden="true" />
+      <h2 id="contact-label" className="section__label micro">
+        {t.contact.label}
+      </h2>
+      <div
+        ref={bodyRef}
+        className={`section__body contact__body${inView ? ' is-in' : ''}`}
+      >
+        <div className="contact__lead">
+          <p className="section__lede">{t.contact.lede}</p>
           <a
-            ref={emailButtonRef}
-            href="mailto:gabrielgustavoandrade@gmail.com"
-            className="button button--primary"
-            aria-label="Send me an email"
+            className="contact__email"
+            href={`mailto:${EMAIL}`}
+            aria-label={EMAIL}
           >
-            Email me
-          </a>
-          <a
-            ref={linkedinButtonRef}
-            href="https://www.linkedin.com/in/gabrielgustavoandrade"
-            className="contact__link"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Visit my LinkedIn profile"
-          >
-            LinkedIn
-          </a>
-          <a
-            ref={githubButtonRef}
-            href="https://github.com/gabrielgustavoandrade"
-            className="contact__link"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Visit my GitHub profile"
-          >
-            GitHub
+            <span>{emailUser}</span>
+            <span>@{emailDomain}</span>
           </a>
         </div>
+        <ul className="contact__links">
+          {contactLinks.map((link, order) => (
+            <li key={link.url} style={{ '--i': order } as CSSProperties}>
+              <a href={link.url} target="_blank" rel="noreferrer">
+                <span className="contact__link-label">{link.label}</span>
+                <span className="contact__link-url">{link.display}</span>
+                <span aria-hidden="true">↗</span>
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );

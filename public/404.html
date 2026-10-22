@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#05060a" />
+    <meta name="robots" content="noindex" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Page not found — Gabriel Andrade</title>
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+      body {
+        margin: 0;
+        min-block-size: 100vh;
+        display: grid;
+        place-items: center;
+        background: #05060a;
+        color: #f2ebe0;
+        font: 400 16px / 1.5 "Inter", system-ui, -apple-system, sans-serif;
+      }
+      .not-found {
+        padding: 32px;
+        text-align: center;
+      }
+      .not-found__code {
+        margin: 0 0 8px;
+        color: #8b93a7;
+        font-size: 13px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+      .not-found__title {
+        margin: 0 0 24px;
+        font-size: clamp(30px, 4vw, 44px);
+        font-weight: 600;
+        letter-spacing: -0.02em;
+      }
+      .not-found__links {
+        display: flex;
+        gap: 24px;
+        justify-content: center;
+      }
+      .not-found__links a {
+        color: #f2ebe0;
+        text-decoration: none;
+        border-block-end: 1px solid rgba(242, 235, 224, 0.24);
+        padding-block-end: 2px;
+      }
+      .not-found__links a:hover,
+      .not-found__links a:focus-visible {
+        border-color: #f2ebe0;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="not-found">
+      <p class="not-found__code">404</p>
+      <h1 class="not-found__title">Page not found</h1>
+      <p class="not-found__links">
+        <a href="/">Back to the homepage</a>
+        <a href="/pt-BR/" lang="pt-BR" hreflang="pt-BR">Página inicial</a>
+      </p>
+    </main>
+  </body>
+</html>

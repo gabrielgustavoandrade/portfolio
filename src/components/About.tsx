@@ -1,45 +1,28 @@
-import { RevealText } from "./RevealText";
-import "./About.css";
+import { useRef } from 'react';
+import { useInView } from '../hooks/useInView';
+import { useI18n } from '../i18n/I18nProvider';
+import './About.css';
 
-export function About() {
+export function About({ reducedMotion }: { reducedMotion: boolean }) {
+  const { t } = useI18n();
+  const textRef = useRef<HTMLParagraphElement>(null);
+  const inView = useInView(textRef, { skip: reducedMotion });
+
   return (
-    <section className="about" id="about">
-      <div className="about__container">
-        <h2 className="about__title">About Me</h2>
-        <div className="about__content">
-          <RevealText
-            as="p"
-            className="about__paragraph"
-            stagger={true}
-            delay={0}
-          >
-            I'm a Brazilian software engineer based in Madrid.
-          </RevealText>
-          <RevealText
-            as="p"
-            className="about__paragraph"
-            stagger={true}
-            delay={100}
-          >
-            Seven years building scalable full-stack applications for consumer
-            platforms, e-commerce, and financial services. I've led
-            modernization projects, improved performance in high-traffic systems,
-            and mentored developers across distributed teams in the US and
-            Europe.
-          </RevealText>
-          <RevealText
-            as="p"
-            className="about__paragraph"
-            stagger={true}
-            delay={200}
-          >
-            My approach emphasizes clean architecture, maintainability, and
-            performance—ensuring every solution is both robust and measurable.
-            I work across the stack with React, Node.js, TypeScript, and modern
-            tooling, focusing on reliable, user-centric products that scale.
-          </RevealText>
-        </div>
-      </div>
+    <section
+      id="about"
+      className="section section--frame about"
+      aria-labelledby="about-label"
+    >
+      <h2 id="about-label" className="section__label micro">
+        {t.about.label}
+      </h2>
+      <p
+        ref={textRef}
+        className={`section__body about__text${inView ? ' is-in' : ''}`}
+      >
+        {t.about.text}
+      </p>
     </section>
   );
 }

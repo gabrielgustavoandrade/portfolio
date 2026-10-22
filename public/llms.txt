@@ -1,0 +1,36 @@
+# Gabriel Andrade
+
+> Gabriel Andrade is a senior full-stack engineer in Madrid building AI-agent platforms with React, TypeScript, Next.js and Python.
+
+Senior full stack engineer with seven years of experience in consumer platforms, e-commerce and financial services. Has led modernization projects, improved performance on high-traffic systems and mentored developers.
+
+The site is available in English (https://andradegabriel.com/) and Brazilian Portuguese (https://andradegabriel.com/pt-BR/).
+
+## Current role
+
+- InteractiveAI (contract, Mar 2026 – present): React/Next.js app and Python FastAPI services; agent observability, AI workflows and an in-product copilot; security hardening of auth and secrets handling.
+
+## Experience
+
+- InteractiveAI — Contract, Mar 2026 – Present. React/Next.js app and Python FastAPI services; agent observability, AI workflows, in-product copilot; security hardening of auth and secrets handling.
+- Red Ventures — Contract, May 2024 – Mar 2026. Clients: SaveOnEnergy, ChooseEnergy, ChooseTexasPower. Products used by millions of users per month; Strata plan comparison tool; introduced trunk-based development for a 12-person team.
+- Valtech — Contract, Sep 2021 – May 2024. Clients: Good Eggs, M&M's Design Your Own. Good Eggs: 7,000+ products, web (React/Next.js) and mobile (React Native); M&M's Design Your Own configurator in 12 countries; the Catalyst/LEAP design system cut site rollout times 40%.
+- Pacto — Contract, Jul 2019 – Sep 2021. 1,000+ daily users; USD 1M+/day in payments; component library that cut dev time 35%.
+
+## Projects
+
+- InteractiveAI: agent platform built with React/Next.js and Python. Highlights: agent observability, AI workflows, in-product copilot.
+- smart-date-input: open-source React/TypeScript date and time input with natural-language parsing and keyboard navigation, published on npm.
+  - npm: https://www.npmjs.com/package/@gabrielgustavoandrade/smart-date-input
+  - GitHub: https://github.com/gabrielgustavoandrade/smart-date-input
+- M&M's Design Your Own (via Valtech): frontend for the product configurator used to personalize M&M's in 12 countries.
+- Holdout (in progress, private repository): a factory-style harness for coding agents. A lead agent assigns tasks to worker agents, each in its own process on a SQLite (WAL) message bus, and hidden evals grade what they ship. TypeScript on Bun with an Ink chat TUI.
+- Fourier series drawing: an outline drawn with a Fourier series in Canvas 2D, where each axis is a chain of rotating circles.
+
+## Links
+
+- Website: https://andradegabriel.com/
+- Email: gabrielgustavoandrade@gmail.com
+- LinkedIn: https://www.linkedin.com/in/gabrielgustavoandrade
+- GitHub: https://github.com/gabrielgustavoandrade
+- npm (smart-date-input): https://www.npmjs.com/package/@gabrielgustavoandrade/smart-date-input

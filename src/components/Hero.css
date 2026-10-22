@@ -1,208 +1,298 @@
+/*
+  Stacking (root context): hero backdrop 0 → dust 0 → Earth 1 → copy 2.
+  Once docked, the Earth mark rises above section content.
+*/
+
 .hero {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-120) var(--space-24);
-  background-color: #000000;
   position: relative;
+  height: 100vh;
+  min-height: 560px;
   overflow: hidden;
 }
 
-.hero__starfield {
-  position: absolute;
-  inset: 0;
-  z-index: var(--z-index-base);
-}
-
-.hero__layout {
-  width: 100%;
-  max-width: 1200px;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-80);
-  align-items: center;
-  position: relative;
-  z-index: var(--z-index-above);
-}
-
-.hero__content {
-  max-width: 520px;
-  width: 100%;
-  text-align: left;
-}
-
-.hero__title {
-  font-size: var(--font-size-hero-desktop);
-  font-weight: 600;
-  line-height: var(--line-height-tight);
-  letter-spacing: -0.02em;
-  margin-bottom: var(--space-16);
-  color: var(--color-text-primary);
-}
-
-.hero__subtitle {
-  font-size: var(--font-size-lg);
-  line-height: var(--line-height-normal);
-  color: var(--color-text-primary);
-  margin-bottom: var(--space-12);
-  max-width: 600px;
-}
-
-.hero__tagline {
-  font-size: var(--font-size-md);
-  line-height: var(--line-height-normal);
-  color: var(--color-text-muted);
-  margin-bottom: var(--space-40);
-}
-
-.hero__cta {
-  display: flex;
-  gap: var(--space-24);
-  justify-content: flex-start;
-  align-items: center;
-  flex-wrap: wrap;
-  isolation: isolate;
-}
-
-.button {
-  position: relative;
-  font-family: var(--font-family);
-  font-size: var(--font-size-base);
-  font-weight: 500;
-  padding: var(--space-12) var(--space-24);
-  border-radius: var(--space-8);
-  cursor: pointer;
-  transition: all var(--transition-duration-normal) var(--transition-easing);
-  min-width: 140px;
-  min-height: 44px;
-  border: none;
-  flex-shrink: 0;
-}
-
-.button--primary {
-  background-color: var(--color-text-primary);
-  color: var(--color-bg);
-}
-
-.button--primary:hover {
-  background-color: var(--color-text-muted);
-  box-shadow: 0 8px 24px rgba(232, 232, 232, 0.15);
-  transform: translateY(-2px);
-}
-
-.button--primary:focus-visible {
-  box-shadow: 0 8px 24px rgba(232, 232, 232, 0.15);
-}
-
-.button--primary:active {
-  background-color: var(--color-text-primary);
-}
-
-.button--secondary {
-  background-color: transparent;
-  color: var(--color-text-primary);
-  border: 1px solid var(--color-border);
-}
-
-.button--secondary:hover {
-  background-color: var(--color-card-bg);
-  border-color: var(--color-text-muted);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(255, 255, 255, 0.08);
-}
-
-.button--secondary:active {
-  background-color: var(--color-card-bg-hover);
-}
-
-.hero__visual {
-  position: relative;
-  width: 100%;
-  min-height: 420px;
-  max-height: 520px;
-  border-radius: var(--radius-3xl);
-  background: transparent;
-  overflow: visible; /* Changed from hidden to allow note to overflow */
-}
-
-.hero__canvas {
-  position: absolute;
-  inset: 0;
-  border-radius: var(--radius-3xl);
-  overflow: hidden;
-}
-.hero__scroll-cue {
-  position: absolute;
-  bottom: var(--space-40);
-  left: 50%;
-  transform: translateX(-50%);
-  color: var(--color-text-muted);
-  animation: fadeInBounce var(--transition-duration-slower) var(--transition-easing) forwards;
-  z-index: calc(var(--z-index-above) + 1);
-}
-
-.hero__scroll-cue svg {
-  display: block;
-  animation: bounce 2s infinite;
-}
-
-/* Mobile styles */
-@media (max-width: 1024px) {
-  .hero__layout {
-    grid-template-columns: 1fr;
-    gap: var(--space-40);
-  }
-
-  .hero__content {
-    text-align: center;
-    max-width: 700px;
-    margin: 0 auto;
-  }
-
-  .hero__cta {
-    justify-content: center;
-  }
-
-  .hero__visual {
-    min-height: 360px;
-  }
-}
-
-@media (max-width: 640px) {
+@supports (height: 100svh) {
   .hero {
-    padding: var(--space-80) var(--space-16);
-  }
-
-  .hero__title {
-    font-size: var(--font-size-hero-mobile);
-  }
-
-  .hero__subtitle {
-    font-size: var(--font-size-md);
-  }
-
-  .hero__tagline {
-    font-size: var(--font-size-base);
-  }
-
-  .hero__cta {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .button {
-    width: 100%;
+    height: 100svh;
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .hero__scroll-cue,
-  .hero__scroll-cue svg {
-    animation: none;
+.hero__backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(
+    110% 90% at 72% 42%,
+    var(--night) 0%,
+    var(--void) 62%
+  );
+}
+
+.hero__dust {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.hero__chrome {
+  position: absolute;
+  top: var(--space-40);
+  right: var(--inset);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: var(--space-40);
+}
+
+.hero__nav {
+  display: flex;
+  gap: var(--space-40);
+  color: var(--cream);
+}
+
+.hero__copy {
+  position: absolute;
+  left: var(--inset);
+  right: var(--inset);
+  top: max(140px, 33.3vh);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-40);
+  pointer-events: none;
+}
+
+.hero__copy a {
+  pointer-events: auto;
+}
+
+.hero__name {
+  font-size: var(--text-display);
+  font-weight: 600;
+  letter-spacing: var(--track-display);
+  line-height: 0.9;
+  white-space: nowrap;
+  color: var(--cream);
+}
+
+.hero__headline {
+  font-size: var(--text-lead);
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  color: var(--cream);
+}
+
+/* Each headline segment gets its own line, so a pipe never dangles. */
+.hero__segment {
+  display: block;
+}
+
+.hero__sep {
+  display: none;
+}
+
+.hero__cue {
+  position: absolute;
+  left: var(--inset);
+  bottom: var(--space-40);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: var(--space-16);
+}
+
+.hero__cue-line {
+  width: 40px;
+  height: 1px;
+  background: var(--hairline);
+}
+
+/* Fixed Earth, positioned by useEarthDock. */
+.earth {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 0;
+  height: 0;
+  transform-origin: center center;
+  will-change: transform;
+  transition: opacity 200ms ease;
+}
+
+.earth--quiet {
+  pointer-events: none;
+}
+
+.earth--docked {
+  z-index: 5;
+}
+
+.earth--fading {
+  opacity: 0;
+}
+
+.earth__intro,
+.earth__canvas,
+.earth__poster {
+  position: absolute;
+  inset: 0;
+}
+
+/* Same framing as the canvas: a square box, sphere at EARTH_FILL. */
+.earth__poster {
+  width: 100%;
+  height: 100%;
+  user-select: none;
+}
+
+.earth__canvas {
+  opacity: 0;
+}
+
+.earth__canvas.is-live {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .earth__canvas {
+    transition: opacity 600ms ease;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .earth__intro {
+    animation: earth-intro 1200ms var(--ease-out) both;
   }
 
-  .button {
-    transition: none;
+  .hero__rise {
+    animation: hero-rise 900ms var(--ease-out) both;
   }
+
+  .hero__headline.hero__rise {
+    animation-delay: 80ms;
+  }
+}
+
+@keyframes earth-intro {
+  from {
+    opacity: 0;
+    transform: scale(0.88);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Drag-to-spin is a pointer nicety; on touch it would trap page scroll. */
+@media (pointer: coarse), (max-width: 720px) {
+  .earth {
+    pointer-events: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .hero__backdrop {
+    background: radial-gradient(
+      120% 70% at 50% 85%,
+      var(--night) 0%,
+      var(--void) 65%
+    );
+  }
+
+  /* Links own the first row; the language toggle sits right-aligned
+     under them so longer pt-BR labels never push it off-screen. */
+  .hero__chrome {
+    top: var(--space-24);
+    left: var(--inset);
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    row-gap: var(--space-8);
+  }
+
+  .hero__nav {
+    flex: 1 0 100%;
+    justify-content: space-between;
+    gap: var(--space-16);
+    letter-spacing: 0.1em;
+  }
+
+  /* Three links fit a 390px row in both languages; Harness and Projects
+     are each one scroll past Work. */
+  .hero__nav-wide {
+    display: none;
+  }
+
+  .hero__cue {
+    display: none;
+  }
+
+  .hero__copy {
+    top: var(--space-96);
+    gap: var(--space-24);
+  }
+
+  .hero__name {
+    line-height: 0.95;
+  }
+}
+
+/* ≤768px: the globe scrolls out of the hero instead of docking. Opacity
+   is written per frame by useEarthDock, so no transition may chase it. */
+.earth--exit {
+  transition: none;
+}
+
+/* Reduced motion on narrow screens: part of the document, no scrub. */
+.earth--static {
+  position: absolute;
+  transition: none;
+  will-change: auto;
+}
+
+/* Desktop: the wrapper is transparent to layout. */
+.earth-clip {
+  display: contents;
+}
+
+/* ≤768px: the globe box is wider than the screen. A fixed, viewport-sized
+   clip keeps it from widening the document on iOS. */
+@media (max-width: 768px) {
+  .earth-clip {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    overflow: hidden;
+    pointer-events: none;
+  }
+}
+
+/* ≤768px: the globe is plain hero content, framed like the original
+   phone design (getHeroPose): sphere 566/390 of the width, centered at
+   240/390 across and 86.5% down the hero. Percent top is relative to the
+   hero box (100svh), so WebKit's early layout can't misplace it. */
+.earth.earth--phone {
+  position: absolute;
+  left: -30.26vw;
+  top: calc(86.5% - 91.8vw);
+  width: 183.6vw;
+  height: 183.6vw;
+  transform: none;
+  transition: none;
+  will-change: auto;
+  pointer-events: none;
 }

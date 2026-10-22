@@ -1,0 +1,46 @@
+.lang-toggle {
+  display: inline-flex;
+  flex: none;
+  padding: 2px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--hairline);
+}
+
+.lang-toggle__option {
+  min-width: 36px;
+  height: 28px;
+  padding: 0 var(--space-8);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: none;
+  color: var(--mute);
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+  transition:
+    color var(--hover-ms) ease,
+    background-color var(--hover-ms) ease;
+}
+
+.lang-toggle__option:hover {
+  color: var(--dust);
+}
+
+.lang-toggle__option[aria-pressed="true"] {
+  background: rgba(242, 235, 224, 0.1);
+  color: var(--cream);
+}
+
+/* Bigger hit area on touch without growing the pill. */
+@media (pointer: coarse) {
+  .lang-toggle__option {
+    position: relative;
+  }
+
+  .lang-toggle__option::after {
+    content: "";
+    position: absolute;
+    inset: -8px -2px;
+  }
+}

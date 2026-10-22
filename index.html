@@ -3,34 +3,36 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Gabriel Andrade — Software Engineer crafting fast, aesthetic, reliable interfaces."
+    <meta name="theme-color" content="#05060a" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="vercel-toolbar" content="false" />
+    <!-- Title, description, canonical, hreflang, Open Graph and JSON-LD
+         per language: injected by scripts/prerender.mjs. -->
+    <!--app-head-->
+
+    <!-- Hero Earth poster: paints before the Three.js chunk loads -->
+    <link
+      rel="preload"
+      as="image"
+      type="image/webp"
+      href="/earth/poster-1600.webp"
+      imagesrcset="/earth/poster-800.webp 800w, /earth/poster-1600.webp 1600w"
+      imagesizes="(max-width: 720px) 184vw, 1030px"
+      fetchpriority="high"
     />
-
-    <!-- Open Graph -->
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Gabriel Andrade — Software Engineer" />
-    <meta property="og:description" content="Software Engineer crafting fast, aesthetic, reliable interfaces." />
-    <meta property="og:image" content="https://andradegabriel.com/og-image.png" />
-    <meta property="og:url" content="https://andradegabriel.com" />
-
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Gabriel Andrade — Software Engineer" />
-    <meta name="twitter:description" content="Software Engineer crafting fast, aesthetic, reliable interfaces." />
-    <meta name="twitter:image" content="https://andradegabriel.com/og-image.png" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <title>Gabriel Andrade — Software Engineer</title>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root"><!--app-html--></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

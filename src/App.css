@@ -1,16 +1,134 @@
 .app {
-  min-height: 100vh;
-  background-color: var(--color-bg);
   position: relative;
-  overflow-x: hidden;
+  min-height: 100vh;
+  background-color: var(--void);
 }
 
-/* Page transitions */
-::view-transition-old(root) {
-  animation: fade-out 0.25s ease-out;
+/*
+  Shared section frame. Sections stay out of the stacking order
+  (no z-index) so the fixed Earth can sit between backgrounds and content.
+
+  Header pattern, every section:
+    .section__label (micro h2, names the section)
+    .section__body  at --section-head-gap below the label
+  Sections built around one project open the body with .section__intro:
+    .section__title (h3) → .section__lede → facts/links.
+*/
+.section {
+  position: relative;
+  padding: var(--section-top) var(--inset) var(--section-bottom);
+  scroll-margin-top: 0;
 }
 
-::view-transition-new(root) {
-  animation: slideInUp 0.3s ease-out;
+.section__label {
+  display: block;
+  position: relative;
+  z-index: 2;
 }
 
+.section__body {
+  position: relative;
+  z-index: 2;
+  margin-top: var(--section-head-gap);
+}
+
+.section__split {
+  display: grid;
+  grid-template-columns: minmax(0, 520px) minmax(0, 640px);
+  justify-content: space-between;
+  align-items: start;
+  gap: var(--space-64);
+}
+
+.section__intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+}
+
+.section__copy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+}
+
+.section__title {
+  font-size: var(--text-heading);
+  font-weight: 600;
+  letter-spacing: var(--track-display);
+  line-height: 0.95;
+  text-wrap: balance;
+}
+
+.section__lede {
+  font-size: var(--text-lead);
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+.section__note {
+  font-size: var(--text-sm);
+  color: var(--mute);
+}
+
+/* Hairline-topped fact list used beside demos. */
+.section__facts {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  font-size: var(--text-body);
+  line-height: 1.45;
+}
+
+.section__facts li {
+  padding: var(--space-16) 0;
+  border-top: 1px solid var(--hairline);
+}
+
+.section__facts li:last-child {
+  border-bottom: 1px solid var(--hairline);
+}
+
+.section__figure {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  min-width: 0;
+}
+
+.section__figure figcaption {
+  font-size: var(--text-sm);
+  color: var(--mute);
+}
+
+/* About is one paragraph: on wide screens it shares a band with Contact. */
+@media (min-width: 1101px) {
+  .closing {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  }
+
+  .closing .about {
+    padding-right: 0;
+  }
+}
+
+@media (max-width: 1100px) {
+  .section__split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .section__figure {
+    max-width: 640px;
+  }
+}
+
+@media (max-width: 720px) {
+  .section__split {
+    gap: var(--space-40);
+  }
+
+  .section__intro {
+    gap: var(--space-24);
+  }
+}

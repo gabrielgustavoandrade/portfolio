@@ -1,0 +1,154 @@
+.terminal {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: var(--shadow-frame);
+}
+
+.terminal__chrome {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  height: 36px;
+  padding: 0 var(--space-16);
+  background: var(--chrome);
+  border-bottom: 1px solid rgba(242, 235, 224, 0.08);
+}
+
+.terminal__dots {
+  display: flex;
+  gap: 6px;
+}
+
+.terminal__dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(242, 235, 224, 0.2);
+}
+
+.terminal__title {
+  font-size: var(--text-sm);
+  letter-spacing: 0.04em;
+  color: var(--mute);
+}
+
+.terminal__replay {
+  justify-self: end;
+  padding: 4px 0;
+  border: 0;
+  background: none;
+  color: var(--mute);
+  font: 500 var(--text-sm) / 1 var(--font);
+  letter-spacing: var(--track-micro);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color var(--hover-ms) ease;
+}
+
+.terminal__replay:hover {
+  color: var(--dust);
+}
+
+.terminal__replay:disabled {
+  opacity: 0;
+  cursor: default;
+}
+
+.terminal__screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  height: 480px;
+  padding: var(--space-16) var(--space-24) var(--space-24);
+  overflow: auto;
+  overscroll-behavior: contain;
+  font: 400 var(--text-sm) / 1.55 var(--mono);
+  color: var(--cream);
+  scrollbar-width: thin;
+  scrollbar-color: var(--hairline-strong) transparent;
+}
+
+.terminal__screen:focus-visible {
+  outline-offset: -3px;
+}
+
+.terminal__command {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.terminal__prompt {
+  color: var(--mute);
+}
+
+.terminal__caret {
+  display: inline-block;
+  width: 0.55em;
+  height: 1.1em;
+  margin-left: 1px;
+  vertical-align: text-bottom;
+  background: var(--cream);
+  animation: terminal-caret 1s steps(1) infinite;
+}
+
+.terminal__output {
+  margin: 0;
+  font: inherit;
+  color: var(--dust);
+  opacity: 0.78;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+@keyframes terminal-caret {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 720px) {
+  .terminal__screen {
+    height: 380px;
+    padding: var(--space-16);
+    font-size: var(--text-sm);
+  }
+}
+
+.harness__heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-16);
+}
+
+/* Status chip: same hairline pill as .tag, with a slow pulse. */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(215, 228, 255, 0.32);
+  color: var(--dust);
+  white-space: nowrap;
+}
+
+.status-badge__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--dust);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .status-badge__dot {
+    animation: status-pulse 2.4s ease-in-out infinite;
+  }
+}
+
+@keyframes status-pulse {
+  50% {
+    opacity: 0.3;
+  }
+}
