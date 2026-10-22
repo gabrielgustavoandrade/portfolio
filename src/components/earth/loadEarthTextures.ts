@@ -8,16 +8,12 @@ export function pickEarthTextureTier(): EarthTextureTier {
   const narrow = window.matchMedia('(max-width: 720px)').matches;
   const coarse =
     window.matchMedia('(pointer: coarse)').matches && window.innerWidth < 1024;
-  const lowMemory =
-    'deviceMemory' in navigator &&
-    Number(navigator.deviceMemory) > 0 &&
-    Number(navigator.deviceMemory) <= 4;
   const connection = (
     navigator as Navigator & { connection?: { saveData?: boolean } }
   ).connection;
   const saveData = Boolean(connection?.saveData);
 
-  return narrow || coarse || lowMemory || saveData ? 'lo' : 'hi';
+  return narrow || coarse || saveData ? 'lo' : 'hi';
 }
 
 export function configureEarthTexture(

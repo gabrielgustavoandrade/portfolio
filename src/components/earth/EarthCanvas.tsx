@@ -88,8 +88,10 @@ export function EarthCanvas({
       alpha: true,
       premultipliedAlpha: false,
     });
-    const maxAnisotropy = renderer.capabilities.getMaxAnisotropy();
-    const anisotropy = Math.min(tier === 'hi' ? 8 : 4, maxAnisotropy);
+    // Fixed values, no capability probe: three clamps to the device limit
+    // itself, and each extra GPU query is a fingerprinting surface for
+    // Safari's Advanced Fingerprinting Protection.
+    const anisotropy = tier === 'hi' ? 8 : 4;
     const compact = window.matchMedia?.(COMPACT_QUERY).matches ?? false;
     const iOS =
       /iP(hone|ad|od)/.test(navigator.userAgent) ||
