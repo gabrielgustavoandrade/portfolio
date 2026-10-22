@@ -80,6 +80,38 @@ export function Hero({ reducedMotion }: { reducedMotion: boolean }) {
     return () => window.clearTimeout(timer);
   }, [earthLive, reducedMotion]);
 
+  // Phones: the globe is plain hero content (absolute, clipped by the
+  // hero, framed in CSS) and scrolls away with the page. Desktop keeps the
+  // fixed, scroll-docked globe.
+  const earthNode = (
+    <div className="earth" ref={earthRef} aria-hidden="true">
+      <div className="earth__intro">
+        {!posterGone ? (
+          <img
+            className="earth__poster"
+            src={EARTH_POSTER.src}
+            srcSet={EARTH_POSTER.srcSet}
+            sizes={EARTH_POSTER.sizes}
+            alt=""
+            decoding="async"
+            fetchPriority="high"
+            draggable={false}
+          />
+        ) : null}
+        {sceneAllowed ? (
+          <Suspense fallback={null}>
+            <EarthCanvas
+              paceRef={paceRef}
+              spin={reducedMotion ? 0 : 1}
+              onReady={() => setEarthLive(true)}
+              className={earthLive ? 'is-live' : undefined}
+            />
+          </Suspense>
+        ) : null}
+      </div>
+    </div>
+  );
+
   return (
     <>
       <header
@@ -87,7 +119,7 @@ export function Hero({ reducedMotion }: { reducedMotion: boolean }) {
         className={`hero${reducedMotion ? ' hero--reduced' : ''}`}
       >
         <div className="hero__backdrop" aria-hidden="true" />
-        {!reducedMotion && sceneAllowed ? (
+        {!reducedMotion && sceneAllowed && !exit ? (
           <Suspense fallback={null}>
             <HeroDustCanvas paceRef={paceRef} compact={compact} />
           </Suspense>
@@ -121,42 +153,15 @@ export function Hero({ reducedMotion }: { reducedMotion: boolean }) {
           </p>
         </div>
 
+        {exit ? earthNode : null}
+
         <a className="hero__cue micro" href="#work">
           <span className="hero__cue-line" aria-hidden="true" />
           <span>{t.nav.cue}</span>
         </a>
       </header>
 
-      {/* Phones: a viewport-sized clip so the oversized globe box can't widen
-          the page (iOS pans sideways otherwise). display: contents elsewhere. */}
-      <div className="earth-clip">
-        <div className="earth" ref={earthRef} aria-hidden="true">
-          <div className="earth__intro">
-            {!posterGone ? (
-              <img
-                className="earth__poster"
-                src={EARTH_POSTER.src}
-                srcSet={EARTH_POSTER.srcSet}
-                sizes={EARTH_POSTER.sizes}
-                alt=""
-                decoding="async"
-                fetchPriority="high"
-                draggable={false}
-              />
-            ) : null}
-            {sceneAllowed ? (
-              <Suspense fallback={null}>
-                <EarthCanvas
-                  paceRef={paceRef}
-                  spin={reducedMotion ? 0 : 1}
-                  onReady={() => setEarthLive(true)}
-                  className={earthLive ? 'is-live' : undefined}
-                />
-              </Suspense>
-            ) : null}
-          </div>
-        </div>
-      </div>
+      {exit ? null : earthNode}
     </>
   );
 }

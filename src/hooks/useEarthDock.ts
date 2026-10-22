@@ -4,19 +4,13 @@ import {
   DOCK_SMOOTH_SECONDS,
   damp,
   type EarthFrame,
-  EXIT_IDLE_PROGRESS,
   getDockProgress,
   getEarthFrame,
-  getExitFrame,
-  getExitProgress,
 } from '../utils/earthDock';
 import { useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect';
 
 /** Matches the 200ms cross-fade in `.earth`. */
 const REDUCED_FADE_MS = 200;
-
-/** Soft edge where the static globe meets the bottom of the hero. */
-const STATIC_FADE_PX = 96;
 
 interface UseEarthDockOptions {
   earthRef: RefObject<HTMLDivElement | null>;
@@ -44,91 +38,11 @@ export function useEarthDock({
   useIsomorphicLayoutEffect(() => {
     const earth = earthRef.current;
     if (!earth || !exit) return;
-
-    // Cached; only a width change (rotation) re-measures, so the iOS
-    // toolbar collapsing on scroll never shifts the globe.
-    let width = window.innerWidth;
-    let heroHeight = heroRef.current?.offsetHeight || window.innerHeight;
-    const measure = () => {
-      width = window.innerWidth;
-      heroHeight = heroRef.current?.offsetHeight || window.innerHeight;
-    };
-    const setBox = (frame: EarthFrame) => {
-      earth.style.width = `${frame.boxSize}px`;
-      earth.style.height = `${frame.boxSize}px`;
-    };
-    const cleanupStyles = (className: string) => {
-      earth.classList.remove(className);
-      earth.style.removeProperty('opacity');
-      earth.style.removeProperty('mask-image');
-      earth.style.removeProperty('-webkit-mask-image');
-    };
-
-    if (reducedMotion) {
-      // No scroll-linked motion: the globe sits in the document and
-      // scrolls away with the hero. Fade it out at the hero's bottom edge
-      // so it never lies over the next section.
-      earth.classList.add('earth--static');
-      paceRef.current = 'full';
-      const place = () => {
-        const frame = getExitFrame(0, width, heroHeight);
-        setBox(frame);
-        earth.style.transform = transformFor(frame);
-        const cut = Math.max(0, heroHeight - frame.y);
-        const mask = `linear-gradient(to bottom, #000 ${Math.max(0, cut - STATIC_FADE_PX)}px, transparent ${cut}px)`;
-        earth.style.setProperty('mask-image', mask);
-        earth.style.setProperty('-webkit-mask-image', mask);
-      };
-      const onResize = () => {
-        if (window.innerWidth === width) return;
-        measure();
-        place();
-      };
-      place();
-      window.addEventListener('resize', onResize);
-      return () => {
-        window.removeEventListener('resize', onResize);
-        cleanupStyles('earth--static');
-      };
-    }
-
-    earth.classList.add('earth--exit');
-    let frameId = 0;
-    let lastProgress = -1;
-
-    const update = () => {
-      frameId = 0;
-      const progress = getExitProgress(window.scrollY, heroHeight);
-      if (progress === lastProgress) return;
-      lastProgress = progress;
-      const frame = getExitFrame(progress, width, heroHeight);
-      earth.style.transform = transformFor(frame);
-      earth.style.opacity = `${frame.opacity}`;
-      paceRef.current = progress > EXIT_IDLE_PROGRESS ? 'idle' : 'full';
-    };
-    const layout = () => {
-      setBox(getExitFrame(0, width, heroHeight));
-      lastProgress = -1;
-      update();
-    };
-    const onScroll = () => {
-      if (frameId === 0) frameId = requestAnimationFrame(update);
-    };
-    const onResize = () => {
-      if (window.innerWidth === width) return;
-      measure();
-      layout();
-    };
-
-    layout();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onResize);
-    return () => {
-      cancelAnimationFrame(frameId);
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onResize);
-      cleanupStyles('earth--exit');
-    };
+    // Phones: no JS at all. The globe sits inside the hero, framed by
+    // `.earth--phone` in CSS, and scrolls with the page. No listeners.
+    earth.classList.add('earth--phone');
+    paceRef.current = 'full';
+    return () => earth.classList.remove('earth--phone');
   }, [earthRef, heroRef, paceRef, reducedMotion, exit]);
 
   useIsomorphicLayoutEffect(() => {

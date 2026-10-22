@@ -99,9 +99,11 @@ export function EarthCanvas({
         window.devicePixelRatio,
         tier === 'hi' && !compact
           ? MAX_PIXEL_RATIO_HI
-          : iOS
-            ? MAX_PIXEL_RATIO_IOS
-            : MAX_PIXEL_RATIO_LO,
+          : compact
+            ? 1
+            : iOS
+              ? MAX_PIXEL_RATIO_IOS
+              : MAX_PIXEL_RATIO_LO,
       ),
     );
     renderer.setSize(sizes.width, sizes.height);
@@ -210,7 +212,9 @@ export function EarthCanvas({
     const onScroll = () => {
       lastScrollAt = performance.now();
     };
-    window.addEventListener('scroll', onScroll, { passive: true });
+    // Desktop only; phones detect scrolling by polling in the loop.
+    if (!compact)
+      window.addEventListener('scroll', onScroll, { passive: true });
     const adaptResolution = (frameMs: number) => {
       if (!texturesLoaded) return;
       if (performance.now() - lastScrollAt < 500) {
@@ -241,11 +245,29 @@ export function EarthCanvas({
     let frame = 0;
     let lastNow = performance.now();
     let lastFrameAt = lastNow;
+    const SCROLL_RESUME_MS = 150;
+    let lastScrollY = window.scrollY;
+    let scrollQuietAt = 0;
     const animate = (now: number) => {
       if (!running) return;
       animationFrame = requestAnimationFrame(animate);
       const dt = Math.min(0.25, Math.max(0, (now - lastNow) / 1000));
       lastNow = now;
+      // Phones: hold the last frame while the page is scrolling and resume
+      // 150ms after it stops. Detected by polling scrollY here rather than
+      // with scroll/touch listeners, so scrolling itself triggers no JS.
+      if (compact) {
+        const y = window.scrollY;
+        if (y !== lastScrollY) {
+          lastScrollY = y;
+          scrollQuietAt = now + SCROLL_RESUME_MS;
+        }
+        if (now < scrollQuietAt) {
+          lastNow = now;
+          lastFrameAt = now;
+          return;
+        }
+      }
       const idle = paceBag.current?.current === 'idle';
       if (!idle && running) adaptResolution(now - lastFrameAt);
       lastFrameAt = now;

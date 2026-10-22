@@ -280,3 +280,18 @@
     pointer-events: none;
   }
 }
+
+/* ≤768px: the globe is plain hero content. Same framing the live site
+   shows on iPhone (716px box at left −118, top −167 on a 390px screen),
+   in vw so the toolbar never moves it; the hero clips it. */
+.earth.earth--phone {
+  position: absolute;
+  left: -30.26vw;
+  top: -42.77vw;
+  width: 183.6vw;
+  height: 183.6vw;
+  transform: none;
+  transition: none;
+  will-change: auto;
+  pointer-events: none;
+}
